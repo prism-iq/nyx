@@ -1,0 +1,5 @@
+[user]
+	name = Flow
+	email = flow@pwnd.icu
+[safe]
+	directory = /opt/flow-chat

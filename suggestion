@@ -1,0 +1,9 @@
+#!/bin/bash
+# NYX SUGGESTION - Pop une idée
+
+IDEE="$1"
+
+# Notification en haut à droite avec action possible
+notify-send -u low -t 10000 "💡 Nyx suggère" "$IDEE" 2>/dev/null
+
+echo "$(date '+%H:%M') IDEE: $IDEE" >> /home/ego-bash/nyx-v2/conversations.log

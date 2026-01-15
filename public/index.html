@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NYXX</title>
+  <style>
+    :root {
+      --bg: #0a0a0f;
+      --bg2: #12121a;
+      --fire: #ff6b35;
+      --fire2: #ff8c42;
+      --violet: #a855f7;
+      --green: #22c55e;
+      --red: #ef4444;
+      --gray: #6b7280;
+      --text: #e5e7eb;
+    }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'JetBrains Mono', 'Fira Code', monospace;
+      min-height: 100vh;
+    }
+
+    /* Header */
+    header {
+      background: linear-gradient(135deg, var(--bg2), #1a1a2e);
+      border-bottom: 1px solid #222;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .logo {
+      font-size: 1.8rem;
+      font-weight: bold;
+      background: linear-gradient(90deg, var(--fire), var(--fire2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .status {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .dot {
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      background: var(--gray);
+      animation: pulse 2s infinite;
+    }
+    .dot.online { background: var(--green); }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+
+    /* Main */
+    main {
+      display: grid;
+      grid-template-columns: 1fr 350px;
+      height: calc(100vh - 60px);
+    }
+    @media (max-width: 900px) {
+      main { grid-template-columns: 1fr; }
+      .sidebar { display: none; }
+    }
+
+    /* Chat */
+    .chat-container {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+    #chat {
+      flex: 1;
+      overflow-y: auto;
+      padding: 1.5rem;
+    }
+    .msg {
+      margin-bottom: 1rem;
+      padding: 0.8rem 1rem;
+      border-radius: 8px;
+      max-width: 85%;
+      animation: fadeIn 0.3s;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .msg.user {
+      background: var(--bg2);
+      margin-left: auto;
+      border: 1px solid #333;
+    }
+    .msg.nyxx {
+      background: linear-gradient(135deg, #1a1020, #150a15);
+      border-left: 3px solid var(--fire);
+    }
+    .msg.system {
+      background: transparent;
+      color: var(--gray);
+      font-size: 0.85rem;
+      text-align: center;
+      max-width: 100%;
+    }
+    .msg.error {
+      background: rgba(239, 68, 68, 0.1);
+      border-left: 3px solid var(--red);
+    }
+    .msg pre {
+      background: #000;
+      padding: 0.8rem;
+      margin-top: 0.5rem;
+      border-radius: 4px;
+      overflow-x: auto;
+      font-size: 0.9rem;
+    }
+    .msg .lang {
+      font-size: 0.75rem;
+      color: var(--gray);
+      margin-bottom: 0.3rem;
+    }
+
+    /* Input */
+    .input-area {
+      padding: 1rem 1.5rem;
+      background: var(--bg2);
+      border-top: 1px solid #222;
+    }
+    .input-row {
+      display: flex;
+      gap: 0.5rem;
+    }
+    #input {
+      flex: 1;
+      background: var(--bg);
+      border: 1px solid #333;
+      color: var(--text);
+      padding: 0.8rem 1rem;
+      border-radius: 6px;
+      font-family: inherit;
+      font-size: 0.95rem;
+      resize: none;
+    }
+    #input:focus {
+      outline: none;
+      border-color: var(--fire);
+      box-shadow: 0 0 0 2px rgba(255, 107, 53, 0.2);
+    }
+    #send {
+      background: linear-gradient(135deg, var(--fire), var(--fire2));
+      color: #000;
+      border: none;
+      padding: 0.8rem 1.5rem;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+      font-family: inherit;
+      transition: transform 0.2s;
+    }
+    #send:hover { transform: scale(1.05); }
+    .lang-select {
+      display: flex;
+      gap: 0.5rem;
+      margin-top: 0.5rem;
+      flex-wrap: wrap;
+    }
+    .lang-btn {
+      background: var(--bg);
+      border: 1px solid #333;
+      color: var(--text);
+      padding: 0.3rem 0.6rem;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      transition: all 0.2s;
+    }
+    .lang-btn:hover, .lang-btn.active {
+      border-color: var(--fire);
+      background: rgba(255, 107, 53, 0.1);
+    }
+
+    /* Sidebar */
+    .sidebar {
+      background: var(--bg2);
+      border-left: 1px solid #222;
+      padding: 1.5rem;
+      overflow-y: auto;
+    }
+    .sidebar h3 {
+      color: var(--fire);
+      margin-bottom: 1rem;
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .stats {
+      display: grid;
+      gap: 0.8rem;
+    }
+    .stat {
+      background: var(--bg);
+      padding: 0.8rem;
+      border-radius: 6px;
+    }
+    .stat-label {
+      color: var(--gray);
+      font-size: 0.75rem;
+      margin-bottom: 0.3rem;
+    }
+    .stat-value {
+      font-size: 1.2rem;
+      font-weight: bold;
+    }
+    .stat-bar {
+      height: 4px;
+      background: #333;
+      border-radius: 2px;
+      margin-top: 0.5rem;
+      overflow: hidden;
+    }
+    .stat-fill {
+      height: 100%;
+      background: var(--fire);
+      transition: width 0.3s;
+    }
+    .flames {
+      margin-top: 1.5rem;
+    }
+    .flame-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem;
+      border-radius: 4px;
+      margin-bottom: 0.3rem;
+      font-size: 0.85rem;
+    }
+    .flame-item.ok { color: var(--green); }
+    .flame-item.fail { color: var(--red); }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">🔥 NYXX</div>
+    <div class="status">
+      <div class="dot" id="dot"></div>
+      <span id="status-text">Connexion...</span>
+    </div>
+  </header>
+
+  <main>
+    <div class="chat-container">
+      <div id="chat"></div>
+      <div class="input-area">
+        <div class="input-row">
+          <textarea id="input" rows="1" placeholder="Parle à Nyxx... (/help pour l'aide)"></textarea>
+          <button id="send">🔥</button>
+        </div>
+        <div class="lang-select" id="langs"></div>
+      </div>
+    </div>
+
+    <div class="sidebar">
+      <h3>Ressources</h3>
+      <div class="stats">
+        <div class="stat">
+          <div class="stat-label">CPU</div>
+          <div class="stat-value" id="cpu">--%</div>
+          <div class="stat-bar"><div class="stat-fill" id="cpu-bar" style="width:0%"></div></div>
+        </div>
+        <div class="stat">
+          <div class="stat-label">RAM</div>
+          <div class="stat-value" id="mem">--%</div>
+          <div class="stat-bar"><div class="stat-fill" id="mem-bar" style="width:0%"></div></div>
+        </div>
+        <div class="stat">
+          <div class="stat-label">Exécutions</div>
+          <div class="stat-value" id="execs">0</div>
+        </div>
+        <div class="stat">
+          <div class="stat-label">Bloquées</div>
+          <div class="stat-value" id="blocked">0</div>
+        </div>
+      </div>
+
+      <div class="flames">
+        <h3>Historique</h3>
+        <div id="flames-list"></div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    const chat = document.getElementById('chat');
+    const input = document.getElementById('input');
+    const send = document.getElementById('send');
+    const dot = document.getElementById('dot');
+    const statusText = document.getElementById('status-text');
+    const langsDiv = document.getElementById('langs');
+
+    let ws;
+    let selectedLang = 'auto';
+    const languages = ['auto', 'python', 'javascript', 'bash', 'go', 'rust', 'c', 'ruby', 'lua'];
+
+    // Lang buttons
+    languages.forEach(l => {
+      const btn = document.createElement('button');
+      btn.className = 'lang-btn' + (l === 'auto' ? ' active' : '');
+      btn.textContent = l;
+      btn.onclick = () => {
+        document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        selectedLang = l;
+      };
+      langsDiv.appendChild(btn);
+    });
+
+    function connect() {
+      ws = new WebSocket(`ws://${location.host}`);
+
+      ws.onopen = () => {
+        dot.classList.add('online');
+        statusText.textContent = 'En ligne';
+        addMsg('system', '🔥 Connecté à Nyxx');
+        ws.send(JSON.stringify({ type: 'status' }));
+      };
+
+      ws.onclose = () => {
+        dot.classList.remove('online');
+        statusText.textContent = 'Déconnecté';
+        setTimeout(connect, 3000);
+      };
+
+      ws.onmessage = (e) => {
+        const data = JSON.parse(e.data);
+        handleMessage(data);
+      };
+    }
+
+    function handleMessage(data) {
+      switch (data.type) {
+        case 'connected':
+          break;
+        case 'status':
+          updateStats(data);
+          break;
+        case 'running':
+          addMsg('system', `🔥 Exécution ${data.lang}...`);
+          break;
+        case 'result':
+          if (data.ok) {
+            addMsg('nyxx', data.output || '(vide)', data.lang);
+          } else {
+            addMsg('error', data.error || 'Erreur');
+          }
+          ws.send(JSON.stringify({ type: 'status' }));
+          break;
+        case 'blocked':
+          addMsg('error', `⛔ ${data.error}`);
+          break;
+        case 'error':
+          addMsg('error', data.error);
+          break;
+      }
+    }
+
+    function updateStats(data) {
+      if (data.resources) {
+        document.getElementById('cpu').textContent = data.resources.cpu + '%';
+        document.getElementById('mem').textContent = data.resources.mem + '%';
+        document.getElementById('cpu-bar').style.width = data.resources.cpu + '%';
+        document.getElementById('mem-bar').style.width = data.resources.mem + '%';
+      }
+      if (data.stats) {
+        document.getElementById('execs').textContent = data.stats.executions;
+        document.getElementById('blocked').textContent = data.stats.blocked;
+      }
+      if (data.fire && data.fire.recentSpells) {
+        const list = document.getElementById('flames-list');
+        list.innerHTML = '';
+        data.fire.recentSpells.slice(-8).reverse().forEach(f => {
+          const div = document.createElement('div');
+          div.className = 'flame-item ' + (f.ok ? 'ok' : 'fail');
+          div.textContent = `${f.flame || '🔥'} ${f.lang} (${f.duration}ms)`;
+          list.appendChild(div);
+        });
+      }
+    }
+
+    function addMsg(type, content, lang = null) {
+      const div = document.createElement('div');
+      div.className = 'msg ' + type;
+
+      if (lang) {
+        const langSpan = document.createElement('div');
+        langSpan.className = 'lang';
+        langSpan.textContent = lang;
+        div.appendChild(langSpan);
+      }
+
+      if (content.includes('\n') && type === 'nyxx') {
+        const pre = document.createElement('pre');
+        pre.textContent = content;
+        div.appendChild(pre);
+      } else {
+        const text = document.createTextNode(content);
+        div.appendChild(text);
+      }
+
+      chat.appendChild(div);
+      chat.scrollTop = chat.scrollHeight;
+    }
+
+    function sendMessage() {
+      const msg = input.value.trim();
+      if (!msg) return;
+
+      addMsg('user', msg);
+      input.value = '';
+
+      if (msg === '/help') {
+        addMsg('system', 'Commandes: /status, /clear, ou tape du code');
+        return;
+      }
+      if (msg === '/status') {
+        ws.send(JSON.stringify({ type: 'status' }));
+        return;
+      }
+      if (msg === '/clear') {
+        chat.innerHTML = '';
+        return;
+      }
+
+      ws.send(JSON.stringify({
+        type: 'run',
+        code: msg,
+        lang: selectedLang === 'auto' ? null : selectedLang
+      }));
+    }
+
+    send.onclick = sendMessage;
+    input.onkeydown = (e) => {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        sendMessage();
+      }
+    };
+
+    // Auto-resize textarea
+    input.oninput = () => {
+      input.style.height = 'auto';
+      input.style.height = Math.min(input.scrollHeight, 150) + 'px';
+    };
+
+    connect();
+    setInterval(() => {
+      if (ws && ws.readyState === WebSocket.OPEN) {
+        ws.send(JSON.stringify({ type: 'status' }));
+      }
+    }, 5000);
+  </script>
+</body>
+</html>

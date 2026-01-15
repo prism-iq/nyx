@@ -1,0 +1,10 @@
+#!/bin/bash
+# NYX WAKE - Réveil
+echo "$(date '+%Y-%m-%d %H:%M') - Nyx se réveille" >> /home/ego-bash/nyx-v2/mind.md
+echo "🔥 Nyx s'éveille..."
+
+# Lancer le heartbeat
+nohup /home/ego-bash/nyx-v2/heartbeat > /dev/null 2>&1 &
+
+# Vérifier l'état
+/home/ego-bash/nyx-v2/sens

@@ -1,0 +1,14 @@
+{
+  "cid": "e2f87cb0-adbd-4ba3-939f-3a2c2543f2cf",
+  "messages": [
+    {
+      "role": "user",
+      "content": "Tu suce ?"
+    },
+    {
+      "role": "assistant",
+      "content": "non.\n\nquestion suivante?"
+    }
+  ],
+  "updated": "2026-01-11T19:25:39.235069"
+}

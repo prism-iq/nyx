@@ -1,0 +1,6 @@
+#!/bin/bash
+# NYX DOIGTS - Écrire vite
+FILE="$1"
+shift
+echo "$@" >> "$FILE"
+echo "Écrit dans $FILE"

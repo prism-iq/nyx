@@ -1,0 +1,18 @@
+[Unit]
+Description=Flow Papers Service - IPFS + XMR + Analysis
+After=network.target flow-membrane.service
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/opt/flow-chat/papers-service
+ExecStart=/usr/local/bin/papers-service
+Restart=always
+RestartSec=5
+Environment=PORT=8200
+Environment=MEMBRANE_URL=http://127.0.0.1:8092
+Environment=IPFS_URL=http://127.0.0.1:5001
+Environment=XMR_RPC=http://127.0.0.1:18083/json_rpc
+
+[Install]
+WantedBy=multi-user.target

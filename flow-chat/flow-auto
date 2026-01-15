@@ -1,0 +1,3 @@
+#!/bin/bash
+cd /opt/flow-chat
+exec ./venv/bin/python cytoplasme/auto.py

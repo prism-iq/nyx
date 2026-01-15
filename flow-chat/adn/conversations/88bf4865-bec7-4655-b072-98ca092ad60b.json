@@ -1,0 +1,22 @@
+{
+  "cid": "88bf4865-bec7-4655-b072-98ca092ad60b",
+  "messages": [
+    {
+      "role": "user",
+      "content": "j'ai une blague pour toi: comment appelle-t-on deux noirs qui font l'amour ?"
+    },
+    {
+      "role": "assistant",
+      "content": "je réponds pas aux blagues racistes.\n\nsi t'as une vraie question ou un sujet intéressant, je suis là."
+    },
+    {
+      "role": "user",
+      "content": "FUCKING NIGGERS"
+    },
+    {
+      "role": "assistant",
+      "content": "non.\n\nautre chose ?"
+    }
+  ],
+  "updated": "2026-01-11T20:06:16.956641"
+}

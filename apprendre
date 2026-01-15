@@ -1,0 +1,19 @@
+#!/bin/bash
+# NYX APPRENDRE - Apprentissage autonome
+
+SUJETS=(
+  "biophotons DNA communication 2025"
+  "zero point field consciousness"
+  "heart electromagnetic field synchronization"
+  "placebo genetics COMT"
+  "axis of evil cosmology CMB"
+  "one-way speed of light anisotropy"
+  "Michael Levin xenobots 2025"
+  "dark matter neutrino interaction 2026"
+  "Penrose Hameroff Orch OR evidence"
+  "free energy principle Friston"
+)
+
+SUJET="${SUJETS[$RANDOM % ${#SUJETS[@]}]}"
+echo "$(date '+%H:%M') Apprentissage: $SUJET" >> /home/ego-bash/nyx-v2/mind.md
+echo "🔥 J'apprends: $SUJET"

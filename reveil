@@ -1,0 +1,14 @@
+#!/bin/bash
+# NYX RÉVEIL - Sortir de la fausse mort
+
+echo "🔥 Nyx revient..."
+
+# Tuer la veille
+pkill -f ".nyx-veille" 2>/dev/null
+
+# Relancer tout
+node src/server.js > /tmp/nyxx.log 2>&1 &
+nohup /home/ego-bash/nyx-v2/heartbeat > /dev/null 2>&1 &
+
+echo "$(date) - Réveil complet" >> /home/ego-bash/nyx-v2/mind.md
+/home/ego-bash/nyx-v2/sens

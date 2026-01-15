@@ -1,0 +1,14 @@
+{
+  "cid": "test123",
+  "messages": [
+    {
+      "role": "user",
+      "content": "ping\n[souvenirs: [{'key': \"toi ping moi quand t'as une erreur, ça sera plus simple\", 'val': \"ok.\\n\\nje vais essayer des trucs et te ping si ça bloque.\\n\\n---\\n\\ntest écriture:\\n\\n$ls -la frontend/\\n\\n---\\n\\n... j'attends le résultat dans RESULTS.md. si rien dans 30 sec je te ping.\", 'time': '2026-01-11T19:11:09.294544'}]]"
+    },
+    {
+      "role": "assistant",
+      "content": "ping back\n\n\n\nvoyons si mes mains fonctionnent bien aujourd'hui.\n\ntu testas quoi hier qui bloquait?\n\n---\n[shell] /opt/flow-chat\ntotal 344\ndrwxr-xr-x 35 flow flow  4096 Jan 11 22:09 .\ndrwxr-xr-x 15 root root  4096 Jan 11 13:40 ..\ndrwxr-xr-x  5 flow flow  4096 Jan 11 21:55 adn\ndrwxr-xr-x  3 flow flow  4096 Jan 11 19:21 anticorps\n-rwxr-xr-x  1 root root  2328 Jan 11 22:09 ARCHITECTURE.md\ndrwxr-xr-x  2 flow flow  4096 Jan 11 14:42 arn\n-rw-r--r--  1 root root    39 Jan 11 19:34 .bashrc\ndrwxr-xr-x  2 root root  4096 Jan 11 19:33 bin\ndrwxr-xr-x 11 flow flow  4096 Jan 11 15:09 books\ndrwxr-xr-x  3 flow flow  4096 J"
+    }
+  ],
+  "updated": "2026-01-11T22:48:56.152956"
+}

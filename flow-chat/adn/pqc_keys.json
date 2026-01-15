@@ -1,0 +1,6 @@
+{
+  "private": "217ec6e56bf6e47059d69e726b52f3a7d4605bb96070ede7e738028c1e3d1d4b",
+  "public": "2eca0ab0f10b784e6a05bda6a4f91940724c58ca6dc7561eda68499f7d4b0496",
+  "algorithm": "SHAKE256-HMAC (simulated PQC)",
+  "created": "2026-01-12T09:11:34.012465"
+}

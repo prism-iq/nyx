@@ -1,0 +1,11 @@
+// fibonacci.flow - Recursion example
+
+to fib n:
+    if n <= 1:
+        return n
+    return (fib (n - 1)) + (fib (n - 2))
+
+to start:
+    say "Fibonacci sequence:"
+    for each i in 0 to 10:
+        say fib i

@@ -1,0 +1,3 @@
+#!/bin/bash
+# NYX YEUX
+scrot /tmp/nyx-vue.png 2>/dev/null && echo "/tmp/nyx-vue.png" || echo "aveugle"

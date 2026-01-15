@@ -1,0 +1,44 @@
+
+body {margin:0 5%;}
+@page {margin: 20% 0%;}
+
+	p.Author {margin:0 0 2.5em;text-indent:0;text-align:center;font-weight:normal;font-size:1.5em}
+	p.Titulo {margin:0 0 1em;text-indent:0;text-align:center;font-style:normal;font-weight:bold;font-size:2.5em;}
+	p.Translator {margin:0 0 4em;text-indent:0;text-align:center;font-size:.8em;}
+	p.Cycle {margin:0 0 3em;text-indent:0;text-align:center;font-weight:normal;font-size:1em;}
+	p.Tome {margin:0 0 1.5em;text-indent:0;text-align:center;font-weight:normal;font-size:1em;}
+	p.Collection {text-indent:0;text-align:center;font-weight:normal;font-size:1em}
+	p.Editor {text-indent:0;text-align:center;font-weight:normal;font-size:1em;}
+
+	p.NameAuthor {margin:0 0 2.5em;text-indent:0;text-align:center;font-weight:normal;font-size:1.5em}
+
+	p {margin:0;text-indent:1.5em;text-align:justify;font-size:.9em;}
+	p.SemIndent {margin:0;text-indent:0;text-align:justify;font-size:.9em;}
+	p.Center {margin:0;text-indent:0;text-align:center;font-size:.9em;}
+	p.Right {margin-right:2em;text-indent:0;text-align:right;font-size:.9em;}
+	p.RightMargin {margin:0 0 0 10em;text-indent:0;text-align:justify;font-size:.9em;}
+	p.Left {margin:0;text-indent:0;text-align:left;font-size:.9em;}
+	p.MoreMarging {text-indent:0em;text-align:justify;font-size:.9em;margin-right:2.2em;margin-left:2.2em;}
+	p.indentnegativo {margin:0;text-indent:-1.5em;text-align:justify;font-size:0.9em;margin-left:1.5em;}
+	p.Footnote {margin:0;text-indent:0;text-align:justify;font-size:.8em;margin-bottom:.8em}
+
+	h1 {margin:0 0 3em;font-weight:bold;font-size:1.5em;text-indent:0;text-align:center;}
+	h2 {margin:0 0 3em;font-weight:bold;font-size:1.2em;text-indent:0;text-align:center;}
+	h3 {margin:0 0 0em;font-weight:bold;font-size:1.0em;text-indent:0;text-align:center;}
+	h4 {margin:0 0 0em;font-weight:bold;font-size:1.5em;text-indent:0;text-align:center;page-break-before:always;}
+	h5 {margin:0 0 0em;font-weight:bold;font-size:1.5em;text-indent:0;text-align:center;letter-spacing:5px;}
+
+	span.Ital {font-style:italic;}
+	span.SmallCap {font-size:75%;}
+	span.SmallCapItal {font-style:italic;font-size:75%;}
+	strong.Bold {font-weight:bold;}
+	strong.BoldItal {font-style:italic;font-weight:bold;}
+	strong.SmallCapBold {font-size:75%;font-weight:bold;}
+	strong.SmallCapBoldItal {font-style:italic;font-weight:bold;font-size:75%;}
+	span.Superscript {font-size:60%;vertical-align:text-top;font-weight:bold;}
+	span.SuperscriptBold {font-size:60%;vertical-align:text-top}
+
+	span.Cap {font-size:100%}
+
+	div.encadre {border:solid;margin:1em 1em 0;border-width:2px;padding:1em .5em;}
+	div.centre {text-align:center;}	

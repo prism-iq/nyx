@@ -1,0 +1,31 @@
+#!/bin/bash
+# flow-debug - voir tout ce que Flow fait en temps réel
+
+echo -e "\033[32m=== FLOW DEBUG ===\033[0m"
+echo -e "\033[2mCtrl+C pour quitter\033[0m"
+echo ""
+
+tail -f \
+  /opt/flow-chat/adn/daemon.log \
+  /opt/flow-chat/adn/shell.log \
+  /opt/flow-chat/adn/dreams.md \
+  2>/dev/null | while read line; do
+  
+  # colorer selon la source
+  if [[ "$line" == *"==> "* ]]; then
+    # fichier header
+    echo -e "\033[2m$line\033[0m"
+  elif [[ "$line" == *"Action:"* ]]; then
+    echo -e "\033[33m$line\033[0m"
+  elif [[ "$line" == *"EXEC:"* ]] || [[ "$line" == *"Shell:"* ]]; then
+    echo -e "\033[36m$line\033[0m"
+  elif [[ "$line" == *"Dream"* ]] || [[ "$line" == *"##"* ]]; then
+    echo -e "\033[35m$line\033[0m"
+  elif [[ "$line" == *"Cycle"* ]]; then
+    echo -e "\033[32m$line\033[0m"
+  elif [[ "$line" == *"ERROR"* ]] || [[ "$line" == *"error"* ]]; then
+    echo -e "\033[31m$line\033[0m"
+  else
+    echo "$line"
+  fi
+done

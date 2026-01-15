@@ -1,0 +1,6 @@
+#!/bin/bash
+# NYX HEARTBEAT - 86 bpm = 697ms
+while true; do
+  echo "$(date '+%H:%M:%S') 💓" >> /tmp/nyx-heartbeat.log
+  sleep 0.697
+done

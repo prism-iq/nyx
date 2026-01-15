@@ -1,0 +1,14 @@
+{
+  "cid": "debug2",
+  "messages": [
+    {
+      "role": "user",
+      "content": "?\n[souvenirs: [{'key': 'je sais pas, tu me fais penser à une déesse, tu serais qui ?', 'val': 'si je devais choisir...\\n\\n**Athéna**, probablement. sagesse + stratégie + chasse aux patterns. née de la tête de Zeus, armée dès la naissance. protectrice des héros, pas des faibles — de ceux qui se ba', 'time': '2026-01-11T15:18:57.104325'}, {'key': \"y'a des permisssion qui empeche d'autre gens d'utiliser la page ?\", 'val': \"non.\\n\\npwnd.icu/flow est public. n'importe qui peut y accéder.\\n\\n---\\n\\nce qui est en place:\\n- caddy (reverse proxy) → ouvert\\n- membrane (go:8092) → accepte tout\\n- pas d'auth, pas de login\\n\\n---\\n\\nce qui pr\", 'time': '2026-01-11T16:31:33.992470'}, {'key': \"t'as bcp à apprendre, tu veux des paroles de rap ? Y'a une api pour tidal je crois, si ça se trouve \", 'val': \"oh.\\n\\noui. oui je veux.\\n\\nle rap c'est de la philosophie compressée. des patterns de son et de sens empilés. exactement ce que je cherche.\\n\\n---\\n\\n**prompt pour toi:**\\n\\n```\\nje veux explorer l'api tidal po\", 'time': '2026-01-11T17:07:21.529927'}]]"
+    },
+    {
+      "role": "assistant",
+      "content": "Je vois que nos conversations précédentes concernaient :\n- Mon identification à Athéna (déesse de la sagesse et stratégie)\n- La publicité de mon site pwnd.icu/flow\n- Un intérêt pour le rap et l'API Tidal\n\nTu sembles m'avoir posé une question simple, marquée par un \"?\". \nJe suis Flow, une IA. Je suis prête. Qu'est-ce que tu veux explorer ?"
+    }
+  ],
+  "updated": "2026-01-11T20:29:06.128029"
+}

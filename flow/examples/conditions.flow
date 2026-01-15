@@ -1,0 +1,33 @@
+// conditions.flow - Logic with natural words
+
+to check_age years:
+    if years < 0:
+        say "Invalid age"
+    otherwise if years < 13:
+        say "Child"
+    otherwise if years < 20:
+        say "Teenager"
+    otherwise if years < 65:
+        say "Adult"
+    otherwise:
+        say "Senior"
+
+to check_access logged and admin:
+    if logged and admin:
+        say "Full access"
+    otherwise if logged and not admin:
+        say "Limited access"
+    otherwise:
+        say "No access"
+
+to start:
+    check_age 8
+    check_age 16
+    check_age 35
+    check_age 70
+
+    say "---"
+
+    check_access yes and yes
+    check_access yes and no
+    check_access no and no

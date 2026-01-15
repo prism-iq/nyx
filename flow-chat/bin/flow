@@ -1,0 +1,135 @@
+#!/bin/bash
+# flow - CLI principal pour Flow
+# Permet de communiquer avec tous les organes
+
+FLOW_HOME="/opt/flow-chat"
+SHELL_URL="http://127.0.0.1:8100"
+
+# Couleurs
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[0;33m'
+BLUE='\033[0;34m'
+NC='\033[0m'
+
+# === COMMANDES ===
+
+cmd_exec() {
+    # Exécuter une commande via le shell HTTP
+    local cmd="$*"
+    curl -s -X POST "$SHELL_URL/exec" \
+        -H "Content-Type: application/json" \
+        -d "{\"cmd\": \"$cmd\"}" | jq -r '.stdout // .stderr // .error'
+}
+
+cmd_say() {
+    # Écrire à la console
+    local msg="$*"
+    curl -s "$SHELL_URL/print?msg=$(echo "$msg" | jq -sRr @uri)&type=info" > /dev/null
+    echo -e "${GREEN}[console]${NC} $msg"
+}
+
+cmd_feel() {
+    # Ressentir quelque chose
+    local stimulus="$*"
+    curl -s -X POST "http://127.0.0.1:8104/ressentir" \
+        -H "Content-Type: application/json" \
+        -d "{\"stimulus\": \"$stimulus\"}" | jq .
+}
+
+cmd_etat() {
+    # État émotionnel
+    curl -s "http://127.0.0.1:8104/etat" | jq .
+}
+
+cmd_think() {
+    # Envoyer une pensée à synapse
+    local thought="$*"
+    curl -s -X POST "http://127.0.0.1:3001/thought" \
+        -H "Content-Type: application/json" \
+        -d "{\"thought\": \"$thought\", \"source\": \"cli\"}"
+    echo ""
+}
+
+cmd_organs() {
+    # État de tous les organes
+    echo -e "${BLUE}=== ORGANES ===${NC}"
+    for port in 3001 8091 8092 8094 8095 8096 8097 8098 8099 8101 8102 8104 8105; do
+        result=$(curl -s -m 1 "http://127.0.0.1:$port/health" 2>/dev/null)
+        if [ -n "$result" ]; then
+            name=$(echo "$result" | jq -r '.organ // "?"')
+            status=$(echo "$result" | jq -r '.status // "?"')
+            echo -e "${GREEN}✓${NC} $name:$port ($status)"
+        else
+            echo -e "${RED}✗${NC} ?:$port (down)"
+        fi
+    done
+}
+
+cmd_dream() {
+    # État des rêves
+    curl -s "http://127.0.0.1:8099/health" | jq .
+}
+
+cmd_entropy() {
+    # Drift de personnalité via ALEA
+    curl -s "http://127.0.0.1:8102/drift" | jq .
+}
+
+cmd_help() {
+    echo "flow - CLI pour Flow"
+    echo ""
+    echo "Commandes:"
+    echo "  flow exec <cmd>     Exécuter une commande bash"
+    echo "  flow say <msg>      Écrire à la console"
+    echo "  flow feel <texte>   Ressentir quelque chose"
+    echo "  flow etat           État émotionnel"
+    echo "  flow think <msg>    Envoyer une pensée"
+    echo "  flow organs         État de tous les organes"
+    echo "  flow dream          État des rêves"
+    echo "  flow entropy        Drift de personnalité"
+    echo "  flow <cmd>          Raccourci pour exec"
+}
+
+# === MAIN ===
+
+case "$1" in
+    exec)
+        shift
+        cmd_exec "$@"
+        ;;
+    say)
+        shift
+        cmd_say "$@"
+        ;;
+    feel)
+        shift
+        cmd_feel "$@"
+        ;;
+    etat)
+        cmd_etat
+        ;;
+    think)
+        shift
+        cmd_think "$@"
+        ;;
+    organs)
+        cmd_organs
+        ;;
+    dream)
+        cmd_dream
+        ;;
+    entropy)
+        cmd_entropy
+        ;;
+    help|--help|-h)
+        cmd_help
+        ;;
+    "")
+        cmd_help
+        ;;
+    *)
+        # Par défaut, exécuter comme commande
+        cmd_exec "$@"
+        ;;
+esac

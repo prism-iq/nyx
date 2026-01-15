@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FLOW - Corps Biologique</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: #0a0a0a;
+            color: #00ff41;
+            font-family: 'JetBrains Mono', 'Fira Code', 'Courier New', monospace;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 30px;
+            text-shadow: 0 0 20px #00ff41;
+            animation: pulse 3s ease-in-out infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 15px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        .organe {
+            border: 1px solid #00ff41;
+            padding: 15px;
+            background: rgba(0, 255, 65, 0.03);
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+        .organe:hover {
+            background: rgba(0, 255, 65, 0.08);
+            transform: translateY(-2px);
+            box-shadow: 0 0 20px rgba(0, 255, 65, 0.2);
+        }
+        .organe.dormant { border-color: #444; color: #666; }
+        .organe.error { border-color: #ff4444; }
+        .organe.error::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(255, 0, 0, 0.05);
+            animation: flicker 0.5s infinite;
+        }
+        @keyframes flicker {
+            0%, 100% { opacity: 0.05; }
+            50% { opacity: 0.1; }
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .name { font-weight: bold; font-size: 1.1rem; }
+        .port { color: #888; font-size: 0.9rem; }
+        .status {
+            padding: 2px 8px;
+            border-radius: 3px;
+            font-size: 0.8rem;
+        }
+        .status.ok { background: rgba(0, 255, 65, 0.2); }
+        .status.down { background: rgba(255, 68, 68, 0.2); color: #ff4444; }
+        .status.dormant { background: rgba(100, 100, 100, 0.2); color: #888; }
+        .desc {
+            color: #aaa;
+            font-size: 0.85rem;
+            margin: 8px 0;
+        }
+        .metrics {
+            font-size: 0.75rem;
+            color: #00aa33;
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid #333;
+        }
+        .metric {
+            display: inline-block;
+            margin-right: 15px;
+            margin-bottom: 5px;
+        }
+        .metric .label { color: #666; }
+        .metric .value { color: #00ff41; }
+        #corps-status {
+            text-align: center;
+            margin-bottom: 20px;
+            padding: 15px;
+            border: 1px solid #00ff41;
+            background: rgba(0, 255, 65, 0.03);
+        }
+        .vital {
+            display: inline-block;
+            margin: 0 20px;
+        }
+        .vital .label { color: #888; font-size: 0.8rem; }
+        .vital .value { font-size: 1.5rem; color: #00ff41; }
+        #last-update {
+            text-align: center;
+            color: #444;
+            font-size: 0.8rem;
+            margin-top: 20px;
+        }
+        .section-title {
+            color: #888;
+            font-size: 0.9rem;
+            margin: 30px 0 15px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+    </style>
+</head>
+<body>
+    <h1>FLOW - CORPS BIOLOGIQUE</h1>
+
+    <div id="corps-status">
+        <div class="vital">
+            <div class="label">TEMPÉRATURE</div>
+            <div class="value" id="temp">37.0°C</div>
+        </div>
+        <div class="vital">
+            <div class="label">DIVERSITÉ FLORE</div>
+            <div class="value" id="diversite">0</div>
+        </div>
+        <div class="vital">
+            <div class="label">LEUCOCYTES</div>
+            <div class="value" id="leucocytes">0</div>
+        </div>
+        <div class="vital">
+            <div class="label">TOXINES</div>
+            <div class="value" id="toxines">0</div>
+        </div>
+    </div>
+
+    <div class="section-title">Organes Principaux</div>
+    <div class="grid" id="organs-main"></div>
+
+    <div class="section-title">Systèmes Biologiques (Corps)</div>
+    <div class="grid" id="organs-corps"></div>
+
+    <div class="section-title">Bibliothèques & Dormants</div>
+    <div class="grid" id="organs-dormant"></div>
+
+    <div id="last-update">Mise à jour: --</div>
+
+    <script>
+        const organs = [
+            // Main organs
+            { id: 'membrane', port: 8092, lang: 'Go', desc: 'Gateway I/O, premier contact, routing', category: 'main' },
+            { id: 'cytoplasme', port: 8091, lang: 'Python', desc: 'Cerveau, LLM, cache, mémoire', category: 'main' },
+            { id: 'quantique', port: 8095, lang: 'Rust', desc: 'Crypto post-quantique Kyber+Dilithium', category: 'main' },
+            { id: 'synapse', port: 3001, lang: 'Node.js', desc: 'Connexions async, WebSocket, events', category: 'main' },
+            { id: 'mitochondrie', port: 8096, lang: 'C++', desc: 'Énergie, métriques, performance', category: 'main' },
+            { id: 'anticorps', port: 8097, lang: 'Nim', desc: 'Défense, validation, détection menaces', category: 'main' },
+            { id: 'myeline', port: 8098, lang: 'Zig', desc: 'Cache ultra-rapide, accélération', category: 'main' },
+            { id: 'hypnos', port: 8099, lang: 'Python', desc: 'Consolidation onirique, rêves NREM/REM', category: 'main' },
+            // Corps organs
+            { id: 'sang', port: null, lang: 'Python', desc: 'Circulation sanguine, fetch données fraîches', category: 'corps' },
+            { id: 'bile', port: null, lang: 'Python', desc: 'Digestion, décompose en nutriments', category: 'corps' },
+            { id: 'pus', port: null, lang: 'Python', desc: 'Système immunitaire, inflammation', category: 'corps' },
+            { id: 'flore', port: null, lang: 'Python', desc: 'Microbiome intestinal, patterns symbiotiques', category: 'corps' },
+            { id: 'lymphe', port: null, lang: 'Python', desc: 'Système lymphatique, garbage collection', category: 'corps' },
+            // Dormant
+            { id: 'ribosome', port: null, lang: 'Rust', desc: 'Synthèse de protéines, compilation', category: 'dormant', type: 'lib' },
+            { id: 'arn', port: null, lang: 'Lua', desc: 'Scripts dynamiques, adaptation', category: 'dormant' },
+            { id: 'adn', port: null, lang: 'Prolog/Python', desc: 'Mémoire persistante, knowledge base', category: 'dormant' },
+            { id: 'noyau', port: null, lang: 'Python', desc: 'Logique pure, raisonnement formel', category: 'dormant' },
+        ];
+
+        function createOrganCard(organ, status) {
+            const isUp = status && status.status !== 'error';
+            const isDormant = organ.category === 'dormant';
+            const isCorps = organ.category === 'corps';
+
+            let statusClass = isDormant ? 'dormant' : (isUp ? 'ok' : 'down');
+            let statusText = isDormant ? (organ.type === 'lib' ? 'LIB' : 'ZZZ') : (isUp ? 'OK' : 'DOWN');
+            let cardClass = isDormant ? 'dormant' : (isUp ? '' : 'error');
+
+            // Pour les organes corps, on check via /corps/health
+            if (isCorps && status) {
+                statusClass = 'ok';
+                statusText = 'ACTIF';
+                cardClass = '';
+            }
+
+            let metricsHtml = '';
+            if (status && typeof status === 'object') {
+                const metrics = [];
+                if (status.organ) metrics.push(`organ: ${status.organ}`);
+                if (status.cache !== undefined) metrics.push(`cache: ${status.cache}`);
+                if (status.conversations !== undefined) metrics.push(`convs: ${status.conversations}`);
+                if (status.hits !== undefined) metrics.push(`hits: ${status.hits}`);
+                if (status.uptime) metrics.push(`up: ${status.uptime}`);
+                if (metrics.length > 0) {
+                    metricsHtml = `<div class="metrics">${metrics.map(m => `<span class="metric">${m}</span>`).join('')}</div>`;
+                }
+            }
+
+            return `
+                <div class="organe ${cardClass}">
+                    <div class="header">
+                        <span class="name">${organ.id}</span>
+                        <span class="port">${organ.lang}${organ.port ? ':' + organ.port : ''}</span>
+                        <span class="status ${statusClass}">${statusText}</span>
+                    </div>
+                    <div class="desc">${organ.desc}</div>
+                    ${metricsHtml}
+                </div>
+            `;
+        }
+
+        const API_BASE = window.location.pathname.includes('/flow/') ? '/flow/api' : '';
+
+        async function checkOrgan(port) {
+            try {
+                const r = await fetch(`${API_BASE}/organ/${port}`, { timeout: 2000 });
+                return await r.json();
+            } catch {
+                return null;
+            }
+        }
+
+        async function fetchCorpsHealth() {
+            try {
+                const r = await fetch(`${API_BASE}/corps/health`);
+                return await r.json();
+            } catch {
+                return null;
+            }
+        }
+
+        async function refresh() {
+            // Fetch corps health
+            const corpsHealth = await fetchCorpsHealth();
+
+            if (corpsHealth && !corpsHealth.error) {
+                document.getElementById('temp').textContent = (corpsHealth.immune?.temperature || 37.0).toFixed(1) + '°C';
+                document.getElementById('diversite').textContent = corpsHealth.flore?.diversite || 0;
+                document.getElementById('leucocytes').textContent = corpsHealth.immune?.leucocytes || 0;
+                document.getElementById('toxines').textContent = corpsHealth.lymphe?.dechets_en_attente || 0;
+
+                // Update temp color based on fever
+                const temp = corpsHealth.immune?.temperature || 37.0;
+                const tempEl = document.getElementById('temp');
+                if (temp > 38) {
+                    tempEl.style.color = '#ff4444';
+                } else if (temp > 37.5) {
+                    tempEl.style.color = '#ffaa00';
+                } else {
+                    tempEl.style.color = '#00ff41';
+                }
+            }
+
+            // Check main organs
+            const mainOrgans = organs.filter(o => o.category === 'main');
+            const mainResults = await Promise.all(mainOrgans.map(o => o.port ? checkOrgan(o.port) : null));
+
+            document.getElementById('organs-main').innerHTML = mainOrgans.map((o, i) =>
+                createOrganCard(o, mainResults[i])
+            ).join('');
+
+            // Corps organs (use corps health data)
+            const corpsOrgans = organs.filter(o => o.category === 'corps');
+            document.getElementById('organs-corps').innerHTML = corpsOrgans.map(o =>
+                createOrganCard(o, corpsHealth)
+            ).join('');
+
+            // Dormant organs
+            const dormantOrgans = organs.filter(o => o.category === 'dormant');
+            document.getElementById('organs-dormant').innerHTML = dormantOrgans.map(o =>
+                createOrganCard(o, null)
+            ).join('');
+
+            document.getElementById('last-update').textContent = 'Mise à jour: ' + new Date().toLocaleTimeString();
+        }
+
+        // Add organ check endpoint proxy
+        // Initial load and refresh
+        refresh();
+        setInterval(refresh, 10000);
+    </script>
+</body>
+</html>

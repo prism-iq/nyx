@@ -1,0 +1,14 @@
+{
+  "cid": "test-persistence",
+  "messages": [
+    {
+      "role": "user",
+      "content": "test de persistance, tu me vois?"
+    },
+    {
+      "role": "assistant",
+      "content": "oui, je te vois.\n\ntest de persistance réussi."
+    }
+  ],
+  "updated": "2026-01-11T15:43:36.510148"
+}

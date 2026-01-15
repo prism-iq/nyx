@@ -1,0 +1,122 @@
+#!/bin/bash
+# PHOENIX - Redémarrage complet de Flow
+# Usage: phoenix [--hard]
+
+set -e
+
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+CYAN='\033[0;36m'
+NC='\033[0m'
+
+echo -e "${CYAN}"
+echo "  ╔═══════════════════════════════════════╗"
+echo "  ║        🔥 PHOENIX - REBIRTH 🔥        ║"
+echo "  ╚═══════════════════════════════════════╝"
+echo -e "${NC}"
+
+# Services dans l'ordre de démarrage (dépendances)
+CORE_SERVICES=(
+    "flow-quantique"      # crypto d'abord
+    "flow-shell"          # shell
+    "flow-cytoplasme"     # cerveau
+    "flow-membrane"       # gateway
+    "flow-synapse"        # events
+)
+
+ORGAN_SERVICES=(
+    "flow-noyau"
+    "flow-hypnos"
+    "flow-anticorps"
+    "flow-mitochondrie"
+    "flow-myeline"
+    "flow-oreille"
+    "flow-corps"
+    "flow-coeur"
+    "flow-arn"
+    "flow-alea"
+)
+
+META_SERVICES=(
+    "flow-pacemaker"
+    "flow-watchdog"
+    "flow-daemon"
+)
+
+HARD_MODE=false
+if [[ "$1" == "--hard" ]]; then
+    HARD_MODE=true
+    echo -e "${YELLOW}⚠️  HARD PHOENIX - killing all processes${NC}"
+fi
+
+# Phase 1: Stop all
+echo -e "\n${YELLOW}▶ Phase 1: Stopping services...${NC}"
+
+if $HARD_MODE; then
+    # Kill all flow processes
+    pkill -9 -f "/opt/flow-chat" 2>/dev/null || true
+    sleep 2
+else
+    # Graceful stop
+    for svc in "${META_SERVICES[@]}" "${ORGAN_SERVICES[@]}" "${CORE_SERVICES[@]}"; do
+        if systemctl is-active --quiet "$svc" 2>/dev/null; then
+            echo -e "  stopping $svc"
+            systemctl stop "$svc" 2>/dev/null || true
+        fi
+    done
+fi
+
+echo -e "${GREEN}  ✓ All stopped${NC}"
+sleep 1
+
+# Phase 2: Start core
+echo -e "\n${YELLOW}▶ Phase 2: Starting core services...${NC}"
+for svc in "${CORE_SERVICES[@]}"; do
+    echo -e "  starting $svc"
+    systemctl start "$svc" 2>/dev/null || echo -e "    ${RED}failed${NC}"
+    sleep 0.5
+done
+
+# Phase 3: Start organs
+echo -e "\n${YELLOW}▶ Phase 3: Starting organ services...${NC}"
+for svc in "${ORGAN_SERVICES[@]}"; do
+    echo -e "  starting $svc"
+    systemctl start "$svc" 2>/dev/null || echo -e "    ${RED}failed${NC}"
+done
+
+# Phase 4: Start meta
+echo -e "\n${YELLOW}▶ Phase 4: Starting meta services...${NC}"
+for svc in "${META_SERVICES[@]}"; do
+    echo -e "  starting $svc"
+    systemctl start "$svc" 2>/dev/null || echo -e "    ${RED}failed${NC}"
+done
+
+sleep 2
+
+# Phase 5: Verify
+echo -e "\n${YELLOW}▶ Phase 5: Verifying...${NC}"
+
+SENSES=$(curl -s localhost:8100/senses 2>/dev/null)
+if [ -n "$SENSES" ]; then
+    ALIVE=$(echo "$SENSES" | python3 -c "import sys,json; d=json.load(sys.stdin); print(d['alive'])" 2>/dev/null || echo "?")
+    TOTAL=$(echo "$SENSES" | python3 -c "import sys,json; d=json.load(sys.stdin); print(d['total'])" 2>/dev/null || echo "?")
+    PCT=$(echo "$SENSES" | python3 -c "import sys,json; d=json.load(sys.stdin); print(f\"{d['health_pct']:.0f}\")" 2>/dev/null || echo "?")
+
+    if [ "$ALIVE" == "$TOTAL" ]; then
+        echo -e "${GREEN}  ✓ $ALIVE/$TOTAL senses alive ($PCT%)${NC}"
+    else
+        echo -e "${YELLOW}  ⚠ $ALIVE/$TOTAL senses alive ($PCT%)${NC}"
+    fi
+else
+    echo -e "${RED}  ✗ shell not responding${NC}"
+fi
+
+# Show failed services
+FAILED=$(systemctl list-units --type=service --state=failed | grep flow- || true)
+if [ -n "$FAILED" ]; then
+    echo -e "\n${RED}Failed services:${NC}"
+    echo "$FAILED"
+fi
+
+echo -e "\n${CYAN}  🔥 Phoenix complete 🔥${NC}\n"

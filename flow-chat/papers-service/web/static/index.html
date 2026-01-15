@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>flow / papers</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#0a0a0a;--fg:#e5e5e5;--dim:#333;--accent:#0ff;--code:#111;--success:#0f0}
+body{font:15px/1.6 -apple-system,system-ui,sans-serif;background:var(--bg);color:var(--fg);min-height:100vh}
+.container{max-width:800px;margin:0 auto;padding:40px 20px}
+h1{font-size:13px;letter-spacing:4px;color:var(--accent);margin-bottom:8px}
+.sub{color:#666;font-size:13px;margin-bottom:40px}
+
+/* Upload zone */
+.dropzone{border:2px dashed var(--dim);padding:60px 20px;text-align:center;border-radius:4px;cursor:pointer;transition:all .2s}
+.dropzone:hover,.dropzone.dragover{border-color:var(--accent);background:rgba(0,255,255,.02)}
+.dropzone h2{font-size:16px;margin-bottom:8px}
+.dropzone p{color:#666;font-size:13px}
+.file-info{margin-top:20px;padding:16px;background:var(--code);border-radius:4px;display:none}
+.file-info.show{display:block}
+.file-info .name{color:var(--accent);font-family:monospace}
+
+/* Tiers */
+.tiers{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:30px 0}
+.tier{background:var(--code);border:2px solid var(--dim);padding:16px;border-radius:4px;cursor:pointer;text-align:center;transition:all .2s}
+.tier:hover,.tier.selected{border-color:var(--accent)}
+.tier h3{font-size:14px;margin-bottom:4px}
+.tier .price{color:var(--accent);font-size:18px;font-weight:bold}
+.tier p{color:#666;font-size:11px;margin-top:8px}
+
+/* Payment */
+.payment{background:var(--code);padding:24px;border-radius:4px;margin:30px 0;display:none}
+.payment.show{display:block}
+.payment h3{color:var(--accent);margin-bottom:16px}
+.qr-box{text-align:center;margin:20px 0}
+.qr-box canvas{border:4px solid #fff;border-radius:4px}
+.xmr-address{font-family:monospace;font-size:11px;word-break:break-all;background:var(--bg);padding:12px;border-radius:4px;margin:16px 0}
+.amount{font-size:20px;color:var(--accent);text-align:center;margin:16px 0}
+.confirmations{text-align:center;margin:16px 0;font-size:14px}
+.confirmations .count{color:var(--accent);font-size:24px;font-weight:bold}
+
+/* Status */
+.status{background:var(--code);padding:20px;border-radius:4px;margin:20px 0;display:none}
+.status.show{display:block}
+.status .step{display:flex;align-items:center;margin:8px 0}
+.status .step .dot{width:12px;height:12px;border-radius:50%;background:var(--dim);margin-right:12px}
+.status .step.done .dot{background:var(--success)}
+.status .step.active .dot{background:var(--accent);animation:pulse 1s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+
+/* Result */
+.result{background:var(--code);padding:24px;border-radius:4px;margin:20px 0;display:none;border-left:3px solid var(--success)}
+.result.show{display:block}
+.result h3{color:var(--success);margin-bottom:16px}
+.result .cid{font-family:monospace;font-size:12px;background:var(--bg);padding:8px;border-radius:4px}
+.result a{color:var(--accent)}
+
+button{background:var(--accent);color:#000;border:none;padding:14px 28px;font:14px -apple-system,sans-serif;cursor:pointer;border-radius:3px;width:100%}
+button:hover{background:#fff}
+button:disabled{background:var(--dim);color:#666;cursor:not-allowed}
+</style>
+</head>
+<body>
+<div class="container">
+<h1>flow / papers</h1>
+<p class="sub">upload. paye en XMR. je lis. je trouve.</p>
+
+<!-- Drop zone -->
+<div class="dropzone" id="dropzone">
+<h2>Drop ton PDF ici</h2>
+<p>ou clique pour sélectionner</p>
+<input type="file" id="fileInput" accept=".pdf" style="display:none">
+</div>
+
+<div class="file-info" id="fileInfo">
+<span class="name" id="fileName"></span>
+<span id="fileSize"></span>
+</div>
+
+<!-- Tiers -->
+<div class="tiers" id="tiers" style="display:none">
+<div class="tier" data-tier="50">
+<h3>Basic</h3>
+<div class="price">50€</div>
+<p>1 paper · insights clés</p>
+</div>
+<div class="tier" data-tier="200">
+<h3>Deep</h3>
+<div class="price">200€</div>
+<p>cross-domain · gaps</p>
+</div>
+<div class="tier" data-tier="500">
+<h3>Full</h3>
+<div class="price">500€</div>
+<p>analyse complète · call</p>
+</div>
+</div>
+
+<button id="submitBtn" style="display:none">Soumettre pour analyse</button>
+
+<!-- Payment -->
+<div class="payment" id="payment">
+<h3>Paiement XMR</h3>
+<div class="qr-box"><canvas id="qrCode"></canvas></div>
+<div class="amount"><span id="xmrAmount">0.00</span> XMR</div>
+<div class="xmr-address" id="xmrAddress"></div>
+<div class="confirmations">
+<div class="count"><span id="confCount">0</span>/10</div>
+<div>confirmations</div>
+</div>
+</div>
+
+<!-- Status -->
+<div class="status" id="status">
+<div class="step" id="step-upload"><div class="dot"></div>Upload IPFS</div>
+<div class="step" id="step-payment"><div class="dot"></div>Paiement vérifié</div>
+<div class="step" id="step-extract"><div class="dot"></div>Extraction texte</div>
+<div class="step" id="step-analyze"><div class="dot"></div>Analyse Flow</div>
+<div class="step" id="step-done"><div class="dot"></div>Terminé</div>
+</div>
+
+<!-- Result -->
+<div class="result" id="result">
+<h3>Analyse terminée</h3>
+<p>Récupère tes insights sur IPFS:</p>
+<div class="cid" id="resultCid"></div>
+<p style="margin-top:16px"><a id="ipfsLink" href="#" target="_blank">Ouvrir sur IPFS Gateway</a></p>
+</div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+<script>
+const dropzone = document.getElementById('dropzone');
+const fileInput = document.getElementById('fileInput');
+const fileInfo = document.getElementById('fileInfo');
+const tiers = document.getElementById('tiers');
+const submitBtn = document.getElementById('submitBtn');
+const payment = document.getElementById('payment');
+const status = document.getElementById('status');
+const result = document.getElementById('result');
+
+let selectedFile = null;
+let selectedTier = 50;
+let jobId = null;
+let ws = null;
+
+// File handling
+dropzone.onclick = () => fileInput.click();
+dropzone.ondragover = e => { e.preventDefault(); dropzone.classList.add('dragover'); };
+dropzone.ondragleave = () => dropzone.classList.remove('dragover');
+dropzone.ondrop = e => {
+    e.preventDefault();
+    dropzone.classList.remove('dragover');
+    handleFile(e.dataTransfer.files[0]);
+};
+fileInput.onchange = e => handleFile(e.target.files[0]);
+
+function handleFile(file) {
+    if (!file || file.type !== 'application/pdf') {
+        alert('PDF uniquement');
+        return;
+    }
+    selectedFile = file;
+    document.getElementById('fileName').textContent = file.name;
+    document.getElementById('fileSize').textContent = ` (${(file.size/1024/1024).toFixed(1)}MB)`;
+    fileInfo.classList.add('show');
+    tiers.style.display = 'grid';
+    submitBtn.style.display = 'block';
+}
+
+// Tier selection
+document.querySelectorAll('.tier').forEach(t => {
+    t.onclick = () => {
+        document.querySelectorAll('.tier').forEach(x => x.classList.remove('selected'));
+        t.classList.add('selected');
+        selectedTier = parseInt(t.dataset.tier);
+    };
+});
+document.querySelector('.tier').click(); // Select first by default
+
+// Submit
+submitBtn.onclick = async () => {
+    if (!selectedFile) return;
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Upload en cours...';
+    status.classList.add('show');
+    setStep('upload', 'active');
+
+    try {
+        // Upload to IPFS
+        const formData = new FormData();
+        formData.append('file', selectedFile);
+
+        const ipfsResp = await fetch('http://127.0.0.1:5001/api/v0/add', {
+            method: 'POST',
+            body: formData
+        });
+        const ipfsData = await ipfsResp.json();
+        const cid = ipfsData.Hash;
+
+        setStep('upload', 'done');
+
+        // Submit to papers-service
+        const resp = await fetch('/api/submit', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ cid, tier: selectedTier })
+        });
+        const data = await resp.json();
+
+        jobId = data.job_id;
+
+        // Show payment
+        document.getElementById('xmrAmount').textContent = data.amount_xmr.toFixed(6);
+        document.getElementById('xmrAddress').textContent = data.xmr_address;
+
+        // Generate QR
+        QRCode.toCanvas(document.getElementById('qrCode'),
+            `monero:${data.xmr_address}?tx_amount=${data.amount_xmr}`,
+            { width: 200, margin: 1, color: { dark: '#000', light: '#fff' } }
+        );
+
+        payment.classList.add('show');
+        setStep('payment', 'active');
+
+        // Connect WebSocket for updates
+        connectWS(jobId);
+
+    } catch (e) {
+        console.error(e);
+        alert('Erreur: ' + e.message);
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Soumettre pour analyse';
+    }
+};
+
+function connectWS(jobId) {
+    const protocol = location.protocol === 'https:' ? 'wss:' : 'ws:';
+    ws = new WebSocket(`${protocol}//${location.host}/api/status?job=${jobId}`);
+
+    ws.onmessage = e => {
+        const data = JSON.parse(e.data);
+        console.log('WS:', data);
+
+        if (data.confirmations) {
+            document.getElementById('confCount').textContent = data.confirmations;
+        }
+
+        switch(data.status) {
+            case 'paid':
+                setStep('payment', 'done');
+                setStep('extract', 'active');
+                payment.classList.remove('show');
+                break;
+            case 'extracted':
+                setStep('extract', 'done');
+                setStep('analyze', 'active');
+                break;
+            case 'analyzed':
+            case 'done':
+                setStep('analyze', 'done');
+                setStep('done', 'done');
+                if (data.result_cid) {
+                    document.getElementById('resultCid').textContent = data.result_cid;
+                    document.getElementById('ipfsLink').href = `https://ipfs.io/ipfs/${data.result_cid}`;
+                    result.classList.add('show');
+                }
+                break;
+            case 'error':
+                alert('Erreur: ' + data.error);
+                break;
+        }
+    };
+
+    ws.onerror = () => {
+        // Fallback to polling
+        pollStatus(jobId);
+    };
+}
+
+function pollStatus(jobId) {
+    const interval = setInterval(async () => {
+        try {
+            const resp = await fetch(`/api/result/${jobId}`);
+            const data = await resp.json();
+
+            document.getElementById('confCount').textContent = data.confirmations || 0;
+
+            if (data.status === 'done') {
+                clearInterval(interval);
+                setStep('payment', 'done');
+                setStep('extract', 'done');
+                setStep('analyze', 'done');
+                setStep('done', 'done');
+                if (data.result_cid) {
+                    document.getElementById('resultCid').textContent = data.result_cid;
+                    document.getElementById('ipfsLink').href = `https://ipfs.io/ipfs/${data.result_cid}`;
+                    result.classList.add('show');
+                }
+            }
+        } catch (e) {}
+    }, 5000);
+}
+
+function setStep(step, state) {
+    const el = document.getElementById('step-' + step);
+    el.classList.remove('active', 'done');
+    if (state) el.classList.add(state);
+}
+</script>
+</body>
+</html>

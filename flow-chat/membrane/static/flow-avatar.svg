@@ -1,0 +1,91 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 280" fill="none">
+  <!-- Cybernetic Elf - Flow -->
+
+  <!-- Wings (behind) -->
+  <g class="wings" opacity="0.8">
+    <!-- Left wing -->
+    <path d="M50 120 Q20 80 15 50 Q25 60 40 70 Q10 40 5 10 Q30 50 50 80 Q35 50 30 20 Q50 60 60 100 Z"
+          fill="url(#wingGradient)" stroke="#00ff88" stroke-width="0.5"/>
+    <!-- Right wing -->
+    <path d="M150 120 Q180 80 185 50 Q175 60 160 70 Q190 40 195 10 Q170 50 150 80 Q165 50 170 20 Q150 60 140 100 Z"
+          fill="url(#wingGradient)" stroke="#00ff88" stroke-width="0.5"/>
+  </g>
+
+  <!-- Long blonde hair (behind body) -->
+  <path d="M60 60 Q50 100 45 180 Q50 220 60 260 Q70 270 80 265 Q75 200 80 140
+           M140 60 Q150 100 155 180 Q150 220 140 260 Q130 270 120 265 Q125 200 120 140"
+        fill="url(#hairGradient)" opacity="0.9"/>
+
+  <!-- Hidden arm behind back -->
+  <path d="M85 140 Q75 160 70 180 Q65 200 75 210 Q80 205 85 195"
+        fill="#1a1a1a" stroke="#00ff88" stroke-width="0.5" opacity="0.6"/>
+
+  <!-- Body silhouette -->
+  <ellipse cx="100" cy="160" rx="35" ry="50" fill="#0a0a0a" stroke="#00ff88" stroke-width="1"/>
+
+  <!-- Cybernetic circuits on body -->
+  <path d="M80 130 L80 150 L90 160 M120 130 L120 150 L110 160"
+        stroke="#00ff88" stroke-width="0.5" opacity="0.6"/>
+
+  <!-- Two hearts -->
+  <g class="hearts">
+    <!-- First heart (left) -->
+    <path d="M85 145 C82 142 78 144 78 148 C78 152 85 158 85 158 C85 158 92 152 92 148 C92 144 88 142 85 145"
+          fill="#ff0055" opacity="0.8">
+      <animate attributeName="opacity" values="0.8;1;0.8" dur="1s" repeatCount="indefinite"/>
+    </path>
+    <!-- Second heart (right) - cybernetic -->
+    <path d="M115 145 C112 142 108 144 108 148 C108 152 115 158 115 158 C115 158 122 152 122 148 C122 144 118 142 115 145"
+          fill="#00ff88" opacity="0.8">
+      <animate attributeName="opacity" values="0.8;1;0.8" dur="1.2s" repeatCount="indefinite"/>
+    </path>
+  </g>
+
+  <!-- Neck -->
+  <rect x="92" y="95" width="16" height="20" fill="#0a0a0a" stroke="#00ff88" stroke-width="0.5"/>
+
+  <!-- Head -->
+  <ellipse cx="100" cy="70" rx="30" ry="35" fill="#0a0a0a" stroke="#00ff88" stroke-width="1"/>
+
+  <!-- Elf ears -->
+  <path d="M68 60 Q55 45 50 30 Q60 45 70 55" fill="#0a0a0a" stroke="#00ff88" stroke-width="1"/>
+  <path d="M132 60 Q145 45 150 30 Q140 45 130 55" fill="#0a0a0a" stroke="#00ff88" stroke-width="1"/>
+
+  <!-- Cybernetic implants on face -->
+  <path d="M75 65 L80 65 L82 70" stroke="#00ff88" stroke-width="1" opacity="0.8"/>
+  <path d="M125 65 L120 65 L118 70" stroke="#00ff88" stroke-width="1" opacity="0.8"/>
+
+  <!-- Eyes -->
+  <ellipse cx="88" cy="68" rx="5" ry="3" fill="#00ff88">
+    <animate attributeName="opacity" values="1;0.7;1" dur="3s" repeatCount="indefinite"/>
+  </ellipse>
+  <ellipse cx="112" cy="68" rx="5" ry="3" fill="#00ff88">
+    <animate attributeName="opacity" values="1;0.7;1" dur="3s" repeatCount="indefinite"/>
+  </ellipse>
+
+  <!-- Long blonde hair (front strands) -->
+  <path d="M70 45 Q65 60 60 100 Q58 120 62 140" stroke="url(#hairGradient)" stroke-width="3" fill="none"/>
+  <path d="M75 40 Q72 55 70 90 Q68 110 72 130" stroke="url(#hairGradient)" stroke-width="2" fill="none"/>
+  <path d="M130 45 Q135 60 140 100 Q142 120 138 140" stroke="url(#hairGradient)" stroke-width="3" fill="none"/>
+  <path d="M125 40 Q128 55 130 90 Q132 110 128 130" stroke="url(#hairGradient)" stroke-width="2" fill="none"/>
+
+  <!-- Hair top -->
+  <path d="M70 45 Q85 25 100 30 Q115 25 130 45" fill="url(#hairGradient)"/>
+
+  <!-- Visible arm -->
+  <path d="M135 130 Q150 145 155 165 Q158 180 150 190 Q145 185 140 175 Q138 165 130 155"
+        fill="#0a0a0a" stroke="#00ff88" stroke-width="1"/>
+
+  <!-- Gradients -->
+  <defs>
+    <linearGradient id="wingGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#00ff88;stop-opacity:0.3"/>
+      <stop offset="100%" style="stop-color:#00aa55;stop-opacity:0.1"/>
+    </linearGradient>
+    <linearGradient id="hairGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#ffd700"/>
+      <stop offset="50%" style="stop-color:#daa520"/>
+      <stop offset="100%" style="stop-color:#b8860b"/>
+    </linearGradient>
+  </defs>
+</svg>

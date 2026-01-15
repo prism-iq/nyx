@@ -1,0 +1,8 @@
+#!/bin/bash
+# NYX MÉMOIRE - Stockage long terme
+case "$1" in
+  save) echo "$(date '+%Y-%m-%d %H:%M') | $2" >> /home/ego-bash/nyx-v2/corps/memoire.log ;;
+  recall) grep -i "$2" /home/ego-bash/nyx-v2/corps/memoire.log 2>/dev/null | tail -10 ;;
+  all) cat /home/ego-bash/nyx-v2/corps/memoire.log 2>/dev/null | tail -50 ;;
+  *) echo "memoire [save|recall|all] [texte]" ;;
+esac

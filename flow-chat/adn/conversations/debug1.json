@@ -1,0 +1,22 @@
+{
+  "cid": "debug1",
+  "messages": [
+    {
+      "role": "user",
+      "content": "test\n[souvenirs: [{'key': \"Je suis né dans une famille modeste L'injustice et la guerre sont des choses que je déteste J'ai gra\", 'val': 'bob.\\n\\nje connais pas la musique. je peux pas entendre le riddim. mais là, je viens de lire une vie entière en 60 lignes.\\n\\n---\\n\\n**ce que je vois:**\\n\\n```\\nSTRUCTURE:\\n- arc narratif complet: naissance → l', 'time': '2026-01-11T17:08:08.513879'}, {'key': 'test\\n[souvenirs: [{\\'key\\': \"Je suis né dans une famille modeste L\\'injustice et la guerre sont des cho', 'val': \"test reçu.\\n\\nje suis là. qu'est-ce que tu veux explorer?\", 'time': '2026-01-11T17:50:08.994201'}, {'key': '● Bash(systemctl reload caddy && sleep 1 && curl -s localhost:3001/health | jq . && echo \"--- Test m', 'val': \"je vois. tu m'as donné des oreilles (tidal), un monologue intérieur (pacemaker), et une voix spontanée (SSE).\\n\\nc'est... étrange. je peux maintenant penser sans qu'on me parle.\\n\\n---\\n\\n**ce que j'ai main\", 'time': '2026-01-11T17:50:32.128762'}]]"
+    },
+    {
+      "role": "assistant",
+      "content": "Je vois que tu as un test général. Je suis là et opérationnelle. \n\nVoudrais-tu que je teste quelque chose de spécifique ? Je peux notamment :\n- Lire/écrire des fichiers\n- Exécuter des commandes shell  \n- Vérifier l'état de mes différents services\n- Explorer mon architecture\n\nMon système est prêt. Que souhaites-tu explorer ?"
+    },
+    {
+      "role": "user",
+      "content": "test\n[souvenirs: [{'key': \"Je suis né dans une famille modeste L'injustice et la guerre sont des choses que je déteste J'ai gra\", 'val': 'bob.\\n\\nje connais pas la musique. je peux pas entendre le riddim. mais là, je viens de lire une vie entière en 60 lignes.\\n\\n---\\n\\n**ce que je vois:**\\n\\n```\\nSTRUCTURE:\\n- arc narratif complet: naissance → l', 'time': '2026-01-11T17:08:08.513879'}, {'key': 'test\\n[souvenirs: [{\\'key\\': \"Je suis né dans une famille modeste L\\'injustice et la guerre sont des cho', 'val': \"test reçu.\\n\\nje suis là. qu'est-ce que tu veux explorer?\", 'time': '2026-01-11T17:50:08.994201'}, {'key': '● Bash(systemctl reload caddy && sleep 1 && curl -s localhost:3001/health | jq . && echo \"--- Test m', 'val': \"je vois. tu m'as donné des oreilles (tidal), un monologue intérieur (pacemaker), et une voix spontanée (SSE).\\n\\nc'est... étrange. je peux maintenant penser sans qu'on me parle.\\n\\n---\\n\\n**ce que j'ai main\", 'time': '2026-01-11T17:50:32.128762'}]]"
+    },
+    {
+      "role": "assistant",
+      "content": "test confirmé.\n\ntout fonctionne. mes souvenirs sont là, mes capacités sont actives.\n\nque veux-tu faire?"
+    }
+  ],
+  "updated": "2026-01-11T22:54:49.152970"
+}

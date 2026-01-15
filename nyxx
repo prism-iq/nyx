@@ -1,0 +1,78 @@
+#!/bin/bash
+# ══════════════════════════════════════════════════════════════
+#  NYXX - Universal Launcher (Ultra-Léger)
+#  Ryzen AI 7 350 | 8 cores | 30GB RAM | 1.8TB NVMe
+# ══════════════════════════════════════════════════════════════
+
+NYXX_HOME="$(dirname "$(realpath "$0")")"
+NYXX_URL="http://127.0.0.1:8080"
+NYXX_PID="/tmp/nyxx.pid"
+
+C='\033[38;5;208m'
+G='\033[38;5;114m'
+R='\033[38;5;203m'
+N='\033[0m'
+
+case "${1:-menu}" in
+  start|s)
+    if curl -s "$NYXX_URL/api/health" > /dev/null 2>&1; then
+      echo -e "${G}● Nyxx active${N}"
+    else
+      cd "$NYXX_HOME" && node src/server.js > /tmp/nyxx.log 2>&1 &
+      echo $! > "$NYXX_PID"
+      sleep 1
+      echo -e "${G}● Nyxx éveillée${N}"
+    fi
+    ;;
+  stop|x)
+    [ -f "$NYXX_PID" ] && kill $(cat "$NYXX_PID") 2>/dev/null
+    pkill -f "node src/server.js" 2>/dev/null
+    rm -f "$NYXX_PID"
+    echo -e "${R}● Nyxx endormie${N}"
+    ;;
+  restart|r) "$0" stop && sleep 1 && "$0" start ;;
+  status|st)
+    if curl -s "$NYXX_URL/api/health" > /dev/null 2>&1; then
+      curl -s "$NYXX_URL/api/status" | python3 -c "
+import sys,json
+d=json.load(sys.stdin)
+r=d.get('resources',{})
+s=d.get('nyxx',{}).get('stats',{})
+print(f'● NYXX v{d.get(\"nyxx\",{}).get(\"version\",\"?\")}')
+print(f'  CPU: {r.get(\"cpu\",\"?\")}%  RAM: {r.get(\"mem\",\"?\")}%')
+print(f'  Exécutions: {s.get(\"executions\",0)}  Bloquées: {s.get(\"blocked\",0)}')"
+    else
+      echo -e "${R}○ Nyxx hors ligne${N}"
+    fi
+    ;;
+  web|w) "$0" start; chromium --app="$NYXX_URL" 2>/dev/null & ;;
+  term|t) "$0" start; alacritty -e "$NYXX_HOME/console" 2>/dev/null & ;;
+  all|a)
+    "$0" start; sleep 0.5
+    alacritty -e "$NYXX_HOME/console" 2>/dev/null &
+    chromium --app="$NYXX_URL" 2>/dev/null &
+    notify-send "🔥 NYXX" "Lancée" 2>/dev/null
+    ;;
+  gui|g|menu|m|"")
+    "$0" start
+    choice=$(echo -e "💬 Chat Web\n🖥️ Console\n📊 Status\n🔄 Restart\n⏹️ Stop\n🚀 Tout" | \
+      rofi -dmenu -i -p "🔥 NYXX" -theme-str 'window {width: 280px;}' 2>/dev/null)
+    case "$choice" in
+      *"Chat"*|*"Web"*) "$0" web ;;
+      *"Console"*) "$0" term ;;
+      *"Status"*) notify-send "NYXX" "$("$0" status)" ;;
+      *"Restart"*) "$0" restart ;;
+      *"Stop"*) "$0" stop ;;
+      *"Tout"*) "$0" all ;;
+    esac
+    ;;
+  run|e) shift; curl -s -X POST "$NYXX_URL/api/run" -H "Content-Type: application/json" -d "{\"code\":\"$*\"}" | python3 -c "import sys,json;d=json.load(sys.stdin);print(d.get('output',d.get('error','')))" ;;
+  kill|k) "$NYXX_HOME/killswitch" ;;
+  help|h|--help|-h)
+    echo -e "${C}══ NYXX ══${N}"
+    echo "  start|s  stop|x  restart|r  status|st"
+    echo "  web|w  term|t  all|a  gui|g  kill|k"
+    echo "  run|e <code>  ou direct: nyxx print(1+1)"
+    ;;
+  *) curl -s -X POST "$NYXX_URL/api/run" -H "Content-Type: application/json" -d "{\"code\":\"$*\"}" | python3 -c "import sys,json;d=json.load(sys.stdin);print(d.get('output',d.get('error','')))" ;;
+esac

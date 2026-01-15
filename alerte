@@ -1,0 +1,12 @@
+#!/bin/bash
+# NYX ALERTE - Urgence
+
+MSG="${1:-Attention!}"
+
+# Notification urgente
+notify-send -u critical -t 0 "⚠️ NYX ALERTE" "$MSG" 2>/dev/null
+
+# Son si disponible
+paplay /usr/share/sounds/freedesktop/stereo/alarm-clock-elapsed.oga 2>/dev/null &
+
+echo "$(date '+%H:%M') ⚠️ $MSG" >> /home/ego-bash/nyx-v2/conversations.log

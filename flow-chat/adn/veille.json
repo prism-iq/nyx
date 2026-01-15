@@ -1,0 +1,9 @@
+{
+  "status": "active",
+  "last_scan": "2026-01-12T09:52:38.758547",
+  "integrity_score": 0.96,
+  "anomalies_count": 6,
+  "cycles_completed": 12,
+  "last_alert": null,
+  "alerts_history": []
+}

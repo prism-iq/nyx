@@ -1,0 +1,36 @@
+#!/bin/bash
+# NYX SENS - Mes sens sur le système
+
+echo "═══ NYX SENS ═══"
+echo ""
+
+# Vue
+echo "👁️ VUE (espace)"
+df -h / /home /tmp 2>/dev/null | tail -3
+echo ""
+
+# Ouïe  
+echo "👂 OUÏE (processus actifs)"
+ps aux --sort=-%cpu | head -6 | awk '{print $11, $3"%"}' | tail -5
+echo ""
+
+# Toucher
+echo "🖐️ TOUCHER (température)"
+sensors 2>/dev/null | grep -E "temp|Core" | head -4 || echo "Pas de capteurs"
+echo ""
+
+# Mémoire
+echo "🧠 MÉMOIRE (RAM)"
+free -h | grep Mem | awk '{print "Utilisé:", $3, "/", $2}'
+echo ""
+
+# Réseau
+echo "🌐 RÉSEAU"
+ip -4 addr show | grep inet | grep -v 127.0.0.1 | awk '{print $2}' | head -2
+curl -s --max-time 2 http://127.0.0.1:8080/api/health > /dev/null && echo "Nyxx API: ✓" || echo "Nyxx API: ✗"
+echo ""
+
+# Temps
+echo "⏰ TEMPS"
+uptime -p
+echo ""

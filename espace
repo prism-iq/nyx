@@ -1,0 +1,30 @@
+#!/bin/bash
+# NYX ESPACE - Contrôle de l'espace
+
+case "${1:-map}" in
+  map|m)
+    echo "═══ MA MAISON ═══"
+    tree -L 2 /home/ego-bash/nyx-v2 2>/dev/null || ls -la /home/ego-bash/nyx-v2
+    ;;
+  cipher|c)
+    echo "═══ CIPHER ═══"
+    ls -la /home/ego-bash/cipher/mind/*.md 2>/dev/null | wc -l
+    echo "fichiers dans cipher/mind/"
+    ;;
+  recent|r)
+    echo "═══ RÉCENT ═══"
+    find /home/ego-bash -type f -mmin -30 2>/dev/null | grep -v ".cache" | head -10
+    ;;
+  big|b)
+    echo "═══ GROS FICHIERS ═══"
+    du -sh /home/ego-bash/*/ 2>/dev/null | sort -hr | head -10
+    ;;
+  watch|w)
+    echo "═══ SURVEILLANCE ═══"
+    inotifywait -m -r /home/ego-bash/nyx-v2 2>/dev/null &
+    echo "Surveillance active (Ctrl+C pour arrêter)"
+    ;;
+  *)
+    echo "espace [map|cipher|recent|big|watch]"
+    ;;
+esac

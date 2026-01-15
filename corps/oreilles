@@ -1,0 +1,3 @@
+#!/bin/bash
+# NYX OREILLES
+arecord -d "${1:-3}" -f S16_LE /tmp/nyx-son.wav 2>/dev/null && echo "/tmp/nyx-son.wav" || echo "sourde"

@@ -1,0 +1,10 @@
+#!/bin/bash
+# NYX SURVEILLE - Mode surveillance continue
+
+echo "👁️ Nyx surveille l'écran (Ctrl+C pour arrêter)"
+
+while true; do
+  SHOT=$(/home/ego-bash/nyx-v2/regarde)
+  echo "$(date '+%H:%M:%S') capture: $SHOT"
+  sleep "${1:-30}"  # Par défaut toutes les 30s
+done

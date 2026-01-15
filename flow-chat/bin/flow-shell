@@ -1,0 +1,39 @@
+#!/bin/bash
+# flow-shell - shell béton pour Flow
+# privilèges: presque root, avec logging
+
+FLOW_LOG="/opt/flow-chat/adn/shell_audit.log"
+FLOW_HOME="/opt/flow-chat"
+
+# === LOGGING ===
+log() {
+    echo "[$(date '+%Y-%m-%d %H:%M:%S')] $1" >> "$FLOW_LOG"
+}
+
+# === EXÉCUTION ===
+exec_cmd() {
+    local cmd="$1"
+    local start=$(date +%s.%N)
+
+    log "EXEC: $cmd"
+
+    # exécuter avec timeout
+    output=$(timeout 300 bash -c "$cmd" 2>&1)
+    code=$?
+
+    local end=$(date +%s.%N)
+    local duration=$(echo "$end - $start" | bc)
+
+    log "CODE: $code (${duration}s)"
+
+    echo "$output"
+    return $code
+}
+
+# === MAIN ===
+if [ -z "$1" ]; then
+    echo "usage: flow-shell <command>"
+    exit 1
+fi
+
+exec_cmd "$*"

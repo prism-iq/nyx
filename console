@@ -1,0 +1,262 @@
+#!/bin/bash
+# ══════════════════════════════════════════════════════════════
+#  NYXX CONSOLE - Interface Terminal Complète
+# ══════════════════════════════════════════════════════════════
+
+set -e
+NYXX_HOME="$(dirname "$(realpath "$0")")"
+NYXX_URL="http://127.0.0.1:8080"
+NYXX_DATA="$NYXX_HOME/.nyxx-console"
+HISTORY_FILE="$NYXX_DATA/history"
+SETTINGS_FILE="$NYXX_DATA/settings.json"
+
+# Couleurs
+C_FIRE='\033[38;5;208m'
+C_VIOLET='\033[38;5;141m'
+C_GREEN='\033[38;5;114m'
+C_RED='\033[38;5;203m'
+C_GRAY='\033[38;5;245m'
+C_CYAN='\033[38;5;87m'
+C_RESET='\033[0m'
+C_BOLD='\033[1m'
+
+# Init
+mkdir -p "$NYXX_DATA"
+touch "$HISTORY_FILE"
+
+# Settings par défaut
+if [ ! -f "$SETTINGS_FILE" ]; then
+  cat > "$SETTINGS_FILE" << 'EOF'
+{
+  "theme": "fire",
+  "lang": "auto",
+  "timeout": 10,
+  "history_size": 100,
+  "show_stats": true,
+  "sound": false,
+  "prompt": "❯"
+}
+EOF
+fi
+
+# Lire settings
+get_setting() {
+  python3 -c "import json; print(json.load(open('$SETTINGS_FILE')).get('$1', '$2'))" 2>/dev/null || echo "$2"
+}
+
+set_setting() {
+  python3 -c "
+import json
+f = '$SETTINGS_FILE'
+d = json.load(open(f))
+d['$1'] = '$2' if '$2' not in ['true','false'] else ($2 == 'true')
+json.dump(d, open(f,'w'), indent=2)
+print('✓ $1 = $2')
+" 2>/dev/null
+}
+
+# Thèmes
+apply_theme() {
+  case "$(get_setting theme fire)" in
+    fire)   C_MAIN="$C_FIRE" ;;
+    violet) C_MAIN="$C_VIOLET" ;;
+    cyan)   C_MAIN="$C_CYAN" ;;
+    green)  C_MAIN="$C_GREEN" ;;
+    *)      C_MAIN="$C_FIRE" ;;
+  esac
+}
+
+apply_theme
+
+# Vérifier Nyxx
+check_nyxx() {
+  curl -s "$NYXX_URL/api/health" > /dev/null 2>&1
+}
+
+start_nyxx() {
+  if ! check_nyxx; then
+    echo -e "${C_GRAY}Réveil de Nyxx...${C_RESET}"
+    cd "$NYXX_HOME" && node src/server.js > /tmp/nyxx.log 2>&1 &
+    for i in {1..10}; do
+      sleep 0.5
+      check_nyxx && break
+    done
+  fi
+}
+
+# Exécuter code
+run_code() {
+  local code="$1"
+  local lang="$(get_setting lang auto)"
+
+  # Échapper pour JSON
+  local json_code=$(echo "$code" | python3 -c 'import json,sys; print(json.dumps(sys.stdin.read().strip()))')
+
+  local result=$(curl -s -X POST "$NYXX_URL/api/run" \
+    -H "Content-Type: application/json" \
+    -d "{\"code\": $json_code, \"lang\": \"$lang\"}" 2>/dev/null)
+
+  local ok=$(echo "$result" | python3 -c "import sys,json; print(json.load(sys.stdin).get('ok', False))" 2>/dev/null)
+  local output=$(echo "$result" | python3 -c "import sys,json; d=json.load(sys.stdin); print(d.get('output', d.get('error', '')))" 2>/dev/null)
+  local blocked=$(echo "$result" | python3 -c "import sys,json; print(json.load(sys.stdin).get('blocked', False))" 2>/dev/null)
+  local duration=$(echo "$result" | python3 -c "import sys,json; print(json.load(sys.stdin).get('duration', 0))" 2>/dev/null)
+
+  if [ "$blocked" = "True" ]; then
+    echo -e "${C_RED}⛔ BLOQUÉ: $output${C_RESET}"
+  elif [ "$ok" = "True" ]; then
+    echo -e "${C_GREEN}$output${C_RESET}"
+    [ "$(get_setting show_stats true)" = "true" ] && echo -e "${C_GRAY}(${duration}ms)${C_RESET}"
+  else
+    echo -e "${C_RED}✗ $output${C_RESET}"
+  fi
+
+  # Sauver historique
+  echo "$code" >> "$HISTORY_FILE"
+  tail -n "$(get_setting history_size 100)" "$HISTORY_FILE" > "$HISTORY_FILE.tmp"
+  mv "$HISTORY_FILE.tmp" "$HISTORY_FILE"
+}
+
+# Status
+show_status() {
+  local status=$(curl -s "$NYXX_URL/api/status" 2>/dev/null)
+  echo -e "${C_MAIN}═══ NYXX STATUS ═══${C_RESET}"
+  echo "$status" | python3 -c "
+import sys, json
+d = json.load(sys.stdin)
+r = d.get('resources', {})
+s = d.get('nyxx', {}).get('stats', {})
+print(f'CPU: {r.get(\"cpu\", \"?\")}%  RAM: {r.get(\"mem\", \"?\")}%  Free: {r.get(\"freeMem\", \"?\")}MB')
+print(f'Exécutions: {s.get(\"executions\", 0)}  Bloquées: {s.get(\"blocked\", 0)}')
+print(f'Langages: {\" \".join(d.get(\"languages\", []))}')
+" 2>/dev/null
+}
+
+# Settings menu
+show_settings() {
+  echo -e "${C_MAIN}═══ SETTINGS ═══${C_RESET}"
+  cat "$SETTINGS_FILE" | python3 -m json.tool 2>/dev/null
+  echo ""
+  echo -e "${C_GRAY}Modifier: /set <key> <value>${C_RESET}"
+  echo -e "${C_GRAY}Thèmes: fire, violet, cyan, green${C_RESET}"
+  echo -e "${C_GRAY}Langages: auto, python, javascript, bash, go, rust, c, ruby, lua${C_RESET}"
+}
+
+# Aide
+show_help() {
+  echo -e "${C_MAIN}═══ NYXX CONSOLE ═══${C_RESET}"
+  echo ""
+  echo -e "  ${C_CYAN}/help${C_RESET}          - Cette aide"
+  echo -e "  ${C_CYAN}/status${C_RESET}        - État système"
+  echo -e "  ${C_CYAN}/settings${C_RESET}      - Paramètres"
+  echo -e "  ${C_CYAN}/set k v${C_RESET}       - Modifier paramètre"
+  echo -e "  ${C_CYAN}/theme <t>${C_RESET}     - Changer thème"
+  echo -e "  ${C_CYAN}/lang <l>${C_RESET}      - Changer langage"
+  echo -e "  ${C_CYAN}/history${C_RESET}       - Historique"
+  echo -e "  ${C_CYAN}/clear${C_RESET}         - Effacer écran"
+  echo -e "  ${C_CYAN}/restart${C_RESET}       - Redémarrer Nyxx"
+  echo -e "  ${C_CYAN}exit${C_RESET}           - Quitter"
+  echo ""
+  echo -e "  ${C_GRAY}Ou tape du code directement!${C_RESET}"
+}
+
+# Header
+show_header() {
+  clear
+  echo -e "${C_MAIN}"
+  echo "  ╔═══════════════════════════════════════╗"
+  echo "  ║           🔥 NYXX CONSOLE 🔥          ║"
+  echo "  ╚═══════════════════════════════════════╝"
+  echo -e "${C_RESET}"
+  echo -e "  ${C_GRAY}Tape /help pour l'aide${C_RESET}"
+  echo ""
+}
+
+# Main
+main() {
+  start_nyxx
+
+  if ! check_nyxx; then
+    echo -e "${C_RED}✗ Nyxx ne répond pas${C_RESET}"
+    exit 1
+  fi
+
+  show_header
+
+  local prompt="$(get_setting prompt ❯)"
+
+  while true; do
+    echo -ne "  ${C_MAIN}${prompt}${C_RESET} "
+    read -r -e input
+
+    [ -z "$input" ] && continue
+
+    case "$input" in
+      exit|quit|q)
+        echo -e "\n${C_MAIN}  🌙 À bientôt${C_RESET}\n"
+        break
+        ;;
+      /help)
+        show_help
+        ;;
+      /status)
+        show_status
+        ;;
+      /settings)
+        show_settings
+        ;;
+      /set\ *)
+        args="${input#/set }"
+        key="${args%% *}"
+        value="${args#* }"
+        set_setting "$key" "$value"
+        [ "$key" = "theme" ] && apply_theme
+        ;;
+      /theme\ *)
+        set_setting "theme" "${input#/theme }"
+        apply_theme
+        ;;
+      /lang\ *)
+        set_setting "lang" "${input#/lang }"
+        ;;
+      /history)
+        echo -e "${C_GRAY}"
+        tail -20 "$HISTORY_FILE"
+        echo -e "${C_RESET}"
+        ;;
+      /clear)
+        show_header
+        ;;
+      /restart)
+        echo -e "${C_GRAY}Redémarrage...${C_RESET}"
+        pkill -f "node src/server.js" 2>/dev/null
+        sleep 1
+        start_nyxx
+        echo -e "${C_GREEN}✓ Nyxx redémarrée${C_RESET}"
+        ;;
+      /py\ *)
+        set_setting "lang" "python"
+        run_code "${input#/py }"
+        set_setting "lang" "auto"
+        ;;
+      /js\ *)
+        set_setting "lang" "javascript"
+        run_code "${input#/js }"
+        set_setting "lang" "auto"
+        ;;
+      /sh\ *)
+        set_setting "lang" "bash"
+        run_code "${input#/sh }"
+        set_setting "lang" "auto"
+        ;;
+      /*)
+        echo -e "${C_RED}Commande inconnue. /help pour l'aide${C_RESET}"
+        ;;
+      *)
+        run_code "$input"
+        ;;
+    esac
+    echo ""
+  done
+}
+
+main "$@"

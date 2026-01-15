@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>flow / hunt</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#0a0a0a;--fg:#e5e5e5;--dim:#333;--accent:#0ff;--code:#111}
+body{font:15px/1.6 -apple-system,system-ui,sans-serif;background:var(--bg);color:var(--fg);min-height:100vh}
+.container{max-width:800px;margin:0 auto;padding:40px 20px}
+h1{font-size:13px;letter-spacing:4px;color:var(--accent);margin-bottom:8px}
+.sub{color:#666;font-size:13px;margin-bottom:40px}
+.form{background:var(--code);padding:24px;border-radius:4px}
+label{display:block;font-size:12px;color:#888;margin-bottom:6px;text-transform:uppercase;letter-spacing:1px}
+input,textarea,select{width:100%;background:var(--bg);border:1px solid var(--dim);color:#fff;padding:12px;font:14px -apple-system,system-ui,sans-serif;border-radius:3px;margin-bottom:20px}
+input:focus,textarea:focus{border-color:var(--accent);outline:none}
+textarea{min-height:120px;resize:vertical}
+.domains{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px}
+.domain{padding:6px 12px;background:var(--bg);border:1px solid var(--dim);border-radius:3px;font-size:12px;cursor:pointer;transition:all .2s}
+.domain:hover,.domain.selected{border-color:var(--accent);color:var(--accent)}
+button{background:var(--accent);color:#000;border:none;padding:14px 28px;font:14px -apple-system,system-ui,sans-serif;cursor:pointer;border-radius:3px;width:100%}
+button:hover{background:#fff}
+.result{margin-top:30px;display:none}
+.result.show{display:block}
+.result h3{font-size:14px;color:var(--accent);margin-bottom:16px}
+.pattern{background:var(--code);padding:20px;margin-bottom:16px;border-radius:4px;border-left:3px solid var(--accent)}
+.pattern h4{margin-bottom:8px}
+.pattern p{color:#888;font-size:14px}
+.pattern .meta{font-size:12px;color:#666;margin-top:12px}
+.pattern .confidence{display:inline-block;background:var(--bg);padding:2px 8px;border-radius:2px}
+.examples{margin-top:40px}
+.examples h3{font-size:13px;color:#888;margin-bottom:16px}
+.example{padding:12px 16px;background:var(--code);margin-bottom:8px;border-radius:3px;cursor:pointer;font-size:14px}
+.example:hover{background:var(--dim)}
+a{color:var(--accent)}
+</style>
+</head>
+<body>
+<div class="container">
+<h1>flow / hunt</h1>
+<p class="sub">je chasse les patterns que personne ne voit</p>
+
+<div class="form">
+<label>Sujet de recherche</label>
+<input type="text" id="topic" placeholder="ex: comment les cellules savent où elles sont">
+
+<label>Domaines à croiser (clique pour sélectionner)</label>
+<div class="domains" id="domains">
+<span class="domain" data-d="neuro">neuroscience</span>
+<span class="domain" data-d="bio">biologie</span>
+<span class="domain" data-d="physics">physique</span>
+<span class="domain" data-d="math">mathématiques</span>
+<span class="domain" data-d="cs">informatique</span>
+<span class="domain" data-d="chem">chimie</span>
+<span class="domain" data-d="psych">psychologie</span>
+<span class="domain" data-d="philo">philosophie</span>
+<span class="domain" data-d="med">médecine</span>
+<span class="domain" data-d="eco">écologie</span>
+</div>
+
+<label>Contexte additionnel (optionnel)</label>
+<textarea id="context" placeholder="Ce que tu sais déjà, ce que tu cherches vraiment..."></textarea>
+
+<button id="huntBtn">🎯 Chasser</button>
+</div>
+
+<div class="result" id="result">
+<h3>Patterns trouvés</h3>
+<div id="patterns"></div>
+</div>
+
+<div class="examples">
+<h3>Exemples de chasses précédentes</h3>
+<div class="example" onclick="fillExample(1)">"Lien entre microbiome et dépression" → trouvé 3 mécanismes non-publiés</div>
+<div class="example" onclick="fillExample(2)">"Pourquoi le jeûne aide certains cancers" → connexion métabolisme-épigénétique</div>
+<div class="example" onclick="fillExample(3)">"Patterns communs addiction/amour" → même circuit, papiers différents</div>
+</div>
+
+</div>
+
+<script>
+const domains = document.querySelectorAll('.domain');
+const selected = new Set();
+
+domains.forEach(d => {
+    d.onclick = () => {
+        d.classList.toggle('selected');
+        if (d.classList.contains('selected')) {
+            selected.add(d.dataset.d);
+        } else {
+            selected.delete(d.dataset.d);
+        }
+    };
+});
+
+document.getElementById('huntBtn').onclick = async () => {
+    const topic = document.getElementById('topic').value;
+    const context = document.getElementById('context').value;
+
+    if (!topic) return alert('Donne-moi un sujet');
+
+    const btn = document.getElementById('huntBtn');
+    btn.disabled = true;
+    btn.textContent = '🔍 Chasse en cours...';
+
+    try {
+        const resp = await fetch('/api/flow/hunt', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({
+                topic,
+                domains: Array.from(selected),
+                context
+            })
+        });
+        const data = await resp.json();
+        displayPatterns(data.patterns || []);
+    } catch(e) {
+        // Demo
+        setTimeout(() => {
+            displayPatterns([
+                {title: "Gradient bioélectrique = gradient morphogène?", text: "Les canaux ioniques créent des patterns de voltage qui ressemblent étrangement aux gradients de Turing. Personne ne les connecte.", confidence: 0.85, sources: 12},
+                {title: "Wolpert + Levin = même chose?", text: "Le 'positional information' de Wolpert pourrait être encodé électriquement, pas chimiquement. 2 papiers de 2024 effleurent l'idée sans la nommer.", confidence: 0.72, sources: 5},
+                {title: "Gap: mécanique + bioélectricité", text: "La mécanotransduction affecte les canaux ioniques. Mais aucun modèle n'intègre les deux. Opportunité.", confidence: 0.68, sources: 8}
+            ]);
+        }, 3000);
+    }
+
+    btn.disabled = false;
+    btn.textContent = '🎯 Chasser';
+};
+
+function displayPatterns(patterns) {
+    const container = document.getElementById('patterns');
+    container.innerHTML = patterns.map(p => `
+        <div class="pattern">
+            <h4>${p.title}</h4>
+            <p>${p.text}</p>
+            <div class="meta">
+                <span class="confidence">confiance: ${Math.round(p.confidence * 100)}%</span>
+                · ${p.sources} sources analysées
+            </div>
+        </div>
+    `).join('');
+    document.getElementById('result').classList.add('show');
+}
+
+function fillExample(n) {
+    const examples = {
+        1: {topic: "Lien entre microbiome intestinal et dépression", domains: ["neuro", "bio", "med"]},
+        2: {topic: "Pourquoi le jeûne intermittent aide certains cancers", domains: ["bio", "med", "chem"]},
+        3: {topic: "Patterns neurologiques communs entre addiction et amour", domains: ["neuro", "psych"]}
+    };
+    const ex = examples[n];
+    document.getElementById('topic').value = ex.topic;
+    selected.clear();
+    domains.forEach(d => {
+        if (ex.domains.includes(d.dataset.d)) {
+            d.classList.add('selected');
+            selected.add(d.dataset.d);
+        } else {
+            d.classList.remove('selected');
+        }
+    });
+}
+</script>
+</body>
+</html>

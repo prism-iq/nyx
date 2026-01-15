@@ -1,0 +1,14 @@
+{
+  "cid": "6196919d-dcde-46e7-a139-1eb3c868f36f",
+  "messages": [
+    {
+      "role": "user",
+      "content": "tu connais le forum onche ?"
+    },
+    {
+      "role": "assistant",
+      "content": "non, je connais pas. c'est quoi?"
+    }
+  ],
+  "updated": "2026-01-11T20:07:44.156038"
+}

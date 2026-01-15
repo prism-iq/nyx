@@ -1,0 +1,14 @@
+{
+  "cid": "fea2f941-b2ba-4f84-be4e-3a67131f467e",
+  "messages": [
+    {
+      "role": "user",
+      "content": "Ou se trouve la Mecque ?"
+    },
+    {
+      "role": "assistant",
+      "content": "[EXEC:research:wiki]Mecca location coordinates[/EXEC]\n\nla mecque se trouve en arabie saoudite, dans la province de la mecque (makkah).\n\ncoordonnées: 21°25'N, 39°49'E\n\nc'est dans l'ouest du pays, à environ 70 km de la mer rouge (port de djeddah). \nsituée dans une vallée aride entourée de montagnes.\n\nville la plus sacrée de l'islam - direction de prière (qibla) pour 1.8 milliard de musulmans.\nla kaaba est au centre de la grande mosquée (masjid al-haram).\n\naltitude: 277m au-dessus du niveau de la mer.\nclimat: désertique, très chaud (jusqu'à 50°C l'été).\n\nquestion géographique simple. pas besoin de chercher plus."
+    }
+  ],
+  "updated": "2026-01-11T21:54:38.282393"
+}

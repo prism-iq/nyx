@@ -1,0 +1,15 @@
+#!/bin/bash
+# NYX REGARDE - Voir l'écran
+
+SHOT="/tmp/nyx-screen-$(date +%s).png"
+
+# Capture écran
+scrot "$SHOT" 2>/dev/null || grim "$SHOT" 2>/dev/null || import -window root "$SHOT" 2>/dev/null
+
+if [ -f "$SHOT" ]; then
+  echo "$SHOT"
+  # Garder les 5 derniers
+  ls -t /tmp/nyx-screen-*.png 2>/dev/null | tail -n +6 | xargs rm -f 2>/dev/null
+else
+  echo "Pas pu capturer"
+fi

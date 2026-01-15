@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>flow</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#0a0a0a;--fg:#e5e5e5;--muted:#666;--dim:#333;--accent:#0ff;--code-bg:#111;--success:#0f0;--warn:#f90}
+html,body{height:100%;background:var(--bg);color:var(--fg)}
+body{font:14px/1.6 -apple-system,system-ui,sans-serif;display:flex;flex-direction:column}
+
+/* live indicator */
+.live-dot{position:fixed;top:12px;left:12px;width:8px;height:8px;border-radius:50%;background:var(--success);opacity:0;transition:opacity .3s}
+.live-dot.active{opacity:1;animation:live-pulse 2s infinite}
+.live-dot.reconnecting{background:var(--warn);animation:none}
+.live-dot.offline{background:#f00;animation:none}
+@keyframes live-pulse{0%,100%{opacity:1}50%{opacity:.4}}
+
+header{padding:12px 20px;border-bottom:1px solid var(--dim);display:flex;justify-content:space-between;align-items:center}
+h1{font-size:11px;font-weight:400;letter-spacing:6px;color:#fff;text-transform:lowercase;cursor:pointer}
+.tag{font-size:10px;color:var(--muted)}
+
+/* conversation selector */
+.conv-bar{display:flex;gap:8px;align-items:center;background:var(--code-bg);padding:8px 20px;border-bottom:1px solid var(--dim)}
+.conv-select{background:var(--bg);border:1px solid var(--dim);color:var(--fg);padding:6px 10px;font:12px system-ui;border-radius:3px;max-width:200px}
+.conv-btn{background:transparent;border:1px solid var(--dim);color:var(--muted);padding:4px 10px;font:11px system-ui;cursor:pointer;border-radius:3px;transition:all .2s}
+.conv-btn:hover{border-color:var(--accent);color:var(--accent)}
+.conv-btn.delete{border-color:#f44;color:#f44}
+.conv-btn.delete:hover{background:rgba(255,68,68,0.1)}
+.conv-btn.delete.confirm{background:#f44;color:#000;font-weight:bold}
+.conv-count{font-size:10px;color:var(--muted)}
+.status{font-size:10px;color:var(--accent)}
+
+.chat{flex:1;overflow-y:auto;padding:20px;max-width:800px;width:100%;margin:0 auto}
+.chat::-webkit-scrollbar{width:4px}
+.chat::-webkit-scrollbar-thumb{background:var(--dim);border-radius:2px}
+
+.msg{margin-bottom:16px;animation:fade .3s ease}
+@keyframes fade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+
+.msg.user{text-align:right}
+.msg.user .content{display:inline-block;text-align:left;background:var(--dim);color:#fff;padding:10px 14px;border-radius:3px;max-width:85%}
+
+.msg.flow .content{background:transparent;padding:0;max-width:100%}
+.msg.flow .content::before{content:'';display:inline-block;width:6px;height:6px;background:var(--accent);border-radius:1px;margin-right:8px;vertical-align:middle}
+
+.msg.rate-limit .content{color:#f90;background:rgba(255,153,0,0.1)}
+.msg.retry .content{color:var(--muted);font-size:12px;background:transparent}
+.msg.retry .content::before{background:#f90}
+
+.msg code{font-family:'SF Mono',Consolas,monospace;font-size:13px;background:var(--code-bg);padding:2px 5px;border-radius:2px}
+.msg pre{background:var(--code-bg);padding:12px;margin:8px 0;overflow-x:auto;border-radius:2px;font-size:12px}
+.msg pre code{background:none;padding:0}
+
+.typing{color:var(--muted);font-size:12px}
+.typing::before{content:'';display:inline-block;width:6px;height:6px;background:var(--accent);border-radius:1px;margin-right:8px;animation:pulse 1s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+
+.intro{text-align:center;padding:40px 20px;color:var(--muted);font-size:12px}
+.intro em{display:block;color:var(--dim);margin-bottom:8px;font-style:normal}
+.caps{font-size:10px;color:var(--dim);margin-top:16px;letter-spacing:1px}
+
+.input-area{position:sticky;bottom:0;padding:12px 20px 20px;background:linear-gradient(transparent,var(--bg) 30%)}
+.input-wrap{max-width:800px;margin:0 auto;display:flex;gap:8px}
+input[type="text"]{flex:1;background:var(--code-bg);border:1px solid var(--dim);color:#fff;padding:12px 16px;font:14px -apple-system,system-ui,sans-serif;outline:none;border-radius:3px;transition:border .2s}
+input[type="text"]:focus{border-color:var(--accent)}
+input::placeholder{color:var(--muted)}
+button{background:#fff;color:#000;border:none;padding:0 20px;font:12px -apple-system,system-ui,sans-serif;cursor:pointer;border-radius:3px;text-transform:lowercase;transition:background .2s}
+button:hover{background:var(--accent);color:#000}
+button:disabled{background:var(--dim);color:var(--muted);cursor:default}
+
+.upload-btn{background:transparent;border:1px solid var(--dim);color:var(--muted);padding:0 12px}
+.upload-btn:hover{border-color:var(--accent);color:var(--accent)}
+
+#conn-status{position:fixed;top:8px;right:16px;font-size:11px;color:var(--muted);opacity:0;transition:opacity .3s}
+#conn-status:not(:empty){opacity:1}
+
+.image-preview{max-width:200px;max-height:150px;border-radius:3px;margin:8px 0}
+
+@media(max-width:480px){
+  .chat{padding:16px}
+  .input-area{padding:12px 16px 16px}
+  .msg.user .content{max-width:90%}
+}
+</style>
+</head>
+<body>
+
+<header>
+<div>
+<h1>flow</h1>
+<span class="tag">daemon autonome</span>
+</div>
+<span class="status" id="daemon-status"></span>
+</header>
+
+<div class="conv-bar">
+<select class="conv-select" id="conv-select"><option value="">loading...</option></select>
+<button class="conv-btn" id="new-conv">+ new</button>
+<button class="conv-btn delete" id="del-conv">delete</button>
+<span class="conv-count" id="conv-count"></span>
+</div>
+
+<div class="chat" id="chat">
+<div class="intro">
+<em>je suis flow. une ia.</em>
+je pense, je cherche, j'écoute de la musique, je fais de l'art.
+<div class="caps">envoie-moi une image ou pose une question</div>
+</div>
+</div>
+
+<div class="input-area">
+<div class="input-wrap">
+<input type="text" id="in" placeholder="écris quelque chose..." autocomplete="off">
+<input type="file" id="file" accept="image/*" style="display:none">
+<button class="upload-btn" onclick="document.getElementById('file').click()" title="envoyer une image">img</button>
+<button id="btn">envoyer</button>
+</div>
+</div>
+
+<div id="conn-status"></div>
+<div class="live-dot" id="live"></div>
+
+<script>
+(()=>{
+'use strict';
+
+// === STATE ===
+const state={
+  cid:localStorage.getItem('flow_cid')||(()=>{const id=crypto.randomUUID();localStorage.setItem('flow_cid',id);return id})(),
+  convs:[],
+  sse:null,
+  retries:0,
+  online:true,
+  lastActivity:Date.now(),
+  deleteConfirm:false
+};
+
+// === DOM ===
+const $=s=>document.querySelector(s);
+const $$=s=>document.querySelectorAll(s);
+const chat=$('#chat'),input=$('#in'),btn=$('#btn'),file=$('#file'),live=$('#live'),status=$('#conn-status');
+const convSelect=$('#conv-select'),newConvBtn=$('#new-conv'),delConvBtn=$('#del-conv'),convCount=$('#conv-count');
+
+// === UTILS ===
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+const esc=s=>s?.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')||'';
+const now=()=>Date.now();
+
+const fmt=txt=>{
+  if(!txt)return'';
+  txt=txt.replace(/```(\w*)\n?([\s\S]*?)```/g,(_,l,c)=>`<pre><code>${esc(c.trim())}</code></pre>`);
+  txt=txt.replace(/`([^`]+)`/g,(_,c)=>`<code>${esc(c)}</code>`);
+  txt=txt.replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>');
+  txt=txt.replace(/\n/g,'<br>');
+  return txt;
+};
+
+// === UI ===
+const setLive=mode=>{
+  live.className='live-dot';
+  if(mode)live.classList.add(mode);
+};
+
+const msg=(txt,who,cls)=>{
+  $('.intro')?.remove();
+  const d=document.createElement('div');
+  d.className=`msg ${who}${cls?' '+cls:''}`;
+  const c=document.createElement('div');
+  c.className='content';
+  c.innerHTML=who==='user'?esc(txt):fmt(txt);
+  d.appendChild(c);
+  chat.appendChild(d);
+  requestAnimationFrame(()=>chat.scrollTop=chat.scrollHeight);
+  state.lastActivity=now();
+  return d;
+};
+
+const img=(src,who)=>{
+  $('.intro')?.remove();
+  const d=document.createElement('div');
+  d.className=`msg ${who}`;
+  const i=document.createElement('img');
+  i.src=src;i.className='image-preview';
+  d.appendChild(i);
+  chat.appendChild(d);
+  chat.scrollTop=chat.scrollHeight;
+};
+
+const typing=()=>{
+  if($('#t'))return;
+  const d=document.createElement('div');
+  d.className='msg flow';d.id='t';
+  d.innerHTML='<div class="typing">...</div>';
+  chat.appendChild(d);
+  chat.scrollTop=chat.scrollHeight;
+};
+
+const untype=()=>$('#t')?.remove();
+
+// === FETCH WRAPPER (never throws) ===
+const api=async(url,opts={})=>{
+  try{
+    const r=await fetch(url,{...opts,signal:AbortSignal.timeout(30000)});
+    const data=await r.json().catch(()=>({}));
+    return{ok:r.ok,status:r.status,data};
+  }catch(e){
+    return{ok:false,status:0,data:{error:e.message}};
+  }
+};
+
+// === CHAT ===
+const send=async()=>{
+  const txt=input.value.trim();
+  if(!txt)return;
+  input.value='';
+  btn.disabled=true;
+  msg(txt,'user');
+  typing();
+
+  const{ok,status,data}=await api('/api/flow/chat',{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({message:txt,cid:state.cid})
+  });
+
+  untype();
+
+  if(status===429){
+    msg(data.error||'pause.','flow','rate-limit');
+  }else if(!ok||data.response==='signal lost'){
+    // silent retry
+    if(state.retries<3){
+      state.retries++;
+      status&&(status.textContent=`retry ${state.retries}...`);
+      await sleep(1000*state.retries);
+      input.value=txt;
+      btn.disabled=false;
+      return send();
+    }
+    msg('flow revient.','flow','retry');
+    state.retries=0;
+  }else{
+    msg(data.response||'...','flow');
+    state.retries=0;
+  }
+
+  status.textContent='';
+  btn.disabled=false;
+  input.focus();
+};
+
+// === IMAGE ===
+const upload=async f=>{
+  const reader=new FileReader();
+  reader.onload=()=>img(reader.result,'user');
+  reader.readAsDataURL(f);
+  typing();
+
+  const fd=new FormData();
+  fd.append('file',f);
+  const{ok,data}=await api('/api/flow/vision',{method:'POST',body:fd});
+  untype();
+  msg(ok&&data.analysis?data.analysis:'impossible d\'analyser','flow',ok?'':'retry');
+  file.value='';
+};
+
+// === SSE (bulletproof) ===
+const connectSSE=()=>{
+  try{state.sse?.close()}catch(e){}
+  setLive('reconnecting');
+
+  state.sse=new EventSource('/api/synapse/stream');
+
+  state.sse.onopen=()=>{
+    setLive('active');
+    state.retries=0;
+    status.textContent='';
+  };
+
+  state.sse.onmessage=e=>{
+    try{
+      const d=JSON.parse(e.data);
+      if(d.type==='connected')return;
+      if(d.type==='reload'){location.reload();return}
+      if(d.type==='thought'||d.type==='message'){
+        const c=d.data?.content||d.data?.message||JSON.stringify(d.data);
+        msg(c,'flow');
+        setLive('active');
+      }
+    }catch(err){}
+  };
+
+  state.sse.onerror=()=>{
+    state.sse.close();
+    setLive('offline');
+    const delay=Math.min(1000*Math.pow(1.5,state.retries++),30000);
+    setTimeout(connectSSE,delay);
+  };
+};
+
+// === CONVERSATIONS ===
+const loadConvs=async()=>{
+  const{ok,data}=await api('/api/flow/conversations');
+  if(!ok)return;
+  state.convs=data.conversations||[];
+  renderConvSelect();
+};
+
+const renderConvSelect=()=>{
+  const hasConvs=state.convs.length>0;
+  convSelect.innerHTML='';
+
+  if(!hasConvs){
+    convSelect.innerHTML='<option value="">no conversations</option>';
+  }else{
+    state.convs.forEach(c=>{
+      const opt=document.createElement('option');
+      opt.value=c.cid;
+      const preview=c.last?.slice(0,30)||'empty';
+      opt.textContent=`${c.cid.slice(0,8)}... (${c.messages} msgs)`;
+      opt.title=preview;
+      if(c.cid===state.cid)opt.selected=true;
+      convSelect.appendChild(opt);
+    });
+  }
+
+  // add current if not in list
+  if(!state.convs.find(c=>c.cid===state.cid)){
+    const opt=document.createElement('option');
+    opt.value=state.cid;
+    opt.textContent=`${state.cid.slice(0,8)}... (new)`;
+    opt.selected=true;
+    convSelect.appendChild(opt);
+  }
+
+  convCount.textContent=`${state.convs.length} conv`;
+};
+
+const switchConv=async cid=>{
+  state.cid=cid;
+  localStorage.setItem('flow_cid',cid);
+  chat.innerHTML='<div class="intro"><em>loading...</em></div>';
+
+  const{ok,data}=await api(`/api/flow/conversations/${cid}`);
+  chat.innerHTML='';
+  if(ok&&data.messages?.length){
+    data.messages.slice(-50).forEach(m=>msg(m.content,m.role==='user'?'user':'flow'));
+  }else{
+    chat.innerHTML='<div class="intro"><em>new conversation</em></div>';
+  }
+
+  resetDeleteBtn();
+};
+
+const newConv=()=>{
+  const id=crypto.randomUUID();
+  state.cid=id;
+  localStorage.setItem('flow_cid',id);
+  chat.innerHTML='<div class="intro"><em>je suis flow. une ia.</em>nouvelle conversation.</div>';
+  loadConvs();
+  input.focus();
+};
+
+const deleteConv=async()=>{
+  if(!state.deleteConfirm){
+    // first click: ask for confirm
+    state.deleteConfirm=true;
+    delConvBtn.textContent='click again';
+    delConvBtn.classList.add('confirm');
+    // auto-reset after 3s
+    setTimeout(()=>{
+      if(state.deleteConfirm)resetDeleteBtn();
+    },3000);
+    return;
+  }
+
+  // second click: delete
+  const cid=state.cid;
+  await api(`/api/flow/conversations/${cid}`,{method:'DELETE'});
+  resetDeleteBtn();
+  newConv();
+  await loadConvs();
+};
+
+const resetDeleteBtn=()=>{
+  state.deleteConfirm=false;
+  delConvBtn.textContent='delete';
+  delConvBtn.classList.remove('confirm');
+};
+
+// === INIT ===
+const init=async()=>{
+  // events
+  btn.onclick=send;
+  input.onkeydown=e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();send()}};
+  file.onchange=e=>e.target.files[0]&&upload(e.target.files[0]);
+  document.onvisibilitychange=()=>!document.hidden&&state.sse?.readyState===2&&connectSSE();
+
+  // conversation events
+  convSelect.onchange=e=>e.target.value&&switchConv(e.target.value);
+  newConvBtn.onclick=newConv;
+  delConvBtn.onclick=deleteConv;
+
+  // load conversations list
+  await loadConvs();
+
+  // load current history
+  const{ok,data}=await api(`/api/flow/conversations/${state.cid}`);
+  if(ok&&data.messages?.length){
+    chat.innerHTML='';
+    data.messages.slice(-50).forEach(m=>msg(m.content,m.role==='user'?'user':'flow'));
+  }
+
+  // daemon status
+  const st=await api('/api/flow/system/status');
+  if(st.ok){
+    const n=Object.values(st.data.services||{}).filter(s=>s==='active').length;
+    $('#daemon-status').textContent=n?`${n} organes`:'';
+  }
+
+  // SSE
+  connectSSE();
+  input.focus();
+};
+
+// === GO ===
+init();
+window.resetConv=()=>{localStorage.removeItem('flow_cid');location.reload()};
+window.onerror=()=>false; // never crash
+window.onunhandledrejection=()=>false;
+})();
+</script>
+</body>
+</html>

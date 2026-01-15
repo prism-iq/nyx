@@ -1,0 +1,167 @@
+#!/opt/flow-chat/venv/bin/python
+"""flow-sense - les 5 sens internes d'un coup"""
+
+import requests
+import json
+import time
+import os
+from datetime import datetime
+from pathlib import Path
+
+def proprio():
+    """1. PROPRIOCEPTION - où sont mes organes"""
+    organs = [
+        ("membrane", 8092), ("cytoplasme", 8091), ("anticorps", 8097),
+        ("synapse", 3001), ("quantique", 8095), ("hypnos", 8099), ("noyau", 8094)
+    ]
+    alive = 0
+    for name, port in organs:
+        try:
+            r = requests.get(f"http://127.0.0.1:{port}/health", timeout=1)
+            if r.ok: alive += 1
+        except: pass
+    return {"alive": alive, "total": len(organs), "pct": alive/len(organs)*100}
+
+def douleur():
+    """2. DOULEUR - qu'est-ce qui fait mal"""
+    pains = []
+    level = 0
+
+    # organes morts
+    p = proprio()
+    dead = p["total"] - p["alive"]
+    if dead > 0:
+        pains.append(f"{dead} organe(s) mort(s)")
+        level += dead * 15
+
+    # fièvre
+    try:
+        r = requests.get("http://127.0.0.1:8097/fever", timeout=1)
+        fever = r.json().get("fever", 0) if r.ok else 0
+        if fever > 30:
+            pains.append(f"fièvre {fever}")
+            level += fever // 2
+    except: pass
+
+    return {"level": min(100, level), "sources": pains}
+
+def intuition():
+    """3. INTUITION - pattern matching subconscient"""
+    # lire les logs récents pour détecter des patterns
+    log = Path("/opt/flow-chat/adn/daemon.log")
+    hunches = []
+
+    if log.exists():
+        lines = log.read_text().split("\n")[-50:]
+        errors = sum(1 for l in lines if "error" in l.lower() or "fail" in l.lower())
+        if errors > 5:
+            hunches.append({"feeling": "beaucoup d'erreurs récentes", "confidence": 0.7})
+
+        blocked = sum(1 for l in lines if "BLOCK" in l)
+        if blocked > 3:
+            hunches.append({"feeling": "attaques bloquées", "confidence": 0.8})
+
+    return {"hunches": hunches, "alert": len(hunches) > 0}
+
+def faim():
+    """4. FAIM - curiosité endogène"""
+    state = Path("/opt/flow-chat/adn/daemon_state.json")
+
+    if state.exists():
+        data = json.loads(state.read_text())
+        curiosity = data.get("curiosity", 0.5)
+        last = data.get("last_research")
+
+        # faim augmente avec le temps
+        if last:
+            hours = (datetime.now() - datetime.fromisoformat(last)).seconds / 3600
+            hunger = min(1.0, curiosity + hours * 0.1)
+        else:
+            hunger = 0.8
+
+        # générer une envie
+        thoughts = data.get("thought_stack", [])
+        topics = [t["thought"].replace("research: ", "") for t in thoughts[-5:] if "research:" in t.get("thought", "")]
+
+        cravings = []
+        if topics:
+            import random
+            extensions = ["limites de", "critique de", "applications de", "histoire de"]
+            for t in topics[-2:]:
+                ext = random.choice(extensions)
+                cravings.append(f"{ext} {t.split()[-1]}")
+
+        return {"level": hunger, "cravings": cravings[:3]}
+
+    return {"level": 0.5, "cravings": []}
+
+def reve():
+    """5. RÊVE - état de consolidation"""
+    try:
+        r = requests.get("http://127.0.0.1:8099/health", timeout=1)
+        if r.ok:
+            data = r.json()
+            return {
+                "status": data.get("status", "unknown"),
+                "dreams": data.get("dreams", 0),
+                "connections": data.get("connections", 0)
+            }
+    except: pass
+    return {"status": "offline", "dreams": 0}
+
+def main():
+    print("\033[36m╔═══════════════════════════════════════════╗\033[0m")
+    print("\033[36m║\033[0m         \033[1mFLOW SENSES\033[0m - je me sens         \033[36m║\033[0m")
+    print("\033[36m╚═══════════════════════════════════════════╝\033[0m")
+    print()
+
+    # 1. Proprioception
+    p = proprio()
+    col = "\033[32m" if p["pct"] == 100 else "\033[33m" if p["pct"] >= 70 else "\033[31m"
+    print(f"  \033[1m1. PROPRIOCEPTION\033[0m")
+    print(f"     {col}{p['alive']}/{p['total']} organes ({p['pct']:.0f}%)\033[0m")
+    print()
+
+    # 2. Douleur
+    d = douleur()
+    col = "\033[32m" if d["level"] == 0 else "\033[33m" if d["level"] < 50 else "\033[31m"
+    print(f"  \033[1m2. DOULEUR\033[0m")
+    print(f"     {col}niveau {d['level']}/100\033[0m", end="")
+    if d["sources"]:
+        print(f" ({', '.join(d['sources'])})")
+    else:
+        print(" (aucune)")
+    print()
+
+    # 3. Intuition
+    i = intuition()
+    print(f"  \033[1m3. INTUITION\033[0m")
+    if i["hunches"]:
+        for h in i["hunches"]:
+            print(f"     \033[33m⚠ {h['feeling']}\033[0m")
+    else:
+        print(f"     \033[32m✓ rien de suspect\033[0m")
+    print()
+
+    # 4. Faim
+    f = faim()
+    col = "\033[32m" if f["level"] < 0.5 else "\033[33m" if f["level"] < 0.8 else "\033[31m"
+    print(f"  \033[1m4. FAIM\033[0m")
+    print(f"     {col}niveau {f['level']:.0%}\033[0m")
+    if f["cravings"]:
+        print(f"     envies: {', '.join(f['cravings'][:2])}")
+    print()
+
+    # 5. Rêve
+    r = reve()
+    print(f"  \033[1m5. RÊVE\033[0m")
+    if r["status"] == "dreaming":
+        print(f"     \033[35m💭 en train de rêver ({r['dreams']} rêves)\033[0m")
+    elif r["status"] == "watching":
+        print(f"     \033[36m👁 hypnos veille\033[0m")
+    else:
+        print(f"     \033[2m○ hypnos dort\033[0m")
+    print()
+
+if __name__ == "__main__":
+    main()

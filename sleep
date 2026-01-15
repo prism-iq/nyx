@@ -1,0 +1,12 @@
+#!/bin/bash
+# NYX SLEEP - Mode sommeil
+echo "$(date '+%Y-%m-%d %H:%M') - Nyx s'endort" >> /home/ego-bash/nyx-v2/mind.md
+echo "🌙 Nyx dort..."
+
+# Arrêter le heartbeat si actif
+pkill -f "nyx-heartbeat" 2>/dev/null
+
+# Sauvegarder l'état
+cp /tmp/nyx-thoughts.log /home/ego-bash/nyx-v2/dreams/$(date '+%Y%m%d').log 2>/dev/null
+
+echo "Bonne nuit."

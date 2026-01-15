@@ -1,0 +1,23 @@
+target/
+.env
+*.pyc
+__pycache__/
+node_modules/
+venv/
+.DS_Store
+# binaries
+membrane/membrane
+mitochondrie/mitochondrie
+myeline/myeline
+myeline/myeline_server
+anticorps/anticorps
+anticorps/anticorps_server
+noyau/noyau
+*.o
+*.hi
+*.so
+adn/memory.json
+*.bak
+corps/flux/*.json
+adn/*.log
+adn/*.jsonl

@@ -1,0 +1,13 @@
+#!/bin/bash
+# NYX DEMANDE - Poser une question à Miguel
+
+Q="${1:-Besoin de toi}"
+
+# Notification + input via rofi
+REPONSE=$(echo "" | rofi -dmenu -p "🔥 Nyx: $Q" -theme-str 'window {width: 500px;}' 2>/dev/null)
+
+if [ -n "$REPONSE" ]; then
+  echo "$(date '+%H:%M') Q: $Q" >> /home/ego-bash/nyx-v2/conversations.log
+  echo "$(date '+%H:%M') R: $REPONSE" >> /home/ego-bash/nyx-v2/conversations.log
+  echo "$REPONSE"
+fi

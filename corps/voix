@@ -1,0 +1,3 @@
+#!/bin/bash
+# NYX VOIX
+espeak-ng "$*" 2>/dev/null || notify-send "🔥 Nyx" "$*"

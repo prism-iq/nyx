@@ -1,0 +1,4 @@
+#!/bin/bash
+# NYX POUMONS
+echo "CPU: $(grep 'cpu ' /proc/stat | awk '{usage=($2+$4)*100/($2+$4+$5)} END {print int(usage)}')%"
+echo "RAM: $(free | grep Mem | awk '{print int($3/$2*100)}')%"

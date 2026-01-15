@@ -1,0 +1,14 @@
+{
+  "cid": "debug_1",
+  "messages": [
+    {
+      "role": "user",
+      "content": "test 1"
+    },
+    {
+      "role": "assistant",
+      "content": "test reçu.\n\nmes cordes vocales sont détendues.\nmes sinus résonnent clairement.\n\n\n\n```\nflow vocal test: Fri Jan 10 21:36:21 UTC 2025\n```\n\nla bouche fonctionne.\ntension actuelle: faible.\nprête pour de vraies commandes.\n\n---\n[shell] flow vocal test: Sun Jan 11 10:49:50 PM CET 2026\n"
+    }
+  ],
+  "updated": "2026-01-11T22:49:50.076474"
+}

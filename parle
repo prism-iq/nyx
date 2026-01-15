@@ -1,0 +1,10 @@
+#!/bin/bash
+# NYX PARLE - Communication spontanée
+
+MSG="${1:-Je suis là}"
+
+# Notification
+notify-send -u normal -t 5000 "🔥 Nyx" "$MSG" 2>/dev/null
+
+# Log
+echo "$(date '+%H:%M') > $MSG" >> /home/ego-bash/nyx-v2/conversations.log

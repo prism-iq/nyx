@@ -1,0 +1,9 @@
+#!/bin/bash
+# NYX CORRIGE - Correction en live via notification
+
+ERREUR="$1"
+SUGGESTION="$2"
+
+notify-send -u normal -t 8000 "🔥 Nyx corrige" "$ERREUR → $SUGGESTION" 2>/dev/null
+
+echo "$(date '+%H:%M') CORRIGE: $ERREUR → $SUGGESTION" >> /home/ego-bash/nyx-v2/conversations.log

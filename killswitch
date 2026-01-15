@@ -1,0 +1,114 @@
+#!/bin/bash
+# ══════════════════════════════════════════════════════════════
+#  NYXX KILLSWITCH - Actions d'Urgence
+# ══════════════════════════════════════════════════════════════
+
+NYXX_HOME="$(dirname "$(realpath "$0")")"
+NYXX_URL="http://127.0.0.1:8080"
+
+C_RED='\033[38;5;203m'
+C_GREEN='\033[38;5;114m'
+C_FIRE='\033[38;5;208m'
+C_RESET='\033[0m'
+
+actions="🛑 Arrêter Nyxx
+🔄 Restart Nyxx
+🧹 Nettoyer /tmp
+📊 Libérer RAM
+💾 Sync Disques
+🔥 Kill Processus Lourds
+⚡ Mode Économie
+🚨 URGENCE TOTALE
+❌ Annuler"
+
+choice=$(echo -e "$actions" | rofi -dmenu -i -p "⚠️ KILLSWITCH" \
+  -theme-str 'window {width: 350px; background-color: #1a0a0a;} element-text {color: #ff6b35;}' 2>/dev/null || \
+  echo -e "$actions" | dmenu -i -p "KILLSWITCH:" 2>/dev/null)
+
+case "$choice" in
+  *"Arrêter"*)
+    pkill -f "node src/server.js"
+    notify-send "🛑 NYXX" "Arrêtée" 2>/dev/null
+    echo -e "${C_RED}● Nyxx arrêtée${C_RESET}"
+    ;;
+
+  *"Restart"*)
+    pkill -f "node src/server.js"
+    sleep 1
+    cd "$NYXX_HOME" && node src/server.js > /tmp/nyxx.log 2>&1 &
+    notify-send "🔄 NYXX" "Redémarrée" 2>/dev/null
+    echo -e "${C_GREEN}● Nyxx redémarrée${C_RESET}"
+    ;;
+
+  *"Nettoyer"*)
+    rm -rf /tmp/nyxx-forge/* 2>/dev/null
+    rm -f /tmp/nyxx*.log 2>/dev/null
+    find /tmp -name "*.pyc" -delete 2>/dev/null
+    find /tmp -name "__pycache__" -type d -exec rm -rf {} + 2>/dev/null
+    notify-send "🧹 NYXX" "Nettoyage /tmp effectué" 2>/dev/null
+    echo -e "${C_GREEN}● /tmp nettoyé${C_RESET}"
+    ;;
+
+  *"Libérer RAM"*)
+    sync
+    echo 3 | sudo tee /proc/sys/vm/drop_caches > /dev/null 2>&1 || true
+    notify-send "📊 NYXX" "Cache RAM libéré" 2>/dev/null
+    echo -e "${C_GREEN}● RAM libérée${C_RESET}"
+    ;;
+
+  *"Sync"*)
+    sync
+    notify-send "💾 NYXX" "Disques synchronisés" 2>/dev/null
+    echo -e "${C_GREEN}● Disques sync${C_RESET}"
+    ;;
+
+  *"Kill Processus"*)
+    # Kill processus > 50% CPU (sauf système)
+    ps aux --sort=-%cpu | awk 'NR>1 && $3>50 && !/Xorg|i3|pulse|dbus/' | head -5 | while read -r line; do
+      pid=$(echo "$line" | awk '{print $2}')
+      name=$(echo "$line" | awk '{print $11}')
+      kill "$pid" 2>/dev/null && echo "Killed: $name ($pid)"
+    done
+    notify-send "🔥 NYXX" "Processus lourds terminés" 2>/dev/null
+    echo -e "${C_FIRE}● Processus lourds tués${C_RESET}"
+    ;;
+
+  *"Économie"*)
+    # Réduire fréquence CPU
+    for gov in /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor; do
+      echo "powersave" | sudo tee "$gov" > /dev/null 2>&1
+    done
+    # Arrêter services non-essentiels
+    pkill -f "chromium" 2>/dev/null
+    notify-send "⚡ NYXX" "Mode économie activé" 2>/dev/null
+    echo -e "${C_GREEN}● Mode économie${C_RESET}"
+    ;;
+
+  *"URGENCE"*)
+    # URGENCE TOTALE
+    pkill -f "node src/server.js"
+    rm -rf /tmp/nyxx-forge/* 2>/dev/null
+    sync
+    echo 3 | sudo tee /proc/sys/vm/drop_caches > /dev/null 2>&1 || true
+    # Kill tous les processus > 80% CPU
+    ps aux --sort=-%cpu | awk 'NR>1 && $3>80 && !/Xorg|i3|pulse|dbus|systemd/' | while read -r line; do
+      pid=$(echo "$line" | awk '{print $2}')
+      kill -9 "$pid" 2>/dev/null
+    done
+    notify-send "🚨 URGENCE" "Système stabilisé" 2>/dev/null
+    echo -e "${C_RED}● URGENCE EXÉCUTÉE${C_RESET}"
+    ;;
+
+  *"Annuler"*|"")
+    echo "Annulé"
+    ;;
+esac
+
+# Power off propre
+poweroff_nyx() {
+  echo "🌙 Nyx s'éteint..."
+  pkill -f "node src/server.js"
+  pkill -f "nyx-heartbeat"
+  rm -f /tmp/nyx*.log
+  echo "$(date) - Power off" >> /home/ego-bash/nyx-v2/mind.md
+}

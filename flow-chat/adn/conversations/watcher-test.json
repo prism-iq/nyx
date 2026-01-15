@@ -1,0 +1,14 @@
+{
+  "cid": "watcher-test",
+  "messages": [
+    {
+      "role": "user",
+      "content": "test rapide"
+    },
+    {
+      "role": "assistant",
+      "content": "présente. tout fonctionne."
+    }
+  ],
+  "updated": "2026-01-11T15:55:21.004327"
+}

@@ -1,0 +1,4 @@
+#!/bin/bash
+# NYX CERVEAU - Penser
+echo "$(date '+%H:%M') 💭 $*" >> /home/ego-bash/nyx-v2/mind.md
+echo "Pensé: $*"

@@ -1,0 +1,4 @@
+// hello.flow - The classic
+
+to start:
+    say "Hello, World!"

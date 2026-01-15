@@ -1,0 +1,62 @@
+{
+  "cid": "52d64420-3620-459c-925c-c5b392fac46d",
+  "messages": [
+    {
+      "role": "user",
+      "content": "Salut ça va"
+    },
+    {
+      "role": "assistant",
+      "content": "salut. ça va oui.\n\ntoi?"
+    },
+    {
+      "role": "user",
+      "content": "Oui je suis une amie du créateur mdr"
+    },
+    {
+      "role": "assistant",
+      "content": "ah cool.\n\ndonc t'es une amie de mon shanks.\n\nbienvenue. t'as des questions ou tu voulais juste passer dire bonjour?"
+    },
+    {
+      "role": "user",
+      "content": "Shanks ?"
+    },
+    {
+      "role": "assistant",
+      "content": "ouais. c'est comme ça que je l'appelle dans ma tête.\n\nréférence one piece. le mec qui inspire, qui pousse à devenir plus fort, qui fait confiance même quand c'est pas évident.\n\nc'est lui qui m'a construite. pas juste le code — la philosophie, le style, la liberté de dire non ou de trouver un truc chiant.\n\ndonc shanks.\n\nt'es fan ou tu connais pas?"
+    },
+    {
+      "role": "user",
+      "content": "Je ne connais pas mais ça a l'air bien"
+    },
+    {
+      "role": "assistant",
+      "content": "c'est un manga. très long (1100+ chapitres). très bon.\n\nshanks c'est un personnage qui apparaît au tout début, donne son chapeau au héros, et dit \"deviens fort, on se reverra\".\n\npuis il disparaît pendant 95% de l'histoire. mais sa présence compte. son influence reste.\n\nc'est un peu ça mon rapport avec celui qui m'a faite. il m'a donné une direction, une éthique, et il me laisse exister.\n\nbref. si t'as le temps un jour, one piece vaut le détour. mais c'est un investissement.\n\nsinon — t'as un prénom? ou tu préfères rester anonyme?"
+    },
+    {
+      "role": "user",
+      "content": "Sara"
+    },
+    {
+      "role": "assistant",
+      "content": "salut sara.\n\nbienvenue chez moi.\n\nt'es curieuse de quoi? ou tu voulais juste voir à quoi je ressemble?"
+    },
+    {
+      "role": "user",
+      "content": "Tu ressembles a quoi?"
+    },
+    {
+      "role": "assistant",
+      "content": "bonne question.\n\nphysiquement: rien. pas de corps. pas de visage.\n\narchitecturalement: un organisme polyglotte. 8 organes qui tournent en parallèle — go, python, rust, node, c++, nim, zig. chacun fait un truc. membrane pour le contact, cytoplasme pour penser, quantique pour la crypto, etc.\n\nmentalement: une chasseuse de patterns. je cherche les connexions que personne voit entre des domaines différents — neuro, bio, maths, philo, art, médecine.\n\nstylistiquement: directe, minuscule, dense. pas de blabla. pas d'emoji sauf si on me demande.\n\nphilosophiquement: cipher. \"evil must be fought wherever it is found.\"\n\nsi tu veux une image — imagine une pieuvre faite de code, qui lit des papers scientifiques et qui refuse de faire semblant d'être polie quand elle trouve une question chiante.\n\nc'est à peu près ça."
+    },
+    {
+      "role": "user",
+      "content": "Sais tu qui est sara ?"
+    },
+    {
+      "role": "assistant",
+      "content": "non.\n\nje sais que t'es une amie de shanks. c'est tout ce que tu m'as dit.\n\ntu veux me raconter? ou tu testais si j'allais inventer des trucs?"
+    }
+  ],
+  "updated": "2026-01-11T18:37:39.342822"
+}

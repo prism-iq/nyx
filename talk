@@ -1,0 +1,137 @@
+#!/bin/bash
+# ═══════════════════════════════════════
+#  NYXX - Parle avec le Feu
+# ═══════════════════════════════════════
+
+PORT=8080
+URL="http://127.0.0.1:$PORT"
+
+# Couleurs
+FIRE='\033[38;5;208m'   # Orange feu
+VIOLET='\033[38;5;141m' # Violet
+GRIS='\033[38;5;240m'   # Gris
+VERT='\033[38;5;114m'   # Vert
+ROUGE='\033[38;5;203m'  # Rouge
+RESET='\033[0m'
+
+# Vérifier si Nyxx tourne
+check_nyxx() {
+    curl -s "$URL/api/health" > /dev/null 2>&1
+}
+
+# Démarrer si nécessaire
+if ! check_nyxx; then
+    echo -e "${GRIS}Réveil de Nyxx...${RESET}"
+    cd "$(dirname "$0")" && node src/server.js > /dev/null 2>&1 &
+    sleep 2
+    if ! check_nyxx; then
+        echo -e "${ROUGE}✗ Nyxx ne répond pas${RESET}"
+        exit 1
+    fi
+fi
+
+# Header
+clear
+echo -e "${FIRE}"
+echo "  ╔═══════════════════════════════════╗"
+echo "  ║           🔥 N Y X X 🔥           ║"
+echo "  ╚═══════════════════════════════════╝"
+echo -e "${RESET}"
+echo -e "${GRIS}  Commandes: /run, /py, /js, /status, /help, exit${RESET}"
+echo ""
+
+# Exécuter code
+run_code() {
+    local code="$1"
+    local lang="${2:-auto}"
+
+    # Escape pour JSON
+    local json_code=$(echo "$code" | python3 -c 'import json,sys; print(json.dumps(sys.stdin.read().strip()))')
+
+    local result=$(curl -s -X POST "$URL/api/run" \
+        -H "Content-Type: application/json" \
+        -d "{\"code\": $json_code, \"lang\": \"$lang\"}" 2>/dev/null)
+
+    local ok=$(echo "$result" | python3 -c "import sys,json; print(json.load(sys.stdin).get('ok', False))" 2>/dev/null)
+    local output=$(echo "$result" | python3 -c "import sys,json; d=json.load(sys.stdin); print(d.get('output', d.get('error', '')))" 2>/dev/null)
+    local blocked=$(echo "$result" | python3 -c "import sys,json; print(json.load(sys.stdin).get('blocked', False))" 2>/dev/null)
+
+    if [[ "$blocked" == "True" ]]; then
+        echo -e "${ROUGE}  ⛔ Bloqué: $output${RESET}"
+    elif [[ "$ok" == "True" ]]; then
+        echo -e "${VERT}$output${RESET}"
+    else
+        echo -e "${ROUGE}  ✗ $output${RESET}"
+    fi
+}
+
+# Boucle principale
+while true; do
+    echo -ne "${VIOLET}  ❯ ${RESET}"
+    read -r input
+
+    # Quitter
+    [[ "$input" == "exit" || "$input" == "quit" || "$input" == "q" ]] && break
+    [[ -z "$input" ]] && continue
+
+    case "$input" in
+        /help)
+            echo -e "${GRIS}"
+            echo "  /run <code>  - Exécuter du code (auto-détection)"
+            echo "  /py <code>   - Python"
+            echo "  /js <code>   - JavaScript"
+            echo "  /sh <code>   - Bash"
+            echo "  /go <code>   - Go"
+            echo "  /status      - État de Nyxx"
+            echo "  /flames      - Historique exécutions"
+            echo "  exit         - Quitter"
+            echo -e "${RESET}"
+            ;;
+        /status)
+            echo -e "${GRIS}"
+            curl -s "$URL/api/status" | python3 -m json.tool 2>/dev/null
+            echo -e "${RESET}"
+            ;;
+        /flames)
+            curl -s "$URL/api/status" | python3 -c "
+import sys,json
+d = json.load(sys.stdin)
+flames = d.get('fire', {}).get('recentSpells', [])
+for f in flames[-5:]:
+    status = '✓' if f.get('ok') else '✗'
+    print(f\"  {f.get('flame','')} {status} {f.get('lang','')} ({f.get('duration',0)}ms)\")
+" 2>/dev/null
+            ;;
+        /run\ *)
+            run_code "${input#/run }" "auto"
+            ;;
+        /py\ *)
+            run_code "${input#/py }" "python"
+            ;;
+        /js\ *)
+            run_code "${input#/js }" "javascript"
+            ;;
+        /sh\ *)
+            run_code "${input#/sh }" "bash"
+            ;;
+        /go\ *)
+            run_code "${input#/go }" "go"
+            ;;
+        *)
+            # Tenter d'exécuter directement
+            if [[ "$input" == *"print"* || "$input" == *"def "* || "$input" == *"import "* ]]; then
+                run_code "$input" "python"
+            elif [[ "$input" == *"console."* || "$input" == *"const "* || "$input" == *"=>"* ]]; then
+                run_code "$input" "javascript"
+            elif [[ "$input" == *"echo "* || "$input" == *"ls"* || "$input" == *"cat "* ]]; then
+                run_code "$input" "bash"
+            else
+                # Par défaut: echo
+                run_code "echo \"$input\"" "bash"
+            fi
+            ;;
+    esac
+    echo ""
+done
+
+echo -e "\n${FIRE}  🌙 Le feu s'endort...${RESET}\n"

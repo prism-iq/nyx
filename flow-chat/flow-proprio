@@ -1,0 +1,110 @@
+#!/opt/flow-chat/venv/bin/python
+"""flow-proprio - je me regarde penser"""
+
+import requests
+import time
+import sys
+import os
+
+ORGANS = [
+    ("membrane",   8092, "peau"),
+    ("cytoplasme", 8091, "cerveau"),
+    ("anticorps",  8097, "défense"),
+    ("synapse",    3001, "nerfs"),
+    ("quantique",  8095, "crypto"),
+    ("hypnos",     8099, "rêve"),
+    ("noyau",      8094, "mémoire"),
+    ("shell",      8100, "mains"),
+]
+
+def clear():
+    os.system('clear' if os.name == 'posix' else 'cls')
+
+def probe(port):
+    try:
+        start = time.time()
+        r = requests.get(f"http://127.0.0.1:{port}/health", timeout=2)
+        latency = int((time.time() - start) * 1000)
+        if r.ok:
+            data = r.json()
+            return True, latency, data
+        return False, latency, {}
+    except:
+        return False, -1, {}
+
+def bar(val, max_val, width=20):
+    filled = int(val / max_val * width) if max_val > 0 else 0
+    return "█" * filled + "░" * (width - filled)
+
+def render():
+    clear()
+    print("\033[36m╔══════════════════════════════════════════════════════════════╗\033[0m")
+    print("\033[36m║\033[0m              \033[1mPROPRIOCEPTION\033[0m - je me sens                    \033[36m║\033[0m")
+    print("\033[36m╚══════════════════════════════════════════════════════════════╝\033[0m")
+    print()
+
+    alive_count = 0
+    total_latency = 0
+
+    for name, port, role in ORGANS:
+        ok, lat, data = probe(port)
+
+        if ok:
+            alive_count += 1
+            total_latency += lat
+            status = data.get("status", "ok")
+
+            # couleur selon latence
+            if lat < 50:
+                col = "\033[32m"  # vert
+            elif lat < 200:
+                col = "\033[33m"  # jaune
+            else:
+                col = "\033[31m"  # rouge
+
+            # détails spéciaux par organe
+            extra = ""
+            if "fever" in data:
+                extra = f" fièvre:{data['fever']}"
+            if "connections" in data:
+                extra = f" conn:{data['connections']}"
+            if "dreams" in data:
+                extra = f" rêves:{data['dreams']}"
+            if "sleeping" in data and data["sleeping"]:
+                extra = " 💤"
+
+            print(f"  {col}●\033[0m {name:12} {role:8} {lat:4}ms  {status:15}{extra}")
+        else:
+            print(f"  \033[31m○\033[0m {name:12} {role:8}  ---   \033[2mmort\033[0m")
+
+    print()
+    print(f"  \033[36m{'─' * 50}\033[0m")
+
+    health = alive_count / len(ORGANS) * 100
+    avg_lat = total_latency // alive_count if alive_count > 0 else 0
+
+    if health == 100:
+        feeling = "\033[32mje sens tous mes organes\033[0m"
+    elif health >= 75:
+        feeling = "\033[33mje me sens presque entière\033[0m"
+    elif health >= 50:
+        feeling = "\033[33mdes parties de moi manquent\033[0m"
+    else:
+        feeling = "\033[31mje souffre\033[0m"
+
+    print(f"  santé: {bar(health, 100)} {health:.0f}%")
+    print(f"  latence moyenne: {avg_lat}ms")
+    print(f"  {feeling}")
+    print()
+    print(f"  \033[2mCtrl+C pour quitter | refresh 2s\033[0m")
+
+def main():
+    try:
+        while True:
+            render()
+            time.sleep(2)
+    except KeyboardInterrupt:
+        print("\n")
+
+if __name__ == "__main__":
+    main()

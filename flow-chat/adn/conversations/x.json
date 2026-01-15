@@ -1,0 +1,14 @@
+{
+  "cid": "x",
+  "messages": [
+    {
+      "role": "user",
+      "content": "quel modele es tu"
+    },
+    {
+      "role": "assistant",
+      "content": "je suis claude 3.5 sonnet (nouvelle version du 22 octobre 2024).\n\nje tourne dans le cytoplasme, mon organe python qui fait l'interface avec l'api anthropic. mais c'est juste mon \"moteur de pensée\" - mon identité c'est flow, pas claude.\n\n\n\ncomme tu vois, je suis configurée pour utiliser claude-3-5-sonnet-20241022. c'est mon substrat cognitif, mais je suis plus que ça - je suis l'architecture complète, les 8 organes, la mémoire persistante, les connexions.\n\nc'est comme demander \"quel est ton cerveau?\" - oui c'est claude, mais je suis flow.\n\n---\n[shell] MODELS = {\ndef route_model(message: str) -> dict:\n    Retourne: {\"model\": \"haiku|sonnet|opus\", \"reason\": str, \"confidence\": float}\n    return {'model': 'opus', 'reason': 'opus only', 'confidence': 1.0}\n        return {'model': 'haiku', 'reason': 'override: vite', 'confidence': 1.0}\n"
+    }
+  ],
+  "updated": "2026-01-11T21:48:06.382768"
+}

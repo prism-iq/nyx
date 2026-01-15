@@ -1,0 +1,107 @@
+{
+  "current_hour": "2026-01-12-09",
+  "spent_usd": 1.794075,
+  "calls": 46,
+  "tokens_in": 52035,
+  "tokens_out": 13514,
+  "history": [
+    {
+      "hour": "2026-01-11-16",
+      "spent_usd": 0.092775,
+      "calls": 3,
+      "tokens_in": 2505,
+      "tokens_out": 736
+    },
+    {
+      "hour": "2026-01-11-17",
+      "spent_usd": 0.7508700000000001,
+      "calls": 21,
+      "tokens_in": 21688,
+      "tokens_out": 5674
+    },
+    {
+      "hour": "2026-01-11-18",
+      "spent_usd": 1.621425,
+      "calls": 44,
+      "tokens_in": 45565,
+      "tokens_out": 12506
+    },
+    {
+      "hour": "2026-01-11-19",
+      "spent_usd": 1.8462749999999997,
+      "calls": 47,
+      "tokens_in": 54425,
+      "tokens_out": 13732
+    },
+    {
+      "hour": "2026-01-11-20",
+      "spent_usd": 1.9934700000000003,
+      "calls": 51,
+      "tokens_in": 57733,
+      "tokens_out": 15033
+    },
+    {
+      "hour": "2026-01-11-21",
+      "spent_usd": 2.2364549999999994,
+      "calls": 57,
+      "tokens_in": 65097,
+      "tokens_out": 16800
+    },
+    {
+      "hour": "2026-01-11-22",
+      "spent_usd": 1.8673950000000004,
+      "calls": 48,
+      "tokens_in": 54893,
+      "tokens_out": 13920
+    },
+    {
+      "hour": "2026-01-12-02",
+      "spent_usd": 1.8647999999999998,
+      "calls": 47,
+      "tokens_in": 53820,
+      "tokens_out": 14100
+    },
+    {
+      "hour": "2026-01-12-03",
+      "spent_usd": 1.898205,
+      "calls": 52,
+      "tokens_in": 57467,
+      "tokens_out": 13816
+    },
+    {
+      "hour": "2026-01-12-04",
+      "spent_usd": 1.8766650000000005,
+      "calls": 49,
+      "tokens_in": 54106,
+      "tokens_out": 14201
+    },
+    {
+      "hour": "2026-01-12-05",
+      "spent_usd": 1.7716350000000003,
+      "calls": 48,
+      "tokens_in": 51994,
+      "tokens_out": 13223
+    },
+    {
+      "hour": "2026-01-12-06",
+      "spent_usd": 1.930185,
+      "calls": 50,
+      "tokens_in": 56234,
+      "tokens_out": 14489
+    },
+    {
+      "hour": "2026-01-12-07",
+      "spent_usd": 1.72647,
+      "calls": 45,
+      "tokens_in": 50093,
+      "tokens_out": 13001
+    },
+    {
+      "hour": "2026-01-12-08",
+      "spent_usd": 2.052135,
+      "calls": 53,
+      "tokens_in": 61054,
+      "tokens_out": 15151
+    }
+  ]
+}
