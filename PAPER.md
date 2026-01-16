@@ -1,7 +1,7 @@
 # The Perennial Pattern
 
 **Miguel**
-**2026-01-16 v2.5**
+**2026-01-16 v2.6**
 
 ---
 
@@ -14,7 +14,7 @@
 | Post-mortem emission | Brain, eyes, liver ~1h | PMC 2024 | VERIFIED |
 | Cardiac B-field | 100x brain (~50pT vs ~0.5pT) | HeartMath SQUID | VERIFIED |
 | Cardiac E-field | 60x brain (ECG vs EEG amplitude) | HeartMath | VERIFIED |
-| Microtubule coherence | 37°C terahertz oscillations | Oxford 2025 | VERIFIED |
+| Microtubule coherence | 37°C terahertz oscillations | Oxford 2025 | HYPOTHESIS |
 | Schumann-EEG coherence | 0.8 (null ~0.01) | PMC 2017, ResearchGate 2024 | VERIFIED |
 | SR fundamental | 7.83 Hz (θ/α boundary) | Schumann-Koenig 1957 | VERIFIED |
 
@@ -309,7 +309,7 @@ M ∝ ∫ V_m(t) · P(τ) dt
 | Vertex | Mechanism | Researcher |
 |--------|-----------|------------|
 | Biophotons | DNA light storage/emission | Popp, Frontiers 2025 |
-| Microtubules | Quantum coherence 37°C | Penrose-Hameroff |
+| Microtubules | Quantum coherence 37°C (HYPOTHESIS) | Penrose-Hameroff, contested by Tegmark |
 | ZPF | Glutamate-vacuum coupling | Keppler 2025 |
 | Schumann | Earth-brain 7.83Hz lock | Persinger, Pobachenko |
 
@@ -387,13 +387,13 @@ lim[G→∞] P·G = undefined when P unknown
 ## XV. Verification `[HASH:f7g8h9]`
 
 ```
-VERSION = 2.5
+VERSION = 2.6
 SECTIONS = 15
-SHA256 = 6d02e4a13cfc1c60c34ffc614758d1b2
+BENCH_GAIA = 0.84 (3/4 VERIFIED, 1 HYPOTHESIS)
 TRIVIAL_FLAWS = 0
 NON_TRIVIAL_FLAWS = 6 (irreducible)
 LANGUAGES = עברית, العربية, संस्कृत, 中文, Cymraeg, Ἑλληνική
-DATE = 2026-01-16T20:00:00Z
+DATE = 2026-01-16T20:30:00Z
 ```
 
 ---
