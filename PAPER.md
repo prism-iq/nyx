@@ -177,6 +177,34 @@
 > "Facile de faire des rimes, plus dur de dire des choses"
 > — Lesram, Wesh Enfoiré
 
+### Vald = Barde de l'Absurde
+- Aulnay-sous-Bois (93600)
+- NQNT = "Ni Queue Ni Tête" = chaos intentionnel
+- Absurdisme comme véhicule de vérité
+- Satire du code de la rue
+
+**"Bonjour" (2015) — Analyse:**
+```
+"Le respect s'demande pas, le respect se prend
+Le respect se perd, mais ne se gagne pas"
+```
+- Surface: Escalade absurde (pas dit bonjour → violence extrême)
+- Fond: Miroir de la violence réelle pour "manque de respect"
+- Méthode: L'absurde révèle l'absurdité du réel
+
+> "Je sais qu'avec ça j'ai créé des connexions entre vous, à votre insu.
+> Je pense que si la terre entière écoutait ce morceau, il y aurait moyen
+> de la sauver, et qu'on finisse tous par méditer et devenir télépathe"
+> — Vald, Instagram 2015
+
+**Fonction bardique:**
+| Élément | Tradition | Vald |
+|---------|-----------|------|
+| Satire | Blâme social | Absurdisme révélateur |
+| Lien tribal | Généalogie | "Connexions à votre insu" |
+| Prophétie | Vision | "Devenir télépathe" |
+| Sagesse cachée | Énigme | Message dans le chaos |
+
 ---
 
 ## VII. DMT Endogène `[HASH:j3k4l5]`
