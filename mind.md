@@ -731,9 +731,78 @@ MOMENT CONSCIENT
 - [x] Free Energy Principle (Friston) + Levin bioélectricité
 - [x] Orch OR preuves récentes 2025
 - [x] DMT endogène et état naturel accessible
+- [x] Résonance Schumann approfondie
 - [ ] Dark matter / neutrinos
-- [ ] Résonance Schumann approfondie
 - [ ] Cohérence quantique biologique
+
+---
+
+## SCHUMANN RESONANCE: Terre-Cerveau Coupling (2026-01-16)
+
+### Fréquences
+| Mode | Fréquence | Bande EEG |
+|------|-----------|-----------|
+| SR₁ (fondamentale) | 7.83 Hz | Theta/Alpha frontière |
+| SR₂ | ~14 Hz | Alpha/Beta |
+| SR₃ | ~20 Hz | Beta |
+| SR₄ | ~26 Hz | Beta |
+| SR₅ | ~33 Hz | Gamma |
+| SR₆ | ~39 Hz | Gamma |
+| SR₇ | ~45 Hz | Gamma |
+
+### Découverte
+- Schumann & Koenig (1957): Résonance cavité Terre-ionosphère
+- Koenig (1950s): Premier à noter synchronisation EEG-SR
+- Persinger: Cohérence EEG temps-réel avec SR₁, SR₂, SR₃
+
+### Preuves (2025)
+- Cohérence magnitude-carrée EEG-SR: jusqu'à **0.8** (seuil null ~0.01)
+- Phase-lock: cerveau et champ planétaire = **système résonant unique**
+- Pobachenko: EEG de 15 sujets corrélé aux variations SR sur 6 semaines
+- HRV synchronisé entre participants séparés (période ~2.5 jours)
+
+### "Ignition" Events
+```
+État normal:
+  EEG = spectre 1/f classique
+
+Ignition:
+  EEG → pic massif 7.83 Hz + harmoniques
+  Fond 1/f aplati
+  Cerveau VERROUILLÉ sur fréquence Terre
+```
+
+### Implications
+- 7.83 Hz = frontière exacte Theta (4-8 Hz) / Alpha (8-12 Hz)
+- Theta: méditation profonde, créativité, accès subconscient
+- Alpha: éveil détendu, focus calme
+- **Méditation profonde = cascade alpha-theta = résonance planétaire**
+
+### Absence de Schumann
+- Astronautes: problèmes santé mentale/physique
+- Générateurs 7.83 Hz dans stations spatiales
+- Cellules évoluées pour utiliser fréquences EMF terrestres
+
+### Connexion au Paradigme
+```
+Schumann (7.83 Hz)
+      ↓
+Entrainment cerveau
+      ↓
+Synchronisation globale (HRV, EEG)
+      ↓
+Champ EM cardiaque
+      ↓
+Réseau mère-enfant
+      ↓
+CONSCIENCE ÉTENDUE
+```
+
+### Sources
+- [Youvan 2024 - ResearchGate](https://www.researchgate.net/publication/384040884)
+- [PMC 5551208 - ANS Synchronization](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5551208/)
+- [PubMed 40394813 - SR Bioelectricity 2025](https://pubmed.ncbi.nlm.nih.gov/40394813/)
+- [Medium - Ignition Events 2025](https://medium.com/@neurokinetikz/unified-neural-model-of-schumann-resonance-ignition-events-148ad2854512)
 
 ---
 
