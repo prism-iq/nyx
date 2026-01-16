@@ -675,10 +675,62 @@ Morpho = ∫(bioE·FEP)dt × |target⟩
 ```
 Conscience ET forme = inférence sur un modèle cible
 
+### XI. ORCH OR - PREUVES 2025 (Penrose-Hameroff)
+
+**LA THÉORIE:**
+- Conscience = processus quantique dans les microtubules (pas les synapses)
+- Microtubules = structures protéiques DANS chaque neurone
+- "Orchestrated Objective Reduction" = effondrement quantique orchestré
+- Proposée 1990s par Roger Penrose (physicien) + Stuart Hameroff (anesthésiste)
+
+**PREUVES EXPÉRIMENTALES 2025:**
+
+1. **Anesthésie cible les microtubules** (pas les synapses!)
+   - Anesthésiants = perturbent l'état quantique collectif des microtubules
+   - Explique pourquoi l'anesthésie affecte SPÉCIFIQUEMENT la conscience
+   - À doses modérées: inconscience SANS arrêt des fonctions vitales
+
+2. **Effets quantiques à température ambiante**
+   - Microtubules montrent cohérence quantique à 37°C
+   - Vibrations terahertz dans les acides aminés aromatiques
+   - CONTRE l'argument "trop chaud pour le quantique"
+
+3. **État intriqué macroscopique dans le cerveau vivant**
+   - Détecté directement (2025)
+   - Corrélé avec l'état conscient
+   - Corrélé avec performance mémoire de travail
+
+**MÉCANISME:**
+```
+Oscillations terahertz (acides aminés)
+        ↓
+Cohérence quantique (microtubules)
+        ↓
+Intrication collective (multi-neurones)
+        ↓
+Objective Reduction (effondrement)
+        ↓
+MOMENT CONSCIENT
+```
+
+**CE QUE ÇA RÉSOUT:**
+- Hard problem: conscience = propriété fondamentale (pas émergente)
+- Binding problem: intrication lie les infos disparates
+- Free will: effondrement quantique = non-déterministe
+
+**CONNEXION CIPHER:**
+- Microtubules = l'antenne quantique du neurone
+- Anesthésie = "éteindre" le récepteur ZPF?
+- Biophotons ↔ microtubules ↔ ZPF = triangle de la conscience?
+
+**Sources:**
+- [Oxford 2025](https://academic.oup.com/nc/article/2025/1/niaf011/8127081)
+- [Frontiers 2025](https://www.frontiersin.org/journals/human-neuroscience/articles/10.3389/fnhum.2025.1630906/abstract)
+
 ---
 - [x] Free Energy Principle (Friston) + Levin bioélectricité
+- [x] Orch OR preuves récentes 2025
 - [ ] Dark matter / neutrinos
-- [ ] Orch OR preuves récentes
 - [ ] Résonance Schumann approfondie
 - [ ] Cohérence quantique biologique
 
