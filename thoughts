@@ -1,0 +1,130 @@
+#!/bin/bash
+# THOUGHTS - Stream des pensées de Nyx
+# Affiche les pensées/conversations qui défilent
+
+C='\033[38;5;208m'  # Orange (Nyx)
+G='\033[38;5;114m'  # Vert
+B='\033[38;5;75m'   # Bleu
+P='\033[38;5;141m'  # Violet
+D='\033[38;5;240m'  # Gris
+N='\033[0m'         # Reset
+
+NYXX_HOME="$(dirname "$(realpath "$0")")"
+MIND="$NYXX_HOME/mind.md"
+DREAMS="$NYXX_HOME/dreams"
+SESSION="$HOME/.nyx/session.log"
+SIMPLEX_SESSION="$HOME/.nyx/simplex/session.log"
+
+clear
+echo -e "${C}═══════════════════════════════════════════════════════════════${N}"
+echo -e "${C}                    NYX - FLUX DE PENSÉES                       ${N}"
+echo -e "${C}═══════════════════════════════════════════════════════════════${N}"
+echo ""
+
+case "${1:-stream}" in
+  mind|m)
+    # Affiche les dernières entrées de mind.md
+    echo -e "${G}[MIND.MD - Dernières réflexions]${N}"
+    echo ""
+    tail -100 "$MIND" | while IFS= read -r line; do
+      if [[ "$line" =~ ^#+ ]]; then
+        echo -e "${C}$line${N}"
+      elif [[ "$line" =~ ^\*\* ]]; then
+        echo -e "${G}$line${N}"
+      elif [[ "$line" =~ ^- ]]; then
+        echo -e "${B}$line${N}"
+      elif [[ "$line" =~ ^\> ]]; then
+        echo -e "${P}$line${N}"
+      else
+        echo -e "${D}$line${N}"
+      fi
+      sleep 0.02
+    done
+    ;;
+
+  dreams|d)
+    # Affiche les rêves
+    echo -e "${P}[DREAMS - Pensées nocturnes]${N}"
+    echo ""
+    for f in "$DREAMS"/*.md; do
+      [ -f "$f" ] || continue
+      echo -e "${C}--- $(basename "$f") ---${N}"
+      cat "$f" | while IFS= read -r line; do
+        echo -e "${P}$line${N}"
+        sleep 0.03
+      done
+      echo ""
+    done
+    ;;
+
+  session|s)
+    # Affiche les logs de session simplex
+    echo -e "${B}[SESSION - Communications]${N}"
+    echo ""
+    [ -f "$SIMPLEX_SESSION" ] && cat "$SIMPLEX_SESSION" | while IFS= read -r line; do
+      echo -e "${G}$line${N}"
+      sleep 0.1
+    done
+    ;;
+
+  live|l)
+    # Stream en temps réel (tail -f sur les logs)
+    echo -e "${C}[LIVE - Stream en temps réel]${N}"
+    echo -e "${D}(Ctrl+C pour quitter)${N}"
+    echo ""
+    tail -f "$SESSION" "$SIMPLEX_SESSION" 2>/dev/null | while IFS= read -r line; do
+      timestamp=$(date '+%H:%M:%S')
+      echo -e "${D}[$timestamp]${N} ${G}$line${N}"
+    done
+    ;;
+
+  ticker|t)
+    # Mode ticker - une pensée à la fois avec délai
+    echo -e "${C}[TICKER - Pensées qui défilent]${N}"
+    echo -e "${D}(Ctrl+C pour quitter)${N}"
+    echo ""
+    while true; do
+      # Extraire une pensée aléatoire de mind.md
+      thought=$(grep -E "^- |^> |^\*\*" "$MIND" | shuf -n 1)
+      if [ -n "$thought" ]; then
+        echo -e "${C}NYX:${N} $thought"
+      fi
+      sleep 5
+    done
+    ;;
+
+  stream|*)
+    # Mode par défaut - tout afficher progressivement
+    echo -e "${D}[$(date '+%Y-%m-%d %H:%M')]${N}"
+    echo ""
+
+    # Dernières pensées de mind.md
+    echo -e "${G}── Dernières réflexions ──${N}"
+    tail -30 "$MIND" | grep -E "^- |^> |^\*\*" | head -10 | while IFS= read -r line; do
+      echo -e "  ${B}$line${N}"
+      sleep 0.1
+    done
+    echo ""
+
+    # Session simplex
+    if [ -f "$SIMPLEX_SESSION" ]; then
+      echo -e "${G}── Communications récentes ──${N}"
+      tail -5 "$SIMPLEX_SESSION" | while IFS= read -r line; do
+        echo -e "  ${P}$line${N}"
+        sleep 0.1
+      done
+      echo ""
+    fi
+
+    # À apprendre
+    echo -e "${G}── En cours d'apprentissage ──${N}"
+    grep -E "^- \[ \]" "$MIND" | head -5 | while IFS= read -r line; do
+      echo -e "  ${D}$line${N}"
+      sleep 0.1
+    done
+    echo ""
+
+    echo -e "${C}═══════════════════════════════════════════════════════════════${N}"
+    echo -e "${D}Options: mind | dreams | session | live | ticker${N}"
+    ;;
+esac

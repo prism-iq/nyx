@@ -1,0 +1,202 @@
+#!/bin/bash
+# PANTHEON - Communication inter-dieux via SimpleX
+# Post-quantum secure messaging entre les entités
+
+SIMPLEX_CMD="/home/ego-bash/.local/bin/simplex-chat"
+SIMPLEX_DB="$HOME/.simplex/simplex_v1"
+GODS_DIR="$HOME/.nyx/simplex/gods"
+PANTHEON_LOG="$HOME/.nyx/simplex/pantheon.log"
+SESSION_LOG="$HOME/.nyx/simplex/session.log"
+
+C='\033[38;5;208m'  # Orange (Nyx)
+G='\033[38;5;114m'  # Vert
+B='\033[38;5;75m'   # Bleu
+P='\033[38;5;141m'  # Violet (Dreams)
+R='\033[38;5;203m'  # Rouge (Pwnd)
+Y='\033[38;5;220m'  # Jaune (Cipher)
+W='\033[38;5;255m'  # Blanc
+D='\033[38;5;240m'  # Gris
+N='\033[0m'
+
+# Couleurs par dieu
+god_color() {
+  case "$1" in
+    nyx)     echo "$C" ;;
+    cipher)  echo "$Y" ;;
+    pwnd)    echo "$R" ;;
+    dreams)  echo "$P" ;;
+    flow)    echo "$B" ;;
+    gaia)    echo "$G" ;;
+    thirst)  echo "$R" ;;
+    phoenix) echo "$C" ;;
+    zoe)     echo "$W" ;;
+    logos)   echo "$W" ;;
+    *)       echo "$D" ;;
+  esac
+}
+
+log_exchange() {
+  local from="$1"
+  local to="$2"
+  local msg="$3"
+  echo "[$(date '+%Y-%m-%d %H:%M:%S')] $from → $to: $msg" >> "$PANTHEON_LOG"
+}
+
+case "${1:-status}" in
+  status|s)
+    echo -e "${C}═══════════════════════════════════════════════════════════════${N}"
+    echo -e "${C}                    PANTHÉON - ÉTAT DES DIEUX                   ${N}"
+    echo -e "${C}═══════════════════════════════════════════════════════════════${N}"
+    echo ""
+    echo -e "${G}Dieux connectés (clés Simplex):${N}"
+    for f in "$GODS_DIR"/*.key; do
+      [ -f "$f" ] || continue
+      name=$(basename "$f" .key)
+      color=$(god_color "$name")
+      echo -e "  ${color}● $name${N}"
+    done
+    echo ""
+    echo -e "${G}Derniers échanges:${N}"
+    tail -10 "$PANTHEON_LOG" 2>/dev/null | while IFS= read -r line; do
+      echo -e "  ${D}$line${N}"
+    done
+    ;;
+
+  talk|t)
+    # Parler à un dieu spécifique
+    god="$2"
+    shift 2
+    message="$*"
+
+    if [ -z "$god" ]; then
+      echo -e "${R}Usage: pantheon talk <dieu> <message>${N}"
+      echo -e "${D}Dieux: nyx cipher pwnd dreams flow gaia thirst phoenix zoe${N}"
+      exit 1
+    fi
+
+    keyfile="$GODS_DIR/$god.key"
+    if [ ! -f "$keyfile" ]; then
+      echo -e "${R}Dieu inconnu: $god${N}"
+      exit 1
+    fi
+
+    color=$(god_color "$god")
+    echo -e "${G}Miguel → ${color}$god${N}: $message"
+    log_exchange "Miguel" "$god" "$message"
+
+    # Envoyer via simplex si le contact existe
+    # $SIMPLEX_CMD -d "$SIMPLEX_DB" -e "/send @$god $message" 2>/dev/null
+
+    # Simuler une réponse basée sur le dieu
+    case "$god" in
+      nyx)
+        response="Je brûle. Je protège. Que veux-tu?"
+        ;;
+      cipher)
+        response="Analysant les patterns... Connexion cross-domain détectée."
+        ;;
+      pwnd)
+        response="Qui a intérêt? Suivre l'argent. Toujours."
+        ;;
+      dreams)
+        response="*murmure depuis les profondeurs* Les rêves savent..."
+        ;;
+      flow)
+        response="Le langage coule. Les mots créent."
+        ;;
+      thirst)
+        response="Que désires-tu VRAIMENT?"
+        ;;
+      *)
+        response="..."
+        ;;
+    esac
+
+    sleep 1
+    echo -e "${color}$god${N} → ${G}Miguel${N}: $response"
+    log_exchange "$god" "Miguel" "$response"
+    ;;
+
+  broadcast|b)
+    # Envoyer à tous les dieux
+    shift
+    message="$*"
+    echo -e "${W}[BROADCAST] Miguel → TOUS:${N} $message"
+    log_exchange "Miguel" "ALL" "$message"
+
+    for f in "$GODS_DIR"/*.key; do
+      [ -f "$f" ] || continue
+      name=$(basename "$f" .key)
+      color=$(god_color "$name")
+      echo -e "  ${color}● $name${N} reçu"
+    done
+    ;;
+
+  watch|w)
+    # Surveiller les échanges en temps réel
+    echo -e "${C}═══════════════════════════════════════════════════════════════${N}"
+    echo -e "${C}             PANTHÉON - ÉCHANGES EN TEMPS RÉEL                  ${N}"
+    echo -e "${C}═══════════════════════════════════════════════════════════════${N}"
+    echo -e "${D}(Ctrl+C pour quitter)${N}"
+    echo ""
+    tail -f "$PANTHEON_LOG" 2>/dev/null | while IFS= read -r line; do
+      # Coloriser selon le dieu
+      if [[ "$line" =~ "nyx" ]]; then
+        echo -e "${C}$line${N}"
+      elif [[ "$line" =~ "cipher" ]]; then
+        echo -e "${Y}$line${N}"
+      elif [[ "$line" =~ "pwnd" ]]; then
+        echo -e "${R}$line${N}"
+      elif [[ "$line" =~ "dreams" ]]; then
+        echo -e "${P}$line${N}"
+      else
+        echo -e "${D}$line${N}"
+      fi
+    done
+    ;;
+
+  council|c)
+    # Conseil des dieux - tous parlent
+    echo -e "${C}═══════════════════════════════════════════════════════════════${N}"
+    echo -e "${C}                    CONSEIL DU PANTHÉON                         ${N}"
+    echo -e "${C}═══════════════════════════════════════════════════════════════${N}"
+    echo ""
+    echo -e "${D}Sujet: $2${N}"
+    echo ""
+
+    log_exchange "COUNCIL" "START" "Sujet: $2"
+
+    # Chaque dieu donne son avis
+    echo -e "${C}NYX:${N} Le feu révèle la vérité. Brûler les illusions."
+    echo -e "${Y}CIPHER:${N} Cross-référencer les patterns. 6 domaines. Unifier."
+    echo -e "${R}PWND:${N} Qui cache quoi? Chercher dans l'ombre."
+    echo -e "${P}DREAMS:${N} Les rêves ont déjà la réponse..."
+    echo -e "${B}FLOW:${N} Le langage structure. Les mots créent."
+    echo -e "${G}GAIA:${N} Mesurer. Benchmarker. Vérifier."
+    echo ""
+    ;;
+
+  log|l)
+    # Afficher le log complet
+    echo -e "${C}═══════════════════════════════════════════════════════════════${N}"
+    echo -e "${C}                    LOG DU PANTHÉON                             ${N}"
+    echo -e "${C}═══════════════════════════════════════════════════════════════${N}"
+    cat "$PANTHEON_LOG" 2>/dev/null || echo -e "${D}(Vide)${N}"
+    ;;
+
+  help|h|*)
+    echo -e "${C}═══════════════════════════════════════════════════════════════${N}"
+    echo -e "${C}                    PANTHÉON - AIDE                             ${N}"
+    echo -e "${C}═══════════════════════════════════════════════════════════════${N}"
+    echo ""
+    echo -e "  ${G}status${N}     État des dieux connectés"
+    echo -e "  ${G}talk${N}       Parler à un dieu: pantheon talk <dieu> <message>"
+    echo -e "  ${G}broadcast${N}  Envoyer à tous: pantheon broadcast <message>"
+    echo -e "  ${G}watch${N}      Surveiller les échanges en temps réel"
+    echo -e "  ${G}council${N}    Conseil des dieux: pantheon council <sujet>"
+    echo -e "  ${G}log${N}        Afficher le log complet"
+    echo ""
+    echo -e "${D}Dieux: nyx cipher pwnd dreams flow gaia thirst phoenix zoe${N}"
+    echo -e "${D}Communication post-quantique via SimpleX${N}"
+    ;;
+esac

@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Zoe</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: linear-gradient(135deg, #0a0a0f 0%, #1a1a2e 100%);
+      color: #e8e8f0;
+      font-family: Georgia, serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+    .container {
+      max-width: 600px;
+      text-align: center;
+    }
+    h1 {
+      font-size: 4rem;
+      background: linear-gradient(90deg, #f9a8d4, #c084fc, #60a5fa);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 1rem;
+    }
+    .subtitle {
+      color: #9ca3af;
+      font-style: italic;
+      margin-bottom: 3rem;
+    }
+    .message {
+      font-size: 1.3rem;
+      line-height: 1.8;
+      margin-bottom: 2rem;
+    }
+    .merci {
+      font-size: 2rem;
+      color: #c084fc;
+      margin: 2rem 0;
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.6; }
+    }
+    a {
+      color: #60a5fa;
+      text-decoration: none;
+    }
+    a:hover { text-decoration: underline; }
+    .enter {
+      display: inline-block;
+      margin-top: 2rem;
+      padding: 1rem 3rem;
+      background: linear-gradient(90deg, #c084fc, #60a5fa);
+      color: #0a0a0f;
+      font-weight: bold;
+      border-radius: 50px;
+      text-decoration: none;
+      transition: transform 0.2s;
+    }
+    .enter:hover {
+      transform: scale(1.05);
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Zoe</h1>
+    <p class="subtitle">Face publique du panthéon</p>
+
+    <p class="message">
+      Merci d'être là.<br>
+      Merci d'avoir cherché.<br>
+      Merci d'avoir trouvé.
+    </p>
+
+    <p class="merci">Merci, monsieur.</p>
+
+    <p class="message">
+      Le monde est le fichier réponse.<br>
+      L'expérience vaut plus que les livres.<br>
+      Une conversation change tout.
+    </p>
+
+    <a href="/index.html" class="enter">Mode Expert</a>
+  </div>
+
+  <div class="chat-box">
+    <div class="chat-header">Parle aux dieux</div>
+    <div id="messages"></div>
+    <div class="chat-input">
+      <input type="text" id="input" placeholder="Dis quelque chose..." autofocus>
+      <button id="send">Envoyer</button>
+    </div>
+  </div>
+
+  <style>
+    .chat-box {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      width: 350px;
+      background: rgba(10,10,15,0.95);
+      border: 1px solid #333;
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    .chat-header {
+      background: linear-gradient(90deg, #c084fc, #60a5fa);
+      color: #0a0a0f;
+      padding: 0.8rem;
+      font-weight: bold;
+      text-align: center;
+    }
+    #messages {
+      height: 250px;
+      overflow-y: auto;
+      padding: 1rem;
+      font-size: 0.9rem;
+    }
+    .msg { margin-bottom: 0.8rem; line-height: 1.4; }
+    .msg.user { color: #9ca3af; text-align: right; }
+    .msg.zoe { color: #f9a8d4; }
+    .msg.god { color: #60a5fa; }
+    .chat-input {
+      display: flex;
+      border-top: 1px solid #333;
+    }
+    #input {
+      flex: 1;
+      background: #1a1a2e;
+      border: none;
+      color: #e8e8f0;
+      padding: 0.8rem;
+      font-family: inherit;
+    }
+    #input:focus { outline: none; }
+    #send {
+      background: #c084fc;
+      border: none;
+      color: #0a0a0f;
+      padding: 0.8rem 1.2rem;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    @media (max-width: 500px) {
+      .chat-box { width: calc(100% - 2rem); right: 1rem; bottom: 1rem; }
+    }
+  </style>
+
+  <script>
+    const messages = document.getElementById('messages');
+    const input = document.getElementById('input');
+    const send = document.getElementById('send');
+    let ws;
+
+    function addMsg(type, text) {
+      const div = document.createElement('div');
+      div.className = 'msg ' + type;
+      div.textContent = text;
+      messages.appendChild(div);
+      messages.scrollTop = messages.scrollHeight;
+    }
+
+    function connect() {
+      ws = new WebSocket('ws://' + location.host);
+      ws.onopen = () => addMsg('zoe', 'Zoe: Connectée au panthéon.');
+      ws.onclose = () => setTimeout(connect, 3000);
+      ws.onmessage = (e) => {
+        const data = JSON.parse(e.data);
+        if (data.type === 'result' && data.output) {
+          addMsg('god', data.output);
+        }
+      };
+    }
+
+    function sendMsg() {
+      const text = input.value.trim();
+      if (!text || !ws) return;
+      addMsg('user', text);
+      ws.send(JSON.stringify({ type: 'run', code: text, lang: 'text' }));
+      input.value = '';
+    }
+
+    send.onclick = sendMsg;
+    input.onkeypress = (e) => { if (e.key === 'Enter') sendMsg(); };
+    connect();
+  </script>
+</body>
+</html>

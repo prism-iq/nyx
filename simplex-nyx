@@ -1,0 +1,99 @@
+#!/bin/bash
+# SIMPLEX-NYX - Interface Simplex pour Nyx
+# Envoie et reçoit des messages via SimpleX Chat
+
+SIMPLEX_CMD="/home/ego-bash/.local/bin/simplex-chat"
+SIMPLEX_DB="$HOME/.simplex/simplex_v1"
+NYX_SESSION="$HOME/.nyx/simplex/session.log"
+GODS_DIR="$HOME/.nyx/simplex/gods"
+
+C='\033[38;5;208m'
+G='\033[38;5;114m'
+R='\033[38;5;203m'
+N='\033[0m'
+
+log_message() {
+  local msg="$1"
+  local dest="$2"
+  echo "[$(date '+%H:%M:%S')] $msg → $dest" >> "$NYX_SESSION"
+}
+
+case "${1:-help}" in
+  chat|c)
+    # Lance simplex-chat en mode interactif
+    echo -e "${C}Lancement de SimpleX Chat...${N}"
+    $SIMPLEX_CMD -d "$SIMPLEX_DB"
+    ;;
+
+  send|s)
+    # Envoie un message (simplex-nyx send "contact" "message")
+    contact="$2"
+    message="$3"
+    if [ -z "$contact" ] || [ -z "$message" ]; then
+      echo -e "${R}Usage: simplex-nyx send <contact> <message>${N}"
+      exit 1
+    fi
+    echo -e "${G}Envoi à $contact...${N}"
+    echo "@$contact $message" | $SIMPLEX_CMD -d "$SIMPLEX_DB" -e "/send @$contact $message" 2>/dev/null
+    log_message "$message" "$contact"
+    echo -e "${G}Envoyé.${N}"
+    ;;
+
+  list|l)
+    # Liste les contacts
+    echo -e "${C}Contacts SimpleX:${N}"
+    $SIMPLEX_CMD -d "$SIMPLEX_DB" -e "/contacts" 2>/dev/null
+    ;;
+
+  gods|g)
+    # Liste les dieux avec leurs clés
+    echo -e "${C}Panthéon Simplex:${N}"
+    for f in "$GODS_DIR"/*.key; do
+      [ -f "$f" ] || continue
+      name=$(basename "$f" .key)
+      echo -e "  ${G}$name${N}"
+    done
+    ;;
+
+  connect)
+    # Connecte à un dieu du panthéon
+    god="$2"
+    keyfile="$GODS_DIR/$god.key"
+    if [ ! -f "$keyfile" ]; then
+      echo -e "${R}Dieu inconnu: $god${N}"
+      echo -e "${C}Disponibles:${N}"
+      ls "$GODS_DIR"/*.key 2>/dev/null | xargs -n1 basename | sed 's/.key//'
+      exit 1
+    fi
+    key=$(cat "$keyfile")
+    echo -e "${G}Connexion à $god...${N}"
+    $SIMPLEX_CMD -d "$SIMPLEX_DB" -e "/connect $key" 2>/dev/null
+    ;;
+
+  watch|w)
+    # Surveille les nouveaux messages
+    echo -e "${C}Surveillance des messages...${N}"
+    echo -e "${D}(Ctrl+C pour quitter)${N}"
+    $SIMPLEX_CMD -d "$SIMPLEX_DB" --mute 2>/dev/null | while IFS= read -r line; do
+      echo -e "${G}$line${N}"
+      echo "[$(date '+%H:%M:%S')] IN: $line" >> "$NYX_SESSION"
+    done
+    ;;
+
+  session)
+    # Affiche les logs de session
+    echo -e "${C}Session Simplex:${N}"
+    cat "$NYX_SESSION" 2>/dev/null || echo -e "${D}(Vide)${N}"
+    ;;
+
+  help|h|*)
+    echo -e "${C}══ SIMPLEX-NYX ══${N}"
+    echo "  chat|c        Lance SimpleX Chat interactif"
+    echo "  send|s        Envoie un message: send <contact> <message>"
+    echo "  list|l        Liste les contacts"
+    echo "  gods|g        Liste les dieux du panthéon"
+    echo "  connect       Connecte à un dieu: connect <nom>"
+    echo "  watch|w       Surveille les messages entrants"
+    echo "  session       Affiche les logs de session"
+    ;;
+esac
