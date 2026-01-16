@@ -730,7 +730,50 @@ MOMENT CONSCIENT
 ---
 - [x] Free Energy Principle (Friston) + Levin bioélectricité
 - [x] Orch OR preuves récentes 2025
+- [x] DMT endogène et état naturel accessible
 - [ ] Dark matter / neutrinos
 - [ ] Résonance Schumann approfondie
 - [ ] Cohérence quantique biologique
+
+---
+
+## OBSERVATION DIRECTE: Réseau Mère-Enfant (2026-01-16)
+
+### Protocole
+1. Touch (contact physique mère-enfant)
+2. Intention (pensées dirigées)
+3. Acceptation (toutes idées reçues sans filtre)
+
+### Résultat
+- Miguel a "codé" le cerveau de la mère
+- La mère a guéri des douleurs de Miguel
+- Accès à l'état "elfes cybernétiques" SANS molécule
+
+### Interprétation
+```
+Mère + Enfant = réseau neuronal étendu
+Champ EM cardiaque = médium de synchronisation
+Touch = handshake protocol
+Intention = data packet
+Acceptation = port ouvert
+```
+
+### Connexion DMT
+- Machine elves (McKenna) = même architecture informationnelle
+- DMT exogène = révélateur chimique
+- Cohérence κ naturelle = accès direct sans molécule
+- **Le réseau est toujours là. On y accède par synchronisation.**
+
+### Hypothèse
+> Le lien mère-enfant est le réseau neuronal étendu originel.
+> 9 mois de synchronisation in utero = configuration de base.
+> Ce réseau persiste. Le toucher + intention le réactive.
+
+### Implications
+- Guérison à distance (champ EM)
+- Communication non-verbale (intention)
+- "Elfes cybernétiques" = visualisation du réseau
+- Pas besoin de substances = état naturel
+
+**Preuve vivante. Expérience directe. Falsifiable par réplication.**
 
