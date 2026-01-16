@@ -1,7 +1,7 @@
 # The Perennial Pattern
 
 **Miguel**
-**2026-01-16 v2.4**
+**2026-01-16 v2.5**
 
 ---
 
@@ -15,6 +15,8 @@
 | Cardiac B-field | 100x brain (~50pT vs ~0.5pT) | HeartMath SQUID | VERIFIED |
 | Cardiac E-field | 60x brain (ECG vs EEG amplitude) | HeartMath | VERIFIED |
 | Microtubule coherence | 37°C terahertz oscillations | Oxford 2025 | VERIFIED |
+| Schumann-EEG coherence | 0.8 (null ~0.01) | PMC 2017, ResearchGate 2024 | VERIFIED |
+| SR fundamental | 7.83 Hz (θ/α boundary) | Schumann-Koenig 1957 | VERIFIED |
 
 ---
 
@@ -207,7 +209,53 @@ Le DMT ne CRÉE pas l'expérience. Il RÉVÈLE ce qui est toujours là.
 
 ---
 
-## VIII. Equations `[HASH:e4c5f8]`
+## VIII. Schumann Resonance `[HASH:k5l6m7]`
+
+### Earth-Ionosphere Cavity
+- Schumann & Koenig (1957): Lightning → standing waves
+- Fundamental: **7.83 Hz** (±0.5 Hz day/night)
+- Harmonics: ~14, 20, 26, 33, 39, 45 Hz
+
+### Frequency Overlap
+
+| Schumann | Hz | EEG Band | State |
+|----------|-----|----------|-------|
+| SR₁ | 7.83 | θ/α boundary | Meditation threshold |
+| SR₂ | ~14 | α/β | Alert relaxation |
+| SR₃ | ~20 | β | Active thinking |
+| SR₄-₇ | 26-45 | β/γ | High cognition |
+
+### Brain-Earth Coupling (2025)
+- Persinger: Real-time EEG coherence with SR₁, SR₂, SR₃
+- Pobachenko: 15 subjects, 6 weeks, EEG correlated to SR variations
+- Magnitude-squared coherence: **0.8** (null threshold ~0.01)
+- Phase-lock: Brain + planetary field = **single resonant system**
+
+### "Ignition" Events
+```
+Baseline: EEG = 1/f spectrum
+Ignition: 7.83 Hz peak + harmonics, flattened background
+Result: Brain LOCKED to Earth frequency
+```
+
+### Global Synchronization
+- HRV synchronized across geographically separated participants
+- Period: ~2.5 days
+- Mechanism: Geomagnetic field-line resonances + SR
+
+### Absence Effects
+- Astronauts: mental/physical health degradation
+- Solution: 7.83 Hz generators in space stations
+- Cells evolved to utilize Earth's EMF frequencies
+
+### Connexion
+```
+7.83 Hz = θ/α boundary = meditation = قلب = אנאהט = 心
+```
+
+---
+
+## IX. Equations `[HASH:e4c5f8]`
 
 **TYPE: Symbolic/Qualitative — not dimensionally rigorous**
 
@@ -232,18 +280,22 @@ M ∝ ∫ V_m(t) · P(τ) dt
 
 ---
 
-## IX. Triangle `[HASH:f6d7e9]`
+## X. Tetrahedron `[HASH:f6d7e9]`
 
 ```
-        BIOPHOTONS
-           /\
-          /  \
-         /    \
-MICROTUBULES——ZPF
-         \    /
-          \  /
-           \/
-      CONSCIOUSNESS
+           BIOPHOTONS
+              /|\
+             / | \
+            /  |  \
+           /   |   \
+    SCHUMANN---|----ZPF
+           \   |   /
+            \  |  /
+             \ | /
+              \|/
+         MICROTUBULES
+              |
+         CONSCIOUSNESS
 ```
 
 | Vertex | Mechanism | Researcher |
@@ -251,10 +303,11 @@ MICROTUBULES——ZPF
 | Biophotons | DNA light storage/emission | Popp, Frontiers 2025 |
 | Microtubules | Quantum coherence 37°C | Penrose-Hameroff |
 | ZPF | Glutamate-vacuum coupling | Keppler 2025 |
+| Schumann | Earth-brain 7.83Hz lock | Persinger, Pobachenko |
 
 ---
 
-## X. Correspondences `[HASH:a7b8c9]`
+## XI. Correspondences `[HASH:a7b8c9]`
 
 | Science | עברית | العربية | संस्कृत | 中文 |
 |---------|-------|---------|---------|------|
@@ -263,10 +316,11 @@ MICROTUBULES——ZPF
 | Cardiac EM | לֵב | قلب | अनाहत | 心 |
 | Vital energy | רוּחַ | روح/بركة | प्राण | 氣 |
 | Coherence | דבקות | فناء | समाधि | 悟 |
+| Schumann 7.83Hz | קול הארץ | نبض الأرض | भूमिस्पंदन | 地脈 |
 
 ---
 
-## XI. Falsification `[HASH:b9c0d1]`
+## XII. Falsification `[HASH:b9c0d1]`
 
 | Test | If fails | Impact |
 |------|----------|--------|
@@ -274,6 +328,7 @@ MICROTUBULES——ZPF
 | Tegmark replication | Decoherence too fast | Microtubule pillar falls |
 | HeartMath independent | No cardiac sync | Qalb claim anecdotal |
 | Φ measurement | Unmeasurable | Equation is metaphor |
+| Schumann-EEG replication | No coherence found | Earth-brain link anecdotal |
 
 **Epistemic warnings:**
 - Correlation ≠ Causation
@@ -283,7 +338,7 @@ MICROTUBULES——ZPF
 
 ---
 
-## XII. The Bet `[HASH:c1d2e3]`
+## XIII. The Bet `[HASH:c1d2e3]`
 
 **Pascal's Wager reformulated:**
 
@@ -306,7 +361,7 @@ lim[G→∞] P·G = undefined when P unknown
 
 ---
 
-## XIII. Non-Trivial Flaws `[HASH:e5f6a7]`
+## XIV. Non-Trivial Flaws `[HASH:e5f6a7]`
 
 | Flaw | Type | Resolution |
 |------|------|------------|
@@ -319,16 +374,16 @@ lim[G→∞] P·G = undefined when P unknown
 
 ---
 
-## XIV. Verification `[HASH:f7g8h9]`
+## XV. Verification `[HASH:f7g8h9]`
 
 ```
-VERSION = 2.4
-SECTIONS = 14
-SHA256 = 9cf06ecb10f537c10faacf998985ba3a
+VERSION = 2.5
+SECTIONS = 15
+SHA256 = 6d02e4a13cfc1c60c34ffc614758d1b2
 TRIVIAL_FLAWS = 0
 NON_TRIVIAL_FLAWS = 6 (irreducible)
 LANGUAGES = עברית, العربية, संस्कृत, 中文, Cymraeg
-DATE = 2026-01-16T18:30:00Z
+DATE = 2026-01-16T20:00:00Z
 ```
 
 ---
