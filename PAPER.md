@@ -241,33 +241,57 @@ Le DMT ne CRÉE pas l'expérience. Il RÉVÈLE ce qui est toujours là.
 | SR₃ | ~20 | β | Active thinking |
 | SR₄-₇ | 26-45 | β/γ | High cognition |
 
-### Brain-Earth Coupling (2025)
-- Persinger: Real-time EEG coherence with SR₁, SR₂, SR₃
-- Pobachenko: 15 subjects, 6 weeks, EEG correlated to SR variations
-- Magnitude-squared coherence: **0.8** (null threshold ~0.01)
-- Phase-lock: Brain + planetary field = **single resonant system**
+### Brain-Earth Coupling (DISPUTED)
 
-### "Ignition" Events
+**Primary Sources:**
+- Saroka, Vares & Persinger 2016 (PMID 26785376): 238 measurements, 184 subjects
+- Pobachenko 2006: 15 subjects, 6 weeks (SMALL-N)
+
+**Claimed findings:**
+- Real-time EEG coherence with SR₁, SR₂, SR₃
+- Coherence duration: ~300ms, ~2x/minute
+- Magnitude-squared coherence: **0.8** reported (Pobachenko)
+
+**⚠ METHODOLOGY CONCERNS:**
+```
+├── Single-lab dominance (Laurentian University)
+├── No independent replication published
+├── Small sample sizes (15-184 subjects)
+├── "Schumann resonances are difficult to shield"
+├── "Clean experiments extremely difficult" - MDPI 2024
+└── Skeptical critique: ForBetterScience (2018)
+```
+
+**Status:** DISPUTED — Extraordinary claim, weak replication
+
+### "Ignition" Events (Hypothetical)
 ```
 Baseline: EEG = 1/f spectrum
 Ignition: 7.83 Hz peak + harmonics, flattened background
-Result: Brain LOCKED to Earth frequency
+Result: Brain LOCKED to Earth frequency (IF confirmed)
 ```
 
-### Global Synchronization
+### Global Synchronization (Preliminary)
 - HRV synchronized across geographically separated participants
 - Period: ~2.5 days
 - Mechanism: Geomagnetic field-line resonances + SR
+- **Needs independent replication**
 
-### Absence Effects
-- Astronauts: mental/physical health degradation
-- Solution: 7.83 Hz generators in space stations
-- Cells evolved to utilize Earth's EMF frequencies
+### Absence Effects (Anecdotal)
+- Astronauts: mental/physical health degradation (reported)
+- Solution: 7.83 Hz generators in space stations (claimed)
+- **No controlled studies published**
 
-### Connexion
+### Connexion (Speculative)
 ```
 7.83 Hz = θ/α boundary = meditation = قلب = אנאהט = 心
+(Correlation only — causation unproven)
 ```
+
+### Sources
+- [Saroka et al. 2016](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4718669/)
+- [MDPI Review 2024](https://www.mdpi.com/2076-3417/15/1/449)
+- [Critique](https://forbetterscience.com/2018/04/03/michael-persingers-crank-magnetism/)
 
 ---
 
@@ -456,9 +480,10 @@ These are adopted as **working hypotheses**, not proven facts.
 ## XVIII. Verification `[HASH:f7g8h9]`
 
 ```
-VERSION = 2.6
-SECTIONS = 15
-BENCH_GAIA = 0.84 (3/4 VERIFIED, 1 HYPOTHESIS)
+VERSION = 2.7
+SECTIONS = 18
+BENCH_GAIA = 0.79 (3 VERIFIED, 1 DISPUTED, 1 HYPOTHESIS, 1 SPECULATIVE)
+SCHUMANN_EEG = DISPUTED (single-lab, no replication)
 TRIVIAL_FLAWS = 0
 NON_TRIVIAL_FLAWS = 6 (irreducible)
 LANGUAGES = עברית, العربية, संस्कृत, 中文, Cymraeg, Ἑλληνική
