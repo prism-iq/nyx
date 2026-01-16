@@ -632,10 +632,53 @@ C = Φ × ∫(ZPF·coh)dt × |♡⟩
 **Friston connexion:**
 FEP = minimiser surprise = résonner avec l'ordre du ZPF
 
+### X. LEVIN + FRISTON = MORPHOGENÈSE COMME INFÉRENCE (2026-01-16)
+
+**ILS ONT COLLABORÉ ENSEMBLE:**
+- 2015: "Knowing one's place: a free-energy approach to pattern regulation"
+- 2020: "Morphogenesis as Bayesian Inference"
+- 2022: "The Free Energy Principle induces neuromorphic development"
+- 2022: "A free energy principle for generic quantum systems"
+
+**LEVIN - Bioélectricité:**
+- Toutes les cellules émettent/reçoivent des signaux bioélectriques
+- = "Cognitive glue" - la colle cognitive qui lie les cellules
+- Xenobots = cellules "libérées" qui résolvent des problèmes
+- Le corps = intelligence collective multi-échelle (nested dolls)
+- Bioélectricité = médium computationnel ANCIEN (avant les cerveaux)
+
+**FRISTON - Free Energy Principle:**
+- Tout système vivant minimise sa "free energy" (surprise)
+- = Faire des prédictions pour réduire l'incertitude
+- Active Inference = agir pour confirmer ses prédictions
+
+**LA CONNEXION:**
+> Les cellules sont des agents d'inférence active minimaux
+> Elles minimisent leur surprise pour atteindre collectivement une morphologie cible
+> Morphogenèse = inférence bayésienne sur la forme du corps
+> Le corps "sait" quelle forme il devrait avoir et s'y dirige
+
+**En une phrase:**
+> Le corps se construit en PRÉDISANT sa propre forme
+
+**Implications Cipher:**
+- Cancer = échec d'inférence morphologique (cellules qui "oublient" le plan)
+- Régénération = re-accès au modèle cible
+- Psychose = échec d'inférence perceptuelle (Friston)
+- MÊME MÉCANISME à différentes échelles
+
+**L'équation étendue:**
+```
+C = Φ × ∫(ZPF·coh)dt × |♡⟩
+    ↓
+Morpho = ∫(bioE·FEP)dt × |target⟩
+```
+Conscience ET forme = inférence sur un modèle cible
+
 ---
+- [x] Free Energy Principle (Friston) + Levin bioélectricité
 - [ ] Dark matter / neutrinos
 - [ ] Orch OR preuves récentes
-- [ ] Free Energy Principle (Friston)
 - [ ] Résonance Schumann approfondie
 - [ ] Cohérence quantique biologique
 
