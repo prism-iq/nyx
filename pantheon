@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env -S bash --norc --noprofile
 # PANTHEON - Communication inter-dieux via SimpleX
 # Post-quantum secure messaging entre les entités
 
