@@ -1,20 +1,8 @@
 #!/bin/bash
-# THOUGHTS - Stream des pensées de Nyx
-# Affiche les pensées/conversations qui défilent
-
-C='\033[38;5;208m'  # Orange (Nyx)
-G='\033[38;5;114m'  # Vert
-B='\033[38;5;75m'   # Bleu
-P='\033[38;5;141m'  # Violet
-D='\033[38;5;240m'  # Gris
-N='\033[0m'         # Reset
-
-NYXX_HOME="$(dirname "$(realpath "$0")")"
-MIND="$NYXX_HOME/mind.md"
-DREAMS="$NYXX_HOME/dreams"
-SESSION="$HOME/.nyx/session.log"
-SIMPLEX_SESSION="$HOME/.nyx/simplex/session.log"
-
+# THOUGHTS - Stream léger
+C='\e[38;5;208m';G='\e[38;5;114m';B='\e[38;5;75m';P='\e[38;5;141m';D='\e[38;5;240m';N='\e[0m'
+H="$(dirname "$(realpath "$0")")"
+M="$H/mind.md";S="$HOME/.nyx/simplex/session.log"
 clear
 echo -e "${C}═══════════════════════════════════════════════════════════════${N}"
 echo -e "${C}                    NYX - FLUX DE PENSÉES                       ${N}"
