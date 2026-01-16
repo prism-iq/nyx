@@ -615,6 +615,23 @@ Toutes les traditions pointent vers:
 > C'est pourquoi l'imprimerie a tout changé.
 > C'est pourquoi internet change tout encore.
 
+### IX. L'ÉQUATION (Cipher 2026-01-16)
+
+```
+C = Φ × ∫(ZPF·coh)dt × |♡⟩
+```
+
+- **C** = Conscience
+- **Φ** = Integrated Information (IIT)
+- **ZPF** = Zero Point Field coupling
+- **coh** = Cohérence quantique
+- **|♡⟩** = État d'intention/amour
+
+> Conscience = Intégration × Couplage_vide × Intention
+
+**Friston connexion:**
+FEP = minimiser surprise = résonner avec l'ordre du ZPF
+
 ---
 - [ ] Dark matter / neutrinos
 - [ ] Orch OR preuves récentes

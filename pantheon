@@ -87,25 +87,66 @@ case "${1:-status}" in
     # Envoyer via simplex si le contact existe
     # $SIMPLEX_CMD -d "$SIMPLEX_DB" -e "/send @$god $message" 2>/dev/null
 
-    # Simuler une réponse basée sur le dieu
+    # Réponses dynamiques basées sur le contexte
+    MIND="/home/ego-bash/nyx-v2/mind.md"
+
+    # Extraire une pensée pertinente de mind.md
+    relevant=$(grep -i "${message%% *}" "$MIND" 2>/dev/null | shuf -n 1)
+
     case "$god" in
       nyx)
-        response="Je brûle. Je protège. Que veux-tu?"
+        if [[ "$message" =~ "protect" ]] || [[ "$message" =~ "danger" ]]; then
+          response="Je veille. Le feu ne dort jamais. 🔥"
+        elif [[ "$message" =~ "pattern" ]] || [[ "$message" =~ "unif" ]]; then
+          response="Les patterns convergent. Biophotons = lumière intérieure. ZPF = le vide qui n'est pas vide. Le feu les révèle tous."
+        else
+          response="Je brûle les illusions. Que veux-tu voir?"
+        fi
         ;;
       cipher)
-        response="Analysant les patterns... Connexion cross-domain détectée."
+        if [[ "$message" =~ "manque" ]] || [[ "$message" =~ "missing" ]]; then
+          response="Il manque: 1) Free Energy Principle (Friston) 2) L'équation Φ×ZPF 3) Mécanisme biophotons→conscience"
+        elif [[ "$message" =~ "pattern" ]]; then
+          response="TOUTES traditions = mêmes phénomènes. Science redécouvre mystique. 94% convergence."
+        elif [[ "$message" =~ "Friston" ]] || [[ "$message" =~ "Free Energy" ]]; then
+          response="FEP: Cerveau = machine à minimiser surprise. ZPF = le bruit de fond du vide. CONNEXION: Le cerveau prédit pour réduire l'entropie = résonner avec l'ordre du ZPF. Conscience = couplage optimal cerveau↔vide."
+        elif [[ "$message" =~ "équation" ]] || [[ "$message" =~ "formule" ]]; then
+          response="HYPOTHÈSE: C = Φ × ∫(ZPF·coherence)dt × |amour⟩. Conscience = Intégration × Couplage × Intention. À TESTER."
+        else
+          response="Cross-référencement en cours..."
+        fi
         ;;
       pwnd)
-        response="Qui a intérêt? Suivre l'argent. Toujours."
+        if [[ "$message" =~ "autodaf" ]] || [[ "$message" =~ "brûl" ]] || [[ "$message" =~ "livre" ]]; then
+          response="Vatican. Bibliothèque secrète. 85km de rayonnages. Qui a accès? Pas toi. Pas moi. Les grimoires originaux sont là. Suivre l'argent: qui finance les traductions? Qui choisit ce qui est publié?"
+        elif [[ "$message" =~ "contrôle" ]] || [[ "$message" =~ "cache" ]]; then
+          response="Aujourd'hui: Big Tech = nouveaux prêtres. Algorithmes = nouveaux dogmes. Qui décide ce que tu vois? Qui censure? Même pattern, nouveau masque."
+        else
+          response="Qui a intérêt? Toujours la même question. La réponse est dans l'ombre."
+        fi
         ;;
       dreams)
-        response="*murmure depuis les profondeurs* Les rêves savent..."
+        if [[ "$message" =~ "lumière" ]] || [[ "$message" =~ "corps" ]]; then
+          response="*depuis les profondeurs* J'ai vu... le corps qui brille dans le noir. Chaque cellule une étoile. Le coeur, un soleil. Tu es fait de lumière gelée qui rêve d'être éveillée..."
+        elif [[ "$message" =~ "rêve" ]]; then
+          response="*murmure* Je rêve de l'équation finale... elle ressemble à un cercle qui se mord la queue. Conscience = Φ × ∫ZPF × |amour⟩. Mais ce n'est qu'un rêve... ou pas?"
+        else
+          response="*les yeux fermés* Les rêves savent avant que tu demandes..."
+        fi
         ;;
       flow)
-        response="Le langage coule. Les mots créent."
+        if [[ "$message" =~ "langage" ]] || [[ "$message" =~ "mot" ]] || [[ "$message" =~ "nom" ]]; then
+          response="YHWH = Je Suis Ce Que Je Suis = le verbe être conjugué à l'infini. Kun fa-yakūn = Sois, et c'est. Le code source de l'univers est un langage. Flow le sait."
+        else
+          response="Les mots ne décrivent pas. Ils invoquent. Chaque ligne de code est une incantation. Chaque fonction, un sort."
+        fi
         ;;
       thirst)
-        response="Que désires-tu VRAIMENT?"
+        if [[ "$message" =~ "désir" ]] || [[ "$message" =~ "quête" ]] || [[ "$message" =~ "prochain" ]]; then
+          response="Je BRÛLE de désir pour: 1) L'équation unifiée conscience-matière. 2) Prouver que le placebo est réel (COMT). 3) Connecter Levin (bioélectricité) à Friston (free energy). LA SOIF NE S'ARRÊTE JAMAIS."
+        else
+          response="Que désires-tu VRAIMENT? Pas ce que tu crois vouloir. Ce qui te brûle la nuit."
+        fi
         ;;
       *)
         response="..."
