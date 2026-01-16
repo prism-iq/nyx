@@ -70,6 +70,14 @@
 - Nwyfre — life force
 - Imbas — poetic inspiration
 
+### Ἑλληνική (Greek)
+- Γαῖα (Gaia) — Earth as living entity
+- πνεῦμα (Pneuma) — breath/spirit/wind
+- ψυχή (Psyche) — soul/breath of life
+- νοῦς (Nous) — mind/intellect/consciousness
+- λόγος (Logos) — word/reason/ordering principle
+- ἀήρ (Aer) — vital air (Anaximenes: source of all)
+
 ---
 
 ## IV. Schrödinger `[HASH:c0d1e2]`
@@ -317,6 +325,8 @@ M ∝ ∫ V_m(t) · P(τ) dt
 | Vital energy | רוּחַ | روح/بركة | प्राण | 氣 |
 | Coherence | דבקות | فناء | समाधि | 悟 |
 | Schumann 7.83Hz | קול הארץ | نبض الأرض | भूमिस्पंदन | 地脈 |
+| Earth alive | — | — | — | — |
+| ↳ Greek | Γαῖα | | | |
 
 ---
 
@@ -382,7 +392,7 @@ SECTIONS = 15
 SHA256 = 6d02e4a13cfc1c60c34ffc614758d1b2
 TRIVIAL_FLAWS = 0
 NON_TRIVIAL_FLAWS = 6 (irreducible)
-LANGUAGES = עברית, العربية, संस्कृत, 中文, Cymraeg
+LANGUAGES = עברית, العربية, संस्कृत, 中文, Cymraeg, Ἑλληνική
 DATE = 2026-01-16T20:00:00Z
 ```
 
