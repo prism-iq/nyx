@@ -1,7 +1,7 @@
 # The Perennial Pattern
 
 **Miguel**
-**2026-01-16 v2.6**
+**2026-01-16 v2.7**
 
 ---
 
@@ -12,11 +12,17 @@
 | Biophotons λ | 200-800nm (peak 350-550nm) | Nature 2024, PMC | VERIFIED |
 | DNA photon storage | Between strands (duplex/exciplex) | Frontiers 2025 | VERIFIED |
 | Post-mortem emission | Brain, eyes, liver ~1h | PMC 2024 | VERIFIED |
-| Cardiac B-field | 100x brain (~50pT vs ~0.5pT) | HeartMath SQUID | VERIFIED |
-| Cardiac E-field | 60x brain (ECG vs EEG amplitude) | HeartMath | VERIFIED |
+| Cardiac B-field | 100x brain (~50pT vs ~0.5pT) | HeartMath SQUID | VERIFIED* |
+| Cardiac E-field | 60x brain (ECG vs EEG amplitude) | HeartMath | VERIFIED* |
 | Microtubule coherence | 37°C terahertz oscillations | Oxford 2025 | HYPOTHESIS |
-| Schumann-EEG coherence | 0.8 (null ~0.01) | PMC 2017, ResearchGate 2024 | VERIFIED |
+| Schumann-EEG coherence | 0.8 (null ~0.01) | PMC 2017, ResearchGate 2024 | DISPUTED |
 | SR fundamental | 7.83 Hz (θ/α boundary) | Schumann-Koenig 1957 | VERIFIED |
+| ZPF-brain coupling | Glutamate-vacuum resonance | Keppler 2025 | SPECULATIVE |
+
+**Notes:**
+- \* Cardiac EM: Field strength verified; functional causality (heart→cognition) is interpretive
+- DISPUTED: Small-N studies, weak replication, methodological concerns
+- SPECULATIVE: Not mainstream physics, single research group
 
 ---
 
@@ -215,6 +221,8 @@ Cohérence_κ → accès(réseau) sans molécule
 
 Le DMT ne CRÉE pas l'expérience. Il RÉVÈLE ce qui est toujours là.
 
+**⚠ NOTE:** This is a **metaphysical claim**, not empirically testable as stated.
+
 ---
 
 ## VIII. Schumann Resonance `[HASH:k5l6m7]`
@@ -384,7 +392,68 @@ lim[G→∞] P·G = undefined when P unknown
 
 ---
 
-## XV. Verification `[HASH:f7g8h9]`
+## XV. Three Layers `[HASH:h8i9j0]`
+
+This document contains **three distinct layers** that should not be conflated:
+
+| Layer | Contents | Falsifiable? |
+|-------|----------|--------------|
+| **Empirical** | Measurements, frequencies, emissions | Yes |
+| **Systems-theoretic** | Coherence, integration, resonance | Partially |
+| **Metaphysical** | Unity of mind, perennial philosophy | No |
+
+**Mapping:**
+- Sections I, VIII: Primarily empirical
+- Sections IX, X: Systems-theoretic
+- Sections IV, XI, XIII: Metaphysical
+
+---
+
+## XVI. Metaphysical Commitments `[HASH:k1l2m3]`
+
+The following are **not scientific claims** but philosophical positions:
+
+1. **Unity of consciousness** (Schrödinger): "There is only one mind"
+2. **وحدة الوجود** (Ibn Arabi): Unity of Being
+3. **DMT revelation**: "Reveals what is always there"
+4. **Perennial philosophy**: Ancient traditions described the same phenomena
+
+These are adopted as **working hypotheses**, not proven facts.
+
+**Why include them?**
+- They motivate the research program
+- They provide interpretive framework
+- They are explicitly labeled as metaphysical
+- Removal would not change empirical claims
+
+---
+
+## XVII. Minimal Claim `[HASH:n4o5p6]`
+
+**What remains true even if 50% of the framework collapses:**
+
+```
+1. DNA emits photons (200-800nm) — VERIFIED
+2. Heart EM field is stronger than brain — VERIFIED
+3. Schumann resonance exists at 7.83 Hz — VERIFIED
+4. Multiple traditions describe internal light/energy — HISTORICAL FACT
+5. These traditions use similar concepts — COMPARATIVE ANALYSIS
+```
+
+**What does NOT survive collapse:**
+- ZPF coupling (if Keppler falsified)
+- Microtubule quantum coherence (if Tegmark confirmed)
+- Schumann-EEG functional coupling (if not replicated)
+- Causal links between any of the above
+
+**Irreducible core:**
+> Ancient traditions and modern science both describe
+> coherence, light, and heart-centered phenomena.
+> Whether they describe the **same thing** is interpretive.
+
+---
+
+## XVIII. Verification `[HASH:f7g8h9]`
 
 ```
 VERSION = 2.6
