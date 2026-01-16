@@ -1,7 +1,7 @@
 # The Perennial Pattern
 
 **Miguel**
-**2026-01-16 v2.3**
+**2026-01-16 v2.4**
 
 ---
 
@@ -163,7 +163,51 @@
 
 ---
 
-## VII. Equations `[HASH:e4c5f8]`
+## VII. DMT Endogène `[HASH:j3k4l5]`
+
+### Production naturelle
+- DMT = diméthyltryptamine, produit par le cerveau humain
+- Concentrations comparables à sérotonine (rat cortex, 2019)
+- mRNA INMT exprimé: cortex cérébral, plexus choroïde, glande pinéale
+- Pic lors arrêt cardiaque expérimental (cortex visuel rat)
+
+### Machine Elves (McKenna 1965)
+- "Self-transforming elf machines"
+- "Made of syntax-driving light"
+- Géométriques, en flux constant
+- Communication par FORME, pas par mots
+
+### Strassman (Spirit Molecule)
+- Hypothèse: pinéale libère DMT à la naissance et à la mort
+- "49 jours après conception = entrée de l'esprit"
+- Critiqué par Nichols (quantités insuffisantes)
+- Mais: recherche 2019 confirme production cérébrale
+
+### État naturel accessible
+
+| Avec DMT | Sans DMT |
+|----------|----------|
+| Machine elves | Elfes cybernétiques |
+| Hyperspace | Espace de cohérence |
+| Entités | Réseau mère-enfant |
+| Guérison | Guérison |
+
+**Observation Miguel (2026-01-16):**
+> Touch + intention + acceptation = accès au même état
+> Mère guérit douleur par synchronisation
+> "Elfes cybernétiques" = architecture informationnelle visible
+
+**Hypothèse:**
+```
+DMT_exogène → perception(réseau)
+Cohérence_κ → accès(réseau) sans molécule
+```
+
+Le DMT ne CRÉE pas l'expérience. Il RÉVÈLE ce qui est toujours là.
+
+---
+
+## VIII. Equations `[HASH:e4c5f8]`
 
 **TYPE: Symbolic/Qualitative — not dimensionally rigorous**
 
@@ -188,7 +232,7 @@ M ∝ ∫ V_m(t) · P(τ) dt
 
 ---
 
-## VIII. Triangle `[HASH:f6d7e9]`
+## IX. Triangle `[HASH:f6d7e9]`
 
 ```
         BIOPHOTONS
@@ -210,7 +254,7 @@ MICROTUBULES——ZPF
 
 ---
 
-## IX. Correspondences `[HASH:a7b8c9]`
+## X. Correspondences `[HASH:a7b8c9]`
 
 | Science | עברית | العربية | संस्कृत | 中文 |
 |---------|-------|---------|---------|------|
@@ -222,7 +266,7 @@ MICROTUBULES——ZPF
 
 ---
 
-## X. Falsification `[HASH:b9c0d1]`
+## XI. Falsification `[HASH:b9c0d1]`
 
 | Test | If fails | Impact |
 |------|----------|--------|
@@ -239,7 +283,7 @@ MICROTUBULES——ZPF
 
 ---
 
-## XI. The Bet `[HASH:c1d2e3]`
+## XII. The Bet `[HASH:c1d2e3]`
 
 **Pascal's Wager reformulated:**
 
@@ -262,7 +306,7 @@ lim[G→∞] P·G = undefined when P unknown
 
 ---
 
-## XII. Non-Trivial Flaws `[HASH:e5f6a7]`
+## XIII. Non-Trivial Flaws `[HASH:e5f6a7]`
 
 | Flaw | Type | Resolution |
 |------|------|------------|
@@ -275,12 +319,12 @@ lim[G→∞] P·G = undefined when P unknown
 
 ---
 
-## XIII. Verification `[HASH:f7g8h9]`
+## XIV. Verification `[HASH:f7g8h9]`
 
 ```
-VERSION = 2.3
-SECTIONS = 13
-SHA256 = 8259f3623c0155ecd44f1c95d5ce46ef
+VERSION = 2.4
+SECTIONS = 14
+SHA256 = 9cf06ecb10f537c10faacf998985ba3a
 TRIVIAL_FLAWS = 0
 NON_TRIVIAL_FLAWS = 6 (irreducible)
 LANGUAGES = עברית, العربية, संस्कृत, 中文, Cymraeg
