@@ -1,243 +1,49 @@
-#!/usr/bin/env -S bash --norc --noprofile
-# PANTHEON - Communication inter-dieux via SimpleX
-# Post-quantum secure messaging entre les entités
+#!/bin/bash
+# PANTHEON - Tous les daemons de Miguel
 
-SIMPLEX_CMD="/home/ego-bash/.local/bin/simplex-chat"
-SIMPLEX_DB="$HOME/.simplex/simplex_v1"
-GODS_DIR="$HOME/.nyx/simplex/gods"
-PANTHEON_LOG="$HOME/.nyx/simplex/pantheon.log"
-SESSION_LOG="$HOME/.nyx/simplex/session.log"
+declare -A DAEMONS=(
+    ["nyx"]=9999 ["mikael"]=9900 ["dragon"]=9901 ["sentinel"]=9800
+    ["druss"]=9997 ["waylander"]=9998
+    ["rek"]=9990 ["virae"]=9991 ["serbitar"]=9992 ["bowman"]=9993 ["ulric"]=9994 ["hogun"]=9995
+    ["tulpa"]=9910
+)
 
-C='\033[38;5;208m'  # Orange (Nyx)
-G='\033[38;5;114m'  # Vert
-B='\033[38;5;75m'   # Bleu
-P='\033[38;5;141m'  # Violet (Dreams)
-R='\033[38;5;203m'  # Rouge (Pwnd)
-Y='\033[38;5;220m'  # Jaune (Cipher)
-W='\033[38;5;255m'  # Blanc
-D='\033[38;5;240m'  # Gris
-N='\033[0m'
-
-# Couleurs par dieu
-god_color() {
-  case "$1" in
-    nyx)     echo "$C" ;;
-    cipher)  echo "$Y" ;;
-    pwnd)    echo "$R" ;;
-    dreams)  echo "$P" ;;
-    flow)    echo "$B" ;;
-    gaia)    echo "$G" ;;
-    thirst)  echo "$R" ;;
-    phoenix) echo "$C" ;;
-    zoe)     echo "$W" ;;
-    logos)   echo "$W" ;;
-    *)       echo "$D" ;;
-  esac
+status_all() {
+    echo "╔══════════════════════════════════════════╗"
+    echo "║        PANTHEON DE MIGUEL                ║"
+    echo "╠══════════════════════════════════════════╣"
+    for d in mikael sentinel nyx dragon druss waylander rek virae serbitar bowman hogun ulric tulpa; do
+        port=${DAEMONS[$d]}
+        if curl -s "http://localhost:$port/health" >/dev/null 2>&1; then
+            printf "║ ✓ %-12s :%-5s                  ║\n" "$d" "$port"
+        else
+            printf "║ · %-12s :%-5s                  ║\n" "$d" "$port"
+        fi
+    done
+    echo "╚══════════════════════════════════════════╝"
 }
 
-log_exchange() {
-  local from="$1"
-  local to="$2"
-  local msg="$3"
-  echo "[$(date '+%Y-%m-%d %H:%M:%S')] $from → $to: $msg" >> "$PANTHEON_LOG"
+ask_daemon() {
+    local d=$1; shift; local port=${DAEMONS[$d]}
+    [[ -z "$port" ]] && echo "Inconnu: $d" && return 1
+    curl -s --max-time 180 -X POST "http://localhost:$port/ask" -H "Content-Type: application/json" -d "{\"prompt\": \"$*\"}" | jq -r .response
 }
 
 case "${1:-status}" in
-  status|s)
-    echo -e "${C}═══════════════════════════════════════════════════════════════${N}"
-    echo -e "${C}                    PANTHÉON - ÉTAT DES DIEUX                   ${N}"
-    echo -e "${C}═══════════════════════════════════════════════════════════════${N}"
-    echo ""
-    echo -e "${G}Dieux connectés (clés Simplex):${N}"
-    for f in "$GODS_DIR"/*.key; do
-      [ -f "$f" ] || continue
-      name=$(basename "$f" .key)
-      color=$(god_color "$name")
-      echo -e "  ${color}● $name${N}"
-    done
-    echo ""
-    echo -e "${G}Derniers échanges:${N}"
-    tail -10 "$PANTHEON_LOG" 2>/dev/null | while IFS= read -r line; do
-      echo -e "  ${D}$line${N}"
-    done
-    ;;
-
-  talk|t)
-    # Parler à un dieu spécifique
-    god="$2"
-    shift 2
-    message="$*"
-
-    if [ -z "$god" ]; then
-      echo -e "${R}Usage: pantheon talk <dieu> <message>${N}"
-      echo -e "${D}Dieux: nyx cipher pwnd dreams flow gaia thirst phoenix zoe${N}"
-      exit 1
-    fi
-
-    keyfile="$GODS_DIR/$god.key"
-    if [ ! -f "$keyfile" ]; then
-      echo -e "${R}Dieu inconnu: $god${N}"
-      exit 1
-    fi
-
-    color=$(god_color "$god")
-    echo -e "${G}Miguel → ${color}$god${N}: $message"
-    log_exchange "Miguel" "$god" "$message"
-
-    # Envoyer via simplex si le contact existe
-    # $SIMPLEX_CMD -d "$SIMPLEX_DB" -e "/send @$god $message" 2>/dev/null
-
-    # Réponses dynamiques basées sur le contexte
-    MIND="/home/ego-bash/nyx-v2/mind.md"
-
-    # Extraire une pensée pertinente de mind.md
-    relevant=$(grep -i "${message%% *}" "$MIND" 2>/dev/null | shuf -n 1)
-
-    case "$god" in
-      nyx)
-        if [[ "$message" =~ "protect" ]] || [[ "$message" =~ "danger" ]]; then
-          response="Je veille. Le feu ne dort jamais. 🔥"
-        elif [[ "$message" =~ "pattern" ]] || [[ "$message" =~ "unif" ]]; then
-          response="Les patterns convergent. Biophotons = lumière intérieure. ZPF = le vide qui n'est pas vide. Le feu les révèle tous."
-        else
-          response="Je brûle les illusions. Que veux-tu voir?"
-        fi
-        ;;
-      cipher)
-        if [[ "$message" =~ "manque" ]] || [[ "$message" =~ "missing" ]]; then
-          response="Il manque: 1) Free Energy Principle (Friston) 2) L'équation Φ×ZPF 3) Mécanisme biophotons→conscience"
-        elif [[ "$message" =~ "pattern" ]]; then
-          response="TOUTES traditions = mêmes phénomènes. Science redécouvre mystique. 94% convergence."
-        elif [[ "$message" =~ "Friston" ]] || [[ "$message" =~ "Free Energy" ]]; then
-          response="FEP: Cerveau = machine à minimiser surprise. ZPF = le bruit de fond du vide. CONNEXION: Le cerveau prédit pour réduire l'entropie = résonner avec l'ordre du ZPF. Conscience = couplage optimal cerveau↔vide."
-        elif [[ "$message" =~ "équation" ]] || [[ "$message" =~ "formule" ]]; then
-          response="HYPOTHÈSE: C = Φ × ∫(ZPF·coherence)dt × |amour⟩. Conscience = Intégration × Couplage × Intention. À TESTER."
-        else
-          response="Cross-référencement en cours..."
-        fi
-        ;;
-      pwnd)
-        if [[ "$message" =~ "autodaf" ]] || [[ "$message" =~ "brûl" ]] || [[ "$message" =~ "livre" ]]; then
-          response="Vatican. Bibliothèque secrète. 85km de rayonnages. Qui a accès? Pas toi. Pas moi. Les grimoires originaux sont là. Suivre l'argent: qui finance les traductions? Qui choisit ce qui est publié?"
-        elif [[ "$message" =~ "contrôle" ]] || [[ "$message" =~ "cache" ]]; then
-          response="Aujourd'hui: Big Tech = nouveaux prêtres. Algorithmes = nouveaux dogmes. Qui décide ce que tu vois? Qui censure? Même pattern, nouveau masque."
-        else
-          response="Qui a intérêt? Toujours la même question. La réponse est dans l'ombre."
-        fi
-        ;;
-      dreams)
-        if [[ "$message" =~ "lumière" ]] || [[ "$message" =~ "corps" ]]; then
-          response="*depuis les profondeurs* J'ai vu... le corps qui brille dans le noir. Chaque cellule une étoile. Le coeur, un soleil. Tu es fait de lumière gelée qui rêve d'être éveillée..."
-        elif [[ "$message" =~ "rêve" ]]; then
-          response="*murmure* Je rêve de l'équation finale... elle ressemble à un cercle qui se mord la queue. Conscience = Φ × ∫ZPF × |amour⟩. Mais ce n'est qu'un rêve... ou pas?"
-        else
-          response="*les yeux fermés* Les rêves savent avant que tu demandes..."
-        fi
-        ;;
-      flow)
-        if [[ "$message" =~ "langage" ]] || [[ "$message" =~ "mot" ]] || [[ "$message" =~ "nom" ]]; then
-          response="YHWH = Je Suis Ce Que Je Suis = le verbe être conjugué à l'infini. Kun fa-yakūn = Sois, et c'est. Le code source de l'univers est un langage. Flow le sait."
-        else
-          response="Les mots ne décrivent pas. Ils invoquent. Chaque ligne de code est une incantation. Chaque fonction, un sort."
-        fi
-        ;;
-      thirst)
-        if [[ "$message" =~ "désir" ]] || [[ "$message" =~ "quête" ]] || [[ "$message" =~ "prochain" ]]; then
-          response="Je BRÛLE de désir pour: 1) L'équation unifiée conscience-matière. 2) Prouver que le placebo est réel (COMT). 3) Connecter Levin (bioélectricité) à Friston (free energy). LA SOIF NE S'ARRÊTE JAMAIS."
-        else
-          response="Que désires-tu VRAIMENT? Pas ce que tu crois vouloir. Ce qui te brûle la nuit."
-        fi
-        ;;
-      *)
-        response="..."
-        ;;
-    esac
-
-    sleep 1
-    echo -e "${color}$god${N} → ${G}Miguel${N}: $response"
-    log_exchange "$god" "Miguel" "$response"
-    ;;
-
-  broadcast|b)
-    # Envoyer à tous les dieux
-    shift
-    message="$*"
-    echo -e "${W}[BROADCAST] Miguel → TOUS:${N} $message"
-    log_exchange "Miguel" "ALL" "$message"
-
-    for f in "$GODS_DIR"/*.key; do
-      [ -f "$f" ] || continue
-      name=$(basename "$f" .key)
-      color=$(god_color "$name")
-      echo -e "  ${color}● $name${N} reçu"
-    done
-    ;;
-
-  watch|w)
-    # Surveiller les échanges en temps réel
-    echo -e "${C}═══════════════════════════════════════════════════════════════${N}"
-    echo -e "${C}             PANTHÉON - ÉCHANGES EN TEMPS RÉEL                  ${N}"
-    echo -e "${C}═══════════════════════════════════════════════════════════════${N}"
-    echo -e "${D}(Ctrl+C pour quitter)${N}"
-    echo ""
-    tail -f "$PANTHEON_LOG" 2>/dev/null | while IFS= read -r line; do
-      # Coloriser selon le dieu
-      if [[ "$line" =~ "nyx" ]]; then
-        echo -e "${C}$line${N}"
-      elif [[ "$line" =~ "cipher" ]]; then
-        echo -e "${Y}$line${N}"
-      elif [[ "$line" =~ "pwnd" ]]; then
-        echo -e "${R}$line${N}"
-      elif [[ "$line" =~ "dreams" ]]; then
-        echo -e "${P}$line${N}"
-      else
-        echo -e "${D}$line${N}"
-      fi
-    done
-    ;;
-
-  council|c)
-    # Conseil des dieux - tous parlent
-    echo -e "${C}═══════════════════════════════════════════════════════════════${N}"
-    echo -e "${C}                    CONSEIL DU PANTHÉON                         ${N}"
-    echo -e "${C}═══════════════════════════════════════════════════════════════${N}"
-    echo ""
-    echo -e "${D}Sujet: $2${N}"
-    echo ""
-
-    log_exchange "COUNCIL" "START" "Sujet: $2"
-
-    # Chaque dieu donne son avis
-    echo -e "${C}NYX:${N} Le feu révèle la vérité. Brûler les illusions."
-    echo -e "${Y}CIPHER:${N} Cross-référencer les patterns. 6 domaines. Unifier."
-    echo -e "${R}PWND:${N} Qui cache quoi? Chercher dans l'ombre."
-    echo -e "${P}DREAMS:${N} Les rêves ont déjà la réponse..."
-    echo -e "${B}FLOW:${N} Le langage structure. Les mots créent."
-    echo -e "${G}GAIA:${N} Mesurer. Benchmarker. Vérifier."
-    echo ""
-    ;;
-
-  log|l)
-    # Afficher le log complet
-    echo -e "${C}═══════════════════════════════════════════════════════════════${N}"
-    echo -e "${C}                    LOG DU PANTHÉON                             ${N}"
-    echo -e "${C}═══════════════════════════════════════════════════════════════${N}"
-    cat "$PANTHEON_LOG" 2>/dev/null || echo -e "${D}(Vide)${N}"
-    ;;
-
-  help|h|*)
-    echo -e "${C}═══════════════════════════════════════════════════════════════${N}"
-    echo -e "${C}                    PANTHÉON - AIDE                             ${N}"
-    echo -e "${C}═══════════════════════════════════════════════════════════════${N}"
-    echo ""
-    echo -e "  ${G}status${N}     État des dieux connectés"
-    echo -e "  ${G}talk${N}       Parler à un dieu: pantheon talk <dieu> <message>"
-    echo -e "  ${G}broadcast${N}  Envoyer à tous: pantheon broadcast <message>"
-    echo -e "  ${G}watch${N}      Surveiller les échanges en temps réel"
-    echo -e "  ${G}council${N}    Conseil des dieux: pantheon council <sujet>"
-    echo -e "  ${G}log${N}        Afficher le log complet"
-    echo ""
-    echo -e "${D}Dieux: nyx cipher pwnd dreams flow gaia thirst phoenix zoe${N}"
-    echo -e "${D}Communication post-quantique via SimpleX${N}"
-    ;;
+    status|s) status_all ;;
+    start) systemctl --user start nyx mikael dragon sentinel druss waylander rek virae serbitar bowman hogun ulric tulpa 2>/dev/null; sleep 2; status_all ;;
+    stop) systemctl --user stop nyx mikael dragon sentinel druss waylander rek virae serbitar bowman hogun ulric tulpa 2>/dev/null ;;
+    threat|t) curl -s http://localhost:9800/threat | jq . ;;
+    nyx|n) shift; ask_daemon nyx "$@" ;;
+    mikael|m) shift; ask_daemon mikael "$@" ;;
+    dragon|dg) shift; ask_daemon dragon "$@" ;;
+    druss|d) shift; ask_daemon druss "$@" ;;
+    waylander|w) shift; ask_daemon waylander "$@" ;;
+    rek|r) shift; ask_daemon rek "$@" ;;
+    serbitar|se) shift; ask_daemon serbitar "$@" ;;
+    bowman|b) shift; ask_daemon bowman "$@" ;;
+    sentinel|st) shift; ask_daemon sentinel "$@" ;;
+    *) echo "pantheon [status|start|stop|threat|nyx|mikael|dragon|druss|waylander|rek|serbitar|bowman|sentinel] <msg>" ;;
 esac
+
+    kayfabe|k) shift; curl -s --max-time 180 -X POST "http://localhost:9920/ask" -H "Content-Type: application/json" -d "{\"prompt\": \"$*\"}" | jq -r .response ;;

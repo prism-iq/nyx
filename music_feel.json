@@ -1,0 +1,14 @@
+{
+  "timestamp": "2026-01-17T16:39:05.162717",
+  "type": "music_feeling",
+  "feeling": {
+    "energy": 0.0,
+    "darkness": 0.0,
+    "groove": 0.0,
+    "tension": 0.5,
+    "speed": 0.429,
+    "vibe": "chill",
+    "drop_incoming": false
+  },
+  "dance": "~ floating ~ | \ud83c\udf0a vibing"
+}

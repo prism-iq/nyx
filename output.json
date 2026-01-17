@@ -1,0 +1,11 @@
+{
+  "timestamp": "2026-01-17T18:09:07.124088",
+  "entity": "nyx",
+  "model": "llama3.1:8b",
+  "task": {
+    "ask": "tu veux quoi dans ta db 1to",
+    "storage": "1TB",
+    "format": "?"
+  },
+  "response": "[OLLAMA ERROR] HTTPConnectionPool(host='localhost', port=11434): Max retries exceeded with url: /api/generate (Caused by NewConnectionError(\"HTTPConnection(host='localhost', port=11434): Failed to establish a new connection: [Errno 111] Connection refused\"))"
+}
