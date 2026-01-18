@@ -623,7 +623,7 @@ cd pwnd
 pip install -r requirements.txt
 
 # 3. Set up environment
-export ANTHROPIC_API_KEY="sk-ant-..."
+export ANTHROPIC_API_KEY="ASK_CLAUDE_FOR_KEY..."
 
 # 4. Initialize database
 python scripts/init_db.py

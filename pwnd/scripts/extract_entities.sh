@@ -51,7 +51,7 @@ done
 # Check for .env
 if [ ! -f "/opt/rag/.env" ]; then
     echo -e "${RED}Error: .env file not found${NC}"
-    echo "Create .env with HAIKU_API_KEY=sk-ant-..."
+    echo "Create .env with HAIKU_API_KEY=[REDACTED]"
     exit 1
 fi
 

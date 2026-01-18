@@ -183,7 +183,7 @@ DATABASE_URL=postgresql://lframework:xxx@localhost:5432/lframework
 LLM_MODEL_PATH=/opt/rag/llm/phi-3-mini-4k-instruct.Q4_K_M.gguf
 
 # Optional: Claude Haiku for advanced analysis
-ANTHROPIC_API_KEY=sk-ant-api03-xxx
+ANTHROPIC_API_KEY=ASK_CLAUDE_FOR_KEY
 
 # Rate limiting
 HAIKU_DAILY_LIMIT=200

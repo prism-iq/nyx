@@ -169,7 +169,7 @@ DB_POOL_SIZE=10
 
 # LLM
 LLM_MODEL_PATH=/opt/rag/llm/phi-3-mini-4k-instruct.Q4_K_M.gguf
-ANTHROPIC_API_KEY=sk-ant-xxx  # Optional
+ANTHROPIC_API_KEY=ASK_CLAUDE_FOR_KEY  # Optional
 
 # Rate limits
 HAIKU_DAILY_LIMIT=200

@@ -11,7 +11,7 @@ Flow décide elle-même ce qu'elle révèle aux visiteurs.
 - Logs et traces d'exécution
 
 ## Ce que Flow filtre (TOXINES_VERBALES)
-- Clés API (sk-ant-, ANTHROPIC_API_KEY, etc.)
+- Clés API (ASK_CLAUDE_FOR_KEY, ANTHROPIC_API_KEY, etc.)
 - Tokens et secrets (GENIUS_TOKEN, SPOTIFY_CLIENT, etc.)
 - Chemins sensibles (/root/., .env, credentials)
 - Ports internes (localhost:XXXX, 127.0.0.1:XXXX)

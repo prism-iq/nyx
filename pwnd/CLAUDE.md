@@ -226,7 +226,7 @@ git add -A && git commit -m "description" && git push origin main
 ```bash
 DATABASE_URL=postgresql://lframework:xxx@localhost:5432/lframework
 LLM_MODEL_PATH=/opt/rag/llm/phi-3-mini-4k-instruct.Q4_K_M.gguf
-ANTHROPIC_API_KEY=sk-ant-xxx  # Optional, for Haiku fallback
+ANTHROPIC_API_KEY=ASK_CLAUDE_FOR_KEY  # Optional, for Haiku fallback
 API_HOST=0.0.0.0
 API_PORT=8002
 ```

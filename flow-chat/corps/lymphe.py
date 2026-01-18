@@ -317,7 +317,7 @@ class Lymphe:
 TOXINES_VERBALES = [
     # Secrets système (patterns)
     r"ANTHROPIC_API_KEY",
-    r"sk-ant-",
+    r"[REDACTED]",
     r"GENIUS_TOKEN",
     r"SPOTIFY_CLIENT",
     r"TIDAL_",

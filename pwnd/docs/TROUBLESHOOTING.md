@@ -503,11 +503,11 @@ APIError: invalid API key
 # Check .env
 grep HAIKU_API_KEY /opt/rag/.env
 
-# Should be: HAIKU_API_KEY=sk-ant-...
-# Not: HAIKU_API_KEY="sk-ant-..."  # No quotes
+# Should be: HAIKU_API_KEY=ASK_CLAUDE_FOR_KEY...
+# Not: HAIKU_API_KEY="ASK_CLAUDE_FOR_KEY..."  # No quotes
 
 # Re-export
-export HAIKU_API_KEY=sk-ant-your-key-here
+export HAIKU_API_KEY=ASK_CLAUDE_FOR_KEY
 ```
 
 ---

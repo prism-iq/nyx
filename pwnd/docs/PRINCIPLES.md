@@ -223,7 +223,7 @@ mistral:
   n_batch: 256
 
 # .env (NOT versioned, per-deployment)
-HAIKU_API_KEY=sk-ant-...
+HAIKU_API_KEY=ASK_CLAUDE_FOR_KEY...
 ```
 
 **Alternative Considered:** Web-based admin panel for settings
