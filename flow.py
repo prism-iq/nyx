@@ -7,6 +7,12 @@ langage multisens
 tout caractère accepté
 utf8 natif
 
+c = recompile
+l = loop
+f = fix/verify
+o = Occam's razor
+φ = 1.618033988749895
+
 credits go
 """
 
